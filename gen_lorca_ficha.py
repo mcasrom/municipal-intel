@@ -36,6 +36,17 @@ for c in formales:
 def fmt_e(n):
     return "%s" % format(int(round(n)), ",").replace(",", ".")
 
+def _edad_bar(g):
+    t = g["Total"]
+    p1, p2, p3 = g["Menos de 16"] / t * 100, g["16-64"] / t * 100, g["65 o más"] / t * 100
+    return ('<div style="margin:10px 0"><div style="display:flex;height:18px;border-radius:5px;overflow:hidden">'
+            '<div style="width:%.1f%%;background:#38bdf8" title="≤15"></div>'
+            '<div style="width:%.1f%%;background:#6366f1" title="16-64"></div>'
+            '<div style="width:%.1f%%;background:#f87171" title="65+"></div></div>'
+            '<div style="display:flex;justify-content:space-between;font-size:11px;color:#94a3b8;margin-top:4px">'
+            '<span>≤15: %.1f%%</span><span>16-64: %.1f%%</span><span>65+: %.1f%%</span></div></div>'
+            ) % (p1, p2, p3, p1, p2, p3)
+
 p96 = serie[0][1]; p25 = serie[-1][1]; var = pct(p25, p96)
 
 row_top_num = ""
@@ -153,6 +164,7 @@ a{color:var(--acc)}
   <div class="kpi"><b>@@SEXOTABLA@@</b></div>
 </div>
 <h3 style="font-size:14px;margin:10px 0 6px">Sexo por grupo de edad (Censo 2021)</h3>
+@@EDADBAR@@
 <table><tr><th>Grupo</th><th class="r">Hombres</th><th class="r">Mujeres</th><th class="r">Total</th></tr>@@SEXOROWS@@</table>
 <div class="alert" style="background:#1e293b;border:1px solid #334155"><b style="color:#fca5a5">Contexto:</b> estructura por grandes grupos (Censo 2021): menores de 16 años @@E16PCT@@, 16-64 @@E1664PCT@@, 65+ @@E65PCT@@ — frente a @@EMUR_PCT@@ de mayores de 64 en Murcia capital. Perfil demográfico con envejecimiento moderado.</div>
 
@@ -215,7 +227,8 @@ TOKENS = {"@@P25@@": fmt_e(p25), "@@P96@@": fmt_e(p96), "@@SIGN@@": "pos" if var
               gr, fmt_e(edad["municipios"]["Lorca"]["sexo"][gr]["Hombres"]),
               fmt_e(edad["municipios"]["Lorca"]["sexo"][gr]["Mujeres"]),
               fmt_e(edad["municipios"]["Lorca"][gr])) for gr in ("Menos de 16", "16-64", "65 o más")),
-          "@@SEXOTABLA@@": "✔"}
+          "@@SEXOTABLA@@": "✔",
+          "@@EDADBAR@@": _edad_bar(edad["municipios"]["Lorca"])}
 html = HTML
 for k, v in TOKENS.items():
     html = html.replace(k, str(v))
