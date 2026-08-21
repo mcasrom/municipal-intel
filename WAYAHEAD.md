@@ -133,7 +133,13 @@ sin inventar causalidad.
       "pueblos que se despueblan", top-10 por provincia (contenido indexable que el mapa no da).
 
 ## SPRINT C (pendiente) — PRODUCTO
-- [ ] Alertas/RSS ("avísame si mi municipio cambia de posición") — reutiliza el cron.
+- [x] **ALERTAS (Sprint C 2/2, 21/Ago)**: municipal-alert-api (stdlib, puerto 8201, pm2):
+      POST /api/alerta (suscripción, doble opt-in vía Resend), /confirmar, /baja,
+      /notificar (interno, X-Alert-Secret; detecta cambio de población/ranking/contratos).
+      Formulario "Avísame si cambian" en las 8.109 páginas + ficha Lorca. nginx /api/ → 8201.
+      update.sh llama a /notificar tras regenerar. SEGURIDAD: data/alerts.env NO al repo
+      (.gitignore); push rechazado por secreto → filter-branch limpió el historial local.
+- [ ] (completado) RSS + alertas del Sprint C.
 - [ ] Isolation Forest en contratos menores para automatizar el troceado a escala.
 
 ## SPRINT D (en WAYAHEAD)
