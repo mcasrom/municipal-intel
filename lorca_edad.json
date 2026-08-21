@@ -6,13 +6,41 @@
    "Menos de 16": 17481,
    "16-64": 63675,
    "65 o más": 14574,
-   "Total": 95730
+   "Total": 95730,
+   "sexo": {
+    "Menos de 16": {
+     "Hombres": 9099,
+     "Mujeres": 8382
+    },
+    "16-64": {
+     "Hombres": 33492,
+     "Mujeres": 30183
+    },
+    "65 o más": {
+     "Hombres": 6396,
+     "Mujeres": 8178
+    }
+   }
   },
   "Murcia": {
    "Menos de 16": 80367,
    "16-64": 305841,
    "65 o más": 73572,
-   "Total": 459780
+   "Total": 459780,
+   "sexo": {
+    "Menos de 16": {
+     "Hombres": 41268,
+     "Mujeres": 39099
+    },
+    "16-64": {
+     "Hombres": 152856,
+     "Mujeres": 152985
+    },
+    "65 o más": {
+     "Hombres": 31251,
+     "Mujeres": 42321
+    }
+   }
   }
  }
 }

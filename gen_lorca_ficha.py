@@ -10,6 +10,8 @@ if not os.path.exists(DBP):
     DBP = "poblacion_municipal.sqlite"
 con = sqlite3.connect(DBP)
 serie = con.execute("SELECT anyo, poblacion FROM poblacion WHERE municipio='Lorca' AND sexo='Total' ORDER BY anyo").fetchall()
+h2025 = con.execute("SELECT poblacion FROM poblacion WHERE municipio='Lorca' AND sexo='Hombres' AND anyo=2025").fetchone()
+m2025 = con.execute("SELECT poblacion FROM poblacion WHERE municipio='Lorca' AND sexo='Mujeres' AND anyo=2025").fetchone()
 cata = con.execute("SELECT codigo_ine FROM catalogo WHERE municipio='Lorca'").fetchone()
 rank_murcia = con.execute("""SELECT COUNT(*)+1 FROM poblacion p JOIN catalogo c USING (provincia, municipio)
   WHERE p.anyo=2025 AND p.sexo='Total' AND p.provincia='Murcia' AND p.poblacion > (
@@ -138,11 +140,19 @@ a{color:var(--acc)}
 
 <h2>Estructura de edad (INE · Censo de Población 2021)</h2>
 <div class="grid">
-  <div class="kpi"><b>@@E16@@</b><span>menores de 16 años</span></div>
-  <div class="kpi"><b>@@E1664@@</b><span>16 a 64 años</span></div>
-  <div class="kpi"><b>@@E65@@</b><span>65 o más</span></div>
-  <div class="kpi"><b>@@ETOT@@</b><span>población (Censo 2021)</span></div>
+  <div class="kpi"><b>@@H25@@</b><span>hombres (2025, Padrón)</span></div>
+  <div class="kpi"><b>@@M25@@</b><span>mujeres (2025, Padrón)</span></div>
+  <div class="kpi"><b>@@H25PCT@@</b><span>% hombres</span></div>
+  <div class="kpi"><b>@@E65@@</b><span>65 o más (Censo 2021)</span></div>
 </div>
+<div class="grid">
+  <div class="kpi"><b>@@E16@@</b><span>menores de 16 (Censo 2021)</span></div>
+  <div class="kpi"><b>@@E1664@@</b><span>16 a 64 años (Censo 2021)</span></div>
+  <div class="kpi"><b>@@ETOT@@</b><span>población (Censo 2021)</span></div>
+  <div class="kpi"><b>@@SEXOTABLA@@</b></div>
+</div>
+<h3 style="font-size:14px;margin:10px 0 6px">Sexo por grupo de edad (Censo 2021)</h3>
+<table><tr><th>Grupo</th><th class="r">Hombres</th><th class="r">Mujeres</th><th class="r">Total</th></tr>@@SEXOROWS@@</table>
 <div class="alert" style="background:#1e293b;border:1px solid #334155"><b style="color:#fca5a5">Contexto:</b> estructura por grandes grupos (Censo 2021): menores de 16 años @@E16PCT@@, 16-64 @@E1664PCT@@, 65+ @@E65PCT@@ — frente a @@EMUR_PCT@@ de mayores de 64 en Murcia capital. Perfil demográfico con envejecimiento moderado.</div>
 
 <h2>Renta de los hogares (INE · Atlas de distribución de renta)</h2>
@@ -195,7 +205,16 @@ TOKENS = {"@@P25@@": fmt_e(p25), "@@P96@@": fmt_e(p96), "@@SIGN@@": "pos" if var
           "@@E16PCT@@": ("%.1f%%" % (edad["municipios"]["Lorca"]["Menos de 16"] / edad["municipios"]["Lorca"]["Total"] * 100)),
           "@@E1664PCT@@": ("%.1f%%" % (edad["municipios"]["Lorca"]["16-64"] / edad["municipios"]["Lorca"]["Total"] * 100)),
           "@@E65PCT@@": ("%.1f%%" % (edad["municipios"]["Lorca"]["65 o más"] / edad["municipios"]["Lorca"]["Total"] * 100)),
-          "@@EMUR_PCT@@": ("%.1f%%" % (edad["municipios"]["Murcia"]["65 o más"] / edad["municipios"]["Murcia"]["Total"] * 100))}
+          "@@EMUR_PCT@@": ("%.1f%%" % (edad["municipios"]["Murcia"]["65 o más"] / edad["municipios"]["Murcia"]["Total"] * 100)),
+          "@@H25@@": fmt_e(h2025[0] if h2025 else 0),
+          "@@M25@@": fmt_e(m2025[0] if m2025 else 0),
+          "@@H25PCT@@": ("%.1f%%" % (h2025[0] / (h2025[0] + m2025[0]) * 100)) if h2025 and m2025 else "—",
+          "@@SEXOROWS@@": "".join(
+            "<tr><td>%s</td><td class='r'>%s</td><td class='r'>%s</td><td class='r'>%s</td></tr>" % (
+              gr, fmt_e(edad["municipios"]["Lorca"]["sexo"][gr]["Hombres"]),
+              fmt_e(edad["municipios"]["Lorca"]["sexo"][gr]["Mujeres"]),
+              fmt_e(edad["municipios"]["Lorca"][gr])) for gr in ("Menos de 16", "16-64", "65 o más")),
+          "@@SEXOTABLA@@": "✔"}
 html = HTML
 for k, v in TOKENS.items():
     html = html.replace(k, str(v))
