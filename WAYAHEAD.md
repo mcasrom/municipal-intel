@@ -5,29 +5,36 @@ Ficha de inteligencia municipal (Lorca primero): "qué está pasando en este
 municipio y qué dicen los datos públicos sobre él". Fuentes trazables,
 sin inventar causalidad.
 
-## Estado (20/Ago) — datos
-- Esqueleto creado (data/ingest/app + git).
-- REALIDAD DE FUENTES (probado hoy):
-  - INE: API/portal NO funciona (decisión del usuario: no usar INE).
-  - PLACSP: WebSphere/dojo (crawl duro, P0 pendiente).
-  - CARM datosabiertos: funciona para CONTRATOS (21.313 menores 2023, ya
-    ingeridos en transparencia_osint) y Facturas (web app, no CSV limpio).
-    Los contratos CARM son REGIONALES (consejerías), no por ayuntamiento.
-  - Overpass/OSM para catálogo municipal: endpoints caídos hoy (kumi 502,
-    osm.ch vacío, overpass-api 000).
-- Conclusión: los datos MUNICIPALES (ayuntamiento de Lorca, población) son el
-  núcleo duro. No hay fuente fácil hoy.
+## ESTADO (21/Ago) — INE ROTO YA NO
+- **INE población municipal: FUNCIONA** (API servicios.ine.es).
+  - Operación: "Cifras oficiales de población de los municipios españoles:
+    Revisión del Padrón Municipal" (padre=525, detalle municipal por provincia).
+  - Endpoint: `https://servicios.ine.es/wstempus/js/ES/DATOS_TABLA/{id_tabla}`
+    con id por provincia (Murcia=2883, Madrid=2881, ... 52 tablas).
+  - Dataset ingerido: **8.132 municipios (oficiales) + 4 disueltos**, serie
+    1996-2025 (29 años, 1997 no publicado), 706.128 filas, total/sexo.
+  - VALIDADO: Lorca 2025=98.969 (69.045 en 1996), Murcia capital 479.405,
+    total España 01/01/2025=49.114.494, municipios por provincia == oficial INE.
+  - Detección de agregados (filas provinciales que duplican el total):
+    valor 2025 == suma del resto => excluir (12 filas). Disueltos
+    (Cesuras/Oza dos Ríos -> Oza-Cesuras, Cerdedo/Cotobade -> Cerdedo-Cotobade)
+    aportan 0 desde la fusión: se conservan para la serie histórica.
+  - Datos: data/poblacion_municipal.sqlite (tabla poblacion:
+    provincia, municipio, sexo, anyo, poblacion).
+- **Siguiente dato municipal a cazar**: códigos INE de municipio (join de la
+  relación de municipios y sus códigos del INE) y coordenadas (Overpass).
+- PLACSP: WebSphere/dojo (crawl duro, P0 en transparencia_osint).
 
 ## Datos que YA tenemos (reutilizar)
-- Contratos de la Región de Murcia 2023 (transparencia_osint) — contexto regional.
-- Ficha/panel de transparencia_osint (patrón de dashboard ligero reutilizable).
+- Contratos Región de Murcia 2023 (transparencia_osint) — contexto regional.
+- Población municipal INE 1996-2025 (este repo) — núcleo demográfico.
 
 ## Roadmap
-- [ ] P1: catálogo de municipios (códigos INE + coords) — resolver fuente de
-      límites (Overpass cuando funcione, o datos.gob.es).
+- [x] P0.5: dataset INE población municipal 1996-2025 (8.132 municipios).
+- [ ] P1: catálogo municipios (códigos INE + coords) — Overpass o codmun INE.
 - [ ] P2: página / con buscador + mapa Leaflet.
-- [ ] P3: fich municipio: contratos del ayuntamiento (PLACSP export manual o
-      crawl), finanzas (Facturas), luego población (mirror INE cuando haya).
+- [ ] P3: ficha municipio: población (serie + variación), luego contratos del
+      ayuntamiento (PLACSP export manual o crawl) y finanzas (Facturas CARM).
 - [ ] P4: indicadores + cambios + comparador.
 - Patrón: Postgres + API ligera + estático (como transparencia_osint).
 
