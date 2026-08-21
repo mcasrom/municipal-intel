@@ -55,12 +55,12 @@ sin inventar causalidad.
 
 ## ESTADO SEO ESTRUCTURAL (21/Ago) — PÁGINAS + JSON-LD
 - JSON-LD: Dataset en index + Dataset/GovernmentService en ficha_lorca.
-- **300 páginas estáticas por municipio** (`/municipio/{slug}.html`): capitales de
+- **8.109 páginas estáticas por municipio (TODOS)** (`/municipio/{slug}.html`): capitales de
   provincia + top población 2025. Cada ficha: H1, KPIs (2025/1996/Δ%), rank
   nacional, variaciones 1/5/10 años, SVG de evolución, serie completa en <details>
   (texto indexable), JSON-LD Dataset, canonical/OG. Enlace cruzado: mapa →
   ficha (top 300) y Lorca → ficha de transparencia.
-- **Sitemap 303 URLs** (mapa + ficha Lorca + acerca + 300 municipios).
+- **Sitemap 8.112 URLs** (mapa + ficha Lorca + acerca + 300 municipios).
 - Corrección del análisis externo: "sitemap será 1 URL" = FALSO (son 303 tras
   este trabajo; antes 3). El resto del análisis (SPA pobre en texto, sin JSON-LD,
   sin URLs por municipio, Lorca mal enmarcado) = CIERTO y corregido aquí.
@@ -101,7 +101,7 @@ sin inventar causalidad.
 - [x] P1: catálogo municipios (códigos INE + coords) — 8.109 municipios (99,7%).
 - [x] P2: mapa Leaflet + buscador + sparkline — DESPLEGADO.
 - [x] P3 (parcial): ficha de transparencia de Lorca (contratos + troceado + renta).
-- [x] SEO: JSON-LD + 300 fichas estáticas + sitemap 303 URLs.
+- [x] SEO: JSON-LD + 300 fichas estáticas + sitemap 8.112 URLs.
 - [ ] P3: ficha municipio: contratos del ayuntamiento (PLACSP export manual o
       crawl) y finanzas (Facturas CARM). Población ya en la ficha del mapa.
 - [ ] P4: indicadores + cambios + comparador (rankings, variaciones interanuales).
