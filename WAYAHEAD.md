@@ -21,8 +21,6 @@ sin inventar causalidad.
     aportan 0 desde la fusión: se conservan para la serie histórica.
   - Datos: data/poblacion_municipal.sqlite (tabla poblacion:
     provincia, municipio, sexo, anyo, poblacion).
-- **Siguiente dato municipal a cazar**: códigos INE de municipio (join de la
-  relación de municipios y sus códigos del INE) y coordenadas (Overpass).
 - PLACSP: WebSphere/dojo (crawl duro, P0 en transparencia_osint).
 
 ## Datos que YA tenemos (reutilizar)
@@ -43,14 +41,26 @@ sin inventar causalidad.
     Resolver con codmun INE para 100%.
 - Reproducible: ingest/overpass_municipios.json (OSM crudo) + ingest/ine_catalog_build.py.
 
+## ESTADO MAPA (21/Ago) — P2 HECHO Y DESPLEGADO
+- **https://municipal.viajeinteligencia.com** EN VIVO (estático, nginx + certbot
+  Let's Encrypt, DNS Cloudflare gris -> pasar a naranja).
+  - Mapa Leaflet de España: 8.109 municipios, 5 clases de población (leyenda),
+    renderer canvas. Buscador con autocompletado (nombre o código INE).
+  - Clic -> panel con KPIs (2025, 1996, Δ%) + sparkline 1996-2025 + texto de
+    crecimiento. Nota de fuentes (INE + OSM/Overpass). Sin cookies.
+  - Datos cacheados (max-age 3600) + gzip (series.json 2,7MB -> 752KB).
+  - Generador reproducible: gen_map.py (lee sqlite -> dashboard/).
+  - Deploy: /home/deploy/municipal-intel/dashboard + vhost nginx
+    municipal.viajeinteligencia.com + certbot. Commit fbd6145.
+
 ## Roadmap
 - [x] P0.5: dataset INE población municipal 1996-2025 (8.132 municipios).
 - [x] P1: catálogo municipios (códigos INE + coords) — 8.109 municipios (99,7%).
-- [ ] P2: página / con buscador + mapa Leaflet.
-- [ ] P3: ficha municipio: población (serie + variación), luego contratos del
-      ayuntamiento (PLACSP export manual o crawl) y finanzas (Facturas CARM).
-- [ ] P4: indicadores + cambios + comparador.
-- Patrón: Postgres + API ligera + estático (como transparencia_osint).
+- [x] P2: mapa Leaflet + buscador + sparkline — DESPLEGADO.
+- [ ] P3: ficha municipio: contratos del ayuntamiento (PLACSP export manual o
+      crawl) y finanzas (Facturas CARM). Población ya en la ficha del mapa.
+- [ ] P4: indicadores + cambios + comparador (rankings, variaciones interanuales).
+- Patrón: estático generado + nginx (como transparencia_osint y alquimetria).
 
 ## Regla
 - Datos fiables y trazables primero. No inventar. Señalar claramente lo pendiente.
