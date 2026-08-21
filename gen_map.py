@@ -93,12 +93,12 @@ HTML = r"""<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Municipal Intelligence · Mapa de población de los municipios de España</title>
-<meta name="description" content="Mapa de la población oficial de los 8.132 municipios de España (INE, 1996-2025): busca cualquier municipio, mira su evolución, comparala con otro y descubre quién crece y quién se vacía. Datos oficiales y trazables.">
+<title>Población de los municipios de España 2025 (INE) · Mapa interactivo</title>
+<meta name="description" content="Población oficial de los 8.132 municipios de España a 01/01/2025 (INE, Revisión del Padrón Municipal): evolución 1996-2025, rankings de quién crece y quién se vacía, comparador y transparencia del Ayuntamiento de Lorca. Datos oficiales y trazables.">
 <link rel="canonical" href="https://municipal.viajeinteligencia.com/">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Municipal Intelligence · Mapa de población de los municipios de España">
-<meta property="og:description" content="Población oficial de los 8.132 municipios de España (INE 1996-2025): evolución, rankings y comparador.">
+<meta property="og:title" content="Población de los municipios de España 2025 (INE) · Mapa interactivo">
+<meta property="og:description" content="Población oficial de los 8.132 municipios de España (INE 2025): evolución, rankings y comparador.">
 <meta property="og:url" content="https://municipal.viajeinteligencia.com/">
 <meta name="twitter:card" content="summary">
 <link rel="icon" type="image/png" href="icon-192.png">

@@ -1,0 +1,31 @@
+# Municipal Intelligence
+
+> Mapa de la población oficial de los 8.132 municipios de España (INE, serie 1996-2025): busca cualquier municipio, mira su evolución, compara dos municipios y descubre quién crece y quién se vacía (España vaciada). Incluye la ficha de transparencia del Ayuntamiento de Lorca (contratos menores, proveedores y detección de posible troceado). Datos oficiales y trazables, sin cookies ni publicidad.
+
+## Páginas principales
+
+- [Mapa interactivo de los 8.132 municipios](https://municipal.viajeinteligencia.com/): población INE 1996-2025, buscador, comparador, rankings de crecimiento/descenso y estructura por entidad.
+- [Ficha de transparencia de Lorca](https://municipal.viajeinteligencia.com/ficha_lorca.html): contratos menores (2019-2026) y formales del Ayuntamiento, anomalías (troceado), renta de los hogares y estructura de edad.
+- [Metodología, fuentes y licencia](https://municipal.viajeinteligencia.com/acerca.html): fecha de los datos (población a 01/01/2025, publicada 11/12/2025), limpieza y cobertura.
+
+## Fichas por municipio
+
+Cada municipio tiene una página estática en `/municipio/{slug}.html` con su población (2025), evolución 1996-2025, ranking nacional y variaciones. Ejemplos:
+- https://municipal.viajeinteligencia.com/municipio/lorca.html
+- https://municipal.viajeinteligencia.com/municipio/madrid.html
+- https://municipal.viajeinteligencia.com/municipio/caceres.html
+
+## Datos y fuentes
+
+- Población: INE, Cifras oficiales de población de los municipios españoles (Revisión del Padrón Municipal), 1996-2025. Población a 01/01/2025 publicada el 11/12/2025. API: servicios.ine.es/wstempus/js/ES/DATOS_TABLA/{id_tabla}.
+- Estructura de edad: INE, Censo de Población 2021 (operación decenal; el siguiente censo es 2031). El Padrón no publica la edad por municipio vía API.
+- Renta de los hogares: INE, Atlas de distribución de renta (tabla por provincia), serie 2014-2022.
+- Coordenadas y códigos INE: OpenStreetMap / Overpass (nodo admin_centre, ref:ine), © contribuidores de OpenStreetMap (ODbL).
+- Contratos del Ayuntamiento de Lorca: Portal de Transparencia (transparencia.lorca.es), PDF trimestrales y listados formales.
+
+## Reglas del proyecto
+
+- Datos fiables y trazables primero; sin inventar; la fecha y fuente de cada dato son visibles; los pendientes se señalan explícitamente.
+- El desglose por edad es Censo 2021 (no Padrón actual); se etiqueta siempre para no confundirlo con la población 2025.
+
+© 2026 M. Castillo. Datos abiertos INE + OpenStreetMap. Ecosistema: https://www.viajeinteligencia.com

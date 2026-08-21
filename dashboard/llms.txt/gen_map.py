@@ -1,14 +1,104 @@
-<!DOCTYPE html>
+import json, sqlite3, os
+
+SLUGMAP = {}
+sm_path = os.path.join("dashboard", "data", "municipio_slugs.json")
+if os.path.exists(sm_path):
+    try:
+        SLUGMAP = json.load(open(sm_path))
+    except Exception:
+        pass
+
+DB = "data/poblacion_municipal.sqlite"
+if not os.path.exists(DB):
+    DB = "poblacion_municipal.sqlite"
+OUT = "dashboard"
+os.makedirs(os.path.join(OUT, "data"), exist_ok=True)
+
+con = sqlite3.connect(DB)
+
+def pop_of(prov, muni, anyo):
+    r = con.execute("SELECT poblacion FROM poblacion WHERE provincia=? AND municipio=? AND anyo=? AND sexo='Total'",
+                    (prov, muni, anyo)).fetchone()
+    return r[0] if r else None
+
+# catalogo: markers con indicadores (rank, variaciones)
+catalogo = []
+pob = con.execute("""SELECT c.municipio, c.provincia, c.codigo_ine, c.lat, c.lon,
+                     p.poblacion FROM catalogo c
+                     JOIN poblacion p ON p.provincia=c.provincia AND p.municipio=c.municipio
+                     AND p.anyo=2025 AND p.sexo='Total'""").fetchall()
+# precalcular variaciones
+def pct(a, b):
+    if a is None or b is None or b == 0: return None
+    return round((a - b) / b * 100, 1)
+
+g1 = {}; g5 = {}; g16 = {}
+for muni, prov, code, lat, lon, pop in pob:
+    p24 = pop_of(prov, muni, 2024); p20 = pop_of(prov, muni, 2020); p16 = pop_of(prov, muni, 2016)
+    g1[code] = pct(pop, p24); g5[code] = pct(pop, p20); g16[code] = pct(pop, p16)
+
+# rankings
+by_pop = sorted(pob, key=lambda x: -x[5])
+rank_spain = {r[2]: i + 1 for i, r in enumerate(by_pop)}
+rank_prov = {}
+for prov in sorted(set(r[1] for r in pob)):
+    for i, r in enumerate(sorted([x for x in pob if x[1] == prov], key=lambda x: -x[5])):
+        rank_prov[r[2]] = i + 1
+
+for muni, prov, code, lat, lon, pop in pob:
+    _sl = SLUGMAP.get(code, "")
+    catalogo.append({"c": code, "n": muni, "p": prov, "la": lat, "lo": lon, "po": int(pop), "sl": _sl,
+                     "r": rank_spain[code], "rp": rank_prov[code],
+                     "g1": g1[code], "g5": g5[code], "g16": g16[code]})
+with open(os.path.join(OUT, "data", "catalogo.json"), "w") as f:
+    json.dump(catalogo, f, ensure_ascii=False, separators=(",", ":"))
+print("catalogo:", len(catalogo))
+
+# rankings.json: tops
+def top(iterable, key, n=20, reverse=True):
+    return sorted(iterable, key=key, reverse=reverse)[:n]
+
+base_pop = {r[2]: r[5] for r in pob}
+topCrec = [{"n": c["n"], "p": c["p"], "c": c["c"], "g": c["g16"], "po": c["po"], "b": base_pop.get(c["c"], 0)} for c in catalogo if c["g16"] is not None]
+topDec = [{"n": c["n"], "p": c["p"], "c": c["c"], "g": c["g16"], "po": c["po"], "b": base_pop.get(c["c"], 0)} for c in catalogo if c["g16"] is not None]
+# filtrar por poblacion 2016 >= 1000 para que el % sea significativo
+topCrec = [x for x in topCrec if x["b"] >= 1000]
+topDec = [x for x in topDec if x["b"] >= 1000]
+topMay = [{"n": c["n"], "p": c["p"], "c": c["c"], "po": c["po"]} for c in catalogo]
+ranking = {
+    "titulo": "Crecimiento 2016 → 2025 (municipios ≥ 1.000 hab en 2016)",
+    "nota": "Variación 2016→2025 sobre municipios con ≥ 1.000 habitantes en 2016 (evita el ruido de pueblos pequeños).",
+    "crec": top(topCrec, lambda x: x["g"]),
+    "dec": top(topDec, lambda x: x["g"], reverse=False),
+    "may": top(topMay, lambda x: x["po"]),
+}
+with open(os.path.join(OUT, "data", "rankings.json"), "w") as f:
+    json.dump(ranking, f, ensure_ascii=False, separators=(",", ":"))
+print("rankings.json OK")
+
+# series: {codigo: [[anyo, total], ...]}
+series = {}
+rows = con.execute("""SELECT c.codigo_ine, p.anyo, p.poblacion FROM catalogo c
+                      JOIN poblacion p ON p.provincia=c.provincia AND p.municipio=c.municipio
+                      AND p.sexo='Total' ORDER BY c.codigo_ine, p.anyo""").fetchall()
+for code, anyo, pop in rows:
+    series.setdefault(code, []).append([anyo, int(pop)])
+with open(os.path.join(OUT, "data", "series.json"), "w") as f:
+    json.dump(series, f, separators=(",", ":"))
+print("series:", len(series), "| fichero KB:", os.path.getsize(os.path.join(OUT,"data","series.json"))//1024)
+con.close()
+
+HTML = r"""<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Población de los municipios de España 2025 (INE) · Mapa interactivo</title>
-<meta name="description" content="Población oficial de los 8.132 municipios de España a 01/01/2025 (INE, Revisión del Padrón Municipal): evolución 1996-2025, rankings de quién crece y quién se vacía, comparador y transparencia del Ayuntamiento de Lorca. Datos oficiales y trazables.">
+<title>Municipal Intelligence · Mapa de población de los municipios de España</title>
+<meta name="description" content="Mapa de la población oficial de los 8.132 municipios de España (INE, 1996-2025): busca cualquier municipio, mira su evolución, comparala con otro y descubre quién crece y quién se vacía. Datos oficiales y trazables.">
 <link rel="canonical" href="https://municipal.viajeinteligencia.com/">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Población de los municipios de España 2025 (INE) · Mapa interactivo">
-<meta property="og:description" content="Población oficial de los 8.132 municipios de España (INE 2025): evolución, rankings y comparador.">
+<meta property="og:title" content="Municipal Intelligence · Mapa de población de los municipios de España">
+<meta property="og:description" content="Población oficial de los 8.132 municipios de España (INE 1996-2025): evolución, rankings y comparador.">
 <meta property="og:url" content="https://municipal.viajeinteligencia.com/">
 <meta name="twitter:card" content="summary">
 <link rel="icon" type="image/png" href="icon-192.png">
@@ -519,3 +609,8 @@ function pintarRank(){
 </script>
 </body>
 </html>
+"""
+with open(os.path.join(OUT, "index.html"), "w") as f:
+    f.write(HTML)
+print("index.html:", os.path.getsize(os.path.join(OUT, "index.html"))//1024, "KB")
+print("OK: dashboard/ generado")
