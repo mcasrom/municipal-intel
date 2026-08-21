@@ -36,6 +36,8 @@ HTML = """<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
 <title>Metodología y fuentes · Municipal Intelligence</title>
 <meta name="description" content="Metodología, fuentes, fecha de los datos y licencias de Municipal Intelligence, el mapa de población de los 8.132 municipios de España y la ficha de transparencia de Lorca.">
 <link rel="canonical" href="https://municipal.viajeinteligencia.com/acerca.html">
+<link rel="icon" type="image/png" href="icon-192.png">
+<meta property="og:image" content="https://municipal.viajeinteligencia.com/og-municipal.png">
 <style>
 :root{--bg:#0f172a;--card:#1e293b;--fg:#e2e8f0;--mut:#94a3b8;--acc:#38bdf8}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -110,6 +112,12 @@ a{color:var(--acc)}
 <b>Regla del proyecto:</b> datos fiables y trazables primero; sin datos inventados; se señala explícitamente lo pendiente. La fecha de cada dato está indicada en la interfaz.<br><br>
 <b>Código:</b> proyecto de código abierto. Repositorio en GitHub (mcasrom/municipal-intel).
 </div>
+
+<h2>Instalación (PWA)</h2>
+<p>El mapa es una <b>app web instalable y offline</b> (Progressive Web App): puedes añadirla a la
+pantalla de inicio de tu móvil u ordenador y consultar las fichas sin conexión. Los datos se
+actualizan al volver a tener red. Busca la opción "Instalar app" / "Añadir a pantalla de inicio"
+en tu navegador, o usa el enlace del pie del mapa.</p>
 
 <h2>Apoyar el proyecto</h2>
 <p>Es un proyecto independiente, gratis y sin publicidad. Si te resulta útil, puedes apoyarlo en Ko-fi:</p>

@@ -280,7 +280,7 @@ body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:v
 </div>
 <div id="kofi" title="Apoyar el proyecto en Ko-fi"><a href="https://ko-fi.com/m_castillo" target="_blank" rel="noopener">☕</a></div>
 <div id="ecosistema" title="Ecosistema de datos abiertos de viajeinteligencia.com"><a href="https://www.viajeinteligencia.com" target="_blank" rel="noopener">🌍</a></div>
-<div id="foot">Municipal Intelligence © 2026 M. Castillo · datos abiertos INE + OpenStreetMap · <a href="acerca.html" style="color:#38bdf8">Metodología, fuentes y licencia</a> · <a href="mailto:info@viajeinteligencia.com" style="color:#38bdf8">Contacto</a> · <a href="https://ko-fi.com/m_castillo" style="color:#38bdf8">Ko-fi</a> · <a href="https://www.viajeinteligencia.com" style="color:#38bdf8">Ecosistema de datos abiertos</a> · sin cookies</div>
+<div id="foot">Municipal Intelligence © 2026 M. Castillo · datos abiertos INE + OpenStreetMap · <a href="acerca.html" style="color:#38bdf8">Metodología, fuentes y licencia</a> · <a href="mailto:info@viajeinteligencia.com" style="color:#38bdf8">Contacto</a> · <a href="https://ko-fi.com/m_castillo" style="color:#38bdf8">Ko-fi</a> · <a href="https://www.viajeinteligencia.com" style="color:#38bdf8">Ecosistema de datos abiertos</a> · <a href="#" id="instalarBtn" style="color:#38bdf8;display:none">Instalar app</a> · sin cookies</div>
 <script>
 var catalogo=[], series={}, lorcaIntel=null;
 fetch('data/catalogo.json').then(r=>r.json()).then(d=>{catalogo=d; pintar();});
@@ -294,6 +294,17 @@ var grupo=L.layerGroup().addTo(map);
 if('serviceWorker' in navigator){
   navigator.serviceWorker.register('sw.js').catch(function(){});
 }
+// instalacion PWA discreta (solo cuando el navegador lo permite y el usuario ha interactuado)
+var installEvt=null;
+window.addEventListener('beforeinstallprompt',function(e){
+  e.preventDefault(); installEvt=e;
+  document.getElementById('instalarBtn').style.display='inline';
+});
+document.getElementById('instalarBtn').addEventListener('click',function(e){
+  e.preventDefault();
+  if(installEvt){ installEvt.prompt(); installEvt=null; }
+  else{ document.getElementById('instalarBtn').textContent='Añádela a la pantalla de inicio desde el menú del navegador'; }
+});
 
 // ---- LANDING (funnel) ----
 function cerrarLanding(){document.getElementById('landing').style.display='none';}
