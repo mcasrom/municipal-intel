@@ -236,6 +236,9 @@ intel = {
         "murcia_capital": renta["municipios"]["Murcia"].get("Renta neta media por persona", {}).get("2022"),
         "anyo": 2022,
     },
+    "edad": {"g1": edad["municipios"]["Lorca"]["Menos de 16"],
+             "g2": edad["municipios"]["Lorca"]["16-64"],
+             "g3": edad["municipios"]["Lorca"]["65 o más"]},
     "top": [{"n": r, "c": len(items), "imp": fmt_e(sum(x["importe"] for x in items))} for r, items in top_num[:8]],
 }
 with open("dashboard/data/lorca_intel.json", "w", encoding="utf-8") as f:

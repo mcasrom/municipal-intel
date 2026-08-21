@@ -257,6 +257,8 @@ body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:v
     <button id="shareBtn" class="cta" style="width:100%;min-width:0">🔗 Compartir este municipio</button>
   </div>
   <div id="sRank"></div>
+  <div id="sRankBar" style="margin:6px 0"></div>
+  <div id="sGrowBars" style="margin:6px 0"></div>
   <div class="kpis">
     <div class="kpi"><b id="s2025"></b><span>2025</span></div>
     <div class="kpi"><b id="s1996"></b><span>1996</span></div>
@@ -356,6 +358,19 @@ function dibujar(cod, cod2){
   }
   dib(cod,'#38bdf8');
   if(cod2)dib(cod2,'#f472b6');
+  // relleno degradado bajo la linea principal (area chart)
+  var s0=series[cod]||[];
+  if(s0.length>2 && !cod2){
+    var ys=s0.map(x=>x[1]), mn=Math.min.apply(null,ys), mx=Math.max.apply(null,ys);
+    var Yv=v=>h-pad-(v-mn)*(hh)/(mx-mn||1);
+    var grad=ctx.createLinearGradient(0,0,0,h);
+    grad.addColorStop(0,'rgba(56,189,248,0.45)');grad.addColorStop(1,'rgba(56,189,248,0.02)');
+    ctx.beginPath();
+    s0.forEach(function(pt,i){var x=X(anyoIndex(pt[0])),y=Yv(pt[1]);i?ctx.lineTo(x,y):ctx.moveTo(x,y);});
+    ctx.lineTo(X(anyoIndex(s0[s0.length-1][0])), h-pad);
+    ctx.lineTo(X(anyoIndex(s0[0][0])), h-pad);
+    ctx.closePath();ctx.fillStyle=grad;ctx.fill();
+  }
   ctx.fillStyle='#e2e8f0';ctx.font='10px system-ui';
   var s=series[cod]||[];
   if(s.length){ctx.fillText(s[0][0],X(anyoIndex(s[0][0])),h-2);ctx.fillText(s[s.length-1][0],X(anyoIndex(s[s.length-1][0]))-22,h-2);}
@@ -381,6 +396,27 @@ function mostrar(m){
   chips+='<span class="chip">5 años: <b>'+fmtNum(m.g5)+'%</b></span>';
   chips+='<span class="chip">10 años: <b>'+fmtNum(m.g16)+'%</b></span>';
   document.getElementById('sChips').innerHTML=chips;
+  // ranking: barra de posicion (visual)
+  var rk=document.getElementById('sRankBar');
+  if(rk){
+    var rpct=Math.max(1,100-Math.round(m.r/8132*100));
+    rk.innerHTML='<div style="display:flex;justify-content:space-between;font-size:10px;color:#94a3b8;margin-bottom:3px"><span>Rank '+m.r+' de 8.132</span><span>top '+rpct+'%</span></div>'+
+      '<div style="background:#0f172a;border-radius:4px;height:8px;overflow:hidden"><div style="height:100%;width:'+rpct+'%;background:linear-gradient(90deg,#38bdf8,#6366f1)"></div></div>';
+  }
+  // crecimiento: mini-barras visuales (1/5/10 anios)
+  var gb=document.getElementById('sGrowBars');
+  if(gb){
+    var maxv=Math.max(Math.abs(m.g1||0),Math.abs(m.g5||0),Math.abs(m.g16||0),0.1);
+    function bar(lab,v){
+      var pct=Math.max(3,Math.round(Math.abs(v||0)/maxv*100));
+      var col=(v||0)>=0?'#4ade80':'#f87171';
+      var pos=(v||0)>=0?'left':'right';
+      return '<div style="display:flex;align-items:center;gap:6px;margin:3px 0;font-size:11px"><span style="width:34px;color:#94a3b8">'+lab+'</span>'+
+        '<div style="flex:1;background:#0f172a;border-radius:3px;height:10px;position:relative"><div style="position:absolute;'+(pos==='left'?'left:0':'right:0')+';width:'+pct+'%;height:100%;background:'+col+';border-radius:3px"></div></div>'+
+        '<b style="width:48px;text-align:right">'+(v==null?'—':((v>=0?'+':'')+v.toFixed(1)+'%'))+'</b></div>';
+    }
+    gb.innerHTML=bar('1 año',m.g1)+bar('5 años',m.g5)+bar('10 años',m.g16);
+  }
   var ctxLine=document.getElementById('sCtx');
   if(m.g16==null){ctxLine.textContent='Sin datos suficientes de evolución para este municipio.';}
   else{
@@ -414,8 +450,9 @@ function mostrar(m){
       '<div class="kpi"><b>'+li.gasto+' €</b><span>gasto</span></div>'+
       '<div class="kpi"><b>'+li.nfor+'</b><span>formales</span></div>'+
       '</div>'+
+      (li.edad?edadBar(li.edad):'')+
       '<div style="font-size:11px;color:#94a3b8;margin-bottom:4px">Proveedores por nº de contratos menores</div>'+
-      '<table style="width:100%;font-size:11px;border-collapse:collapse"><tr style="color:#94a3b8;text-align:left"><th>Proveedor</th><th>#</th><th>Importe</th></tr>'+rows+'</table>'+
+      provBars(li.top)+
       (li.renta?('<div class="kpis" style="margin:8px 0"><div class="kpi"><b>'+li.renta.neta_persona.toLocaleString('es-ES')+' €</b><span>renta neta/persona '+li.renta.anyo+'</span></div><div class="kpi"><b>'+li.renta.neta_hogar.toLocaleString('es-ES')+' €</b><span>neta/hogar</span></div></div><div style="font-size:11px;color:#94a3b8">Murcia capital: '+li.renta.murcia_capital.toLocaleString('es-ES')+' €/persona · INE Atlas</div>'):'')+
       alerta+
       '<a href="ficha_lorca.html" style="display:block;text-align:center;margin-top:8px;padding:8px;border:1px solid #334155;border-radius:8px;color:#38bdf8;font-size:12px;font-weight:600">Ver la ficha completa de Lorca →</a>'+
@@ -437,6 +474,29 @@ function mostrar(m){
   }
 }
 function fmtNum(x){return x==null?'—':(x>=0?'+':'')+x.toFixed(1);}
+
+// barra apilada de estructura de edad (3 grupos, % )
+function edadBar(ed){
+  var tot=ed.g1+ed.g2+ed.g3;
+  if(!tot)return '';
+  var p1=Math.round(ed.g1/tot*100), p2=Math.round(ed.g2/tot*100), p3=100-p1-p2;
+  return '<div style="margin:8px 0"><div style="font-size:11px;color:#94a3b8;margin-bottom:4px">Estructura de edad (Censo 2021)</div>'+
+    '<div style="display:flex;height:14px;border-radius:4px;overflow:hidden">'+
+    '<div style="width:'+p1+'%;background:#38bdf8" title="<16: '+p1+'%"></div>'+
+    '<div style="width:'+p2+'%;background:#6366f1" title="16-64: '+p2+'%"></div>'+
+    '<div style="width:'+p3+'%;background:#f87171" title="65+: '+p3+'%"></div></div>'+
+    '<div style="display:flex;justify-content:space-between;font-size:10px;color:#94a3b8;margin-top:3px"><span>≤15 '+p1+'%</span><span>16-64 '+p2+'%</span><span>65+ '+p3+'%</span></div></div>';
+}
+// barras horizontales por proveedor (troceado visual)
+function provBars(top){
+  if(!top||!top.length)return '';
+  var mx=Math.max.apply(null,top.map(function(t){return t.c;}));
+  return top.map(function(t){
+    var pct=Math.max(5,Math.round(t.c/mx*100));
+    return '<div style="margin:3px 0"><div style="display:flex;justify-content:space-between;font-size:10px;color:#94a3b8"><span>'+t.n+'</span><b style="color:#e2e8f0">'+t.c+' · '+t.imp+' €</b></div>'+
+      '<div style="background:#0f172a;border-radius:3px;height:8px"><div style="width:'+pct+'%;height:100%;background:#f59e0b;border-radius:3px"></div></div></div>';
+  }).join('');
+}
 // COMPARTIR: copia el enlace a la ficha estatica del municipio
 function compartir(m){
   var url='https://municipal.viajeinteligencia.com/municipio/'+(m.sl?m.sl:'.html');
