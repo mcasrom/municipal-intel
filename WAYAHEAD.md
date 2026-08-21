@@ -29,9 +29,23 @@ sin inventar causalidad.
 - Contratos Región de Murcia 2023 (transparencia_osint) — contexto regional.
 - Población municipal INE 1996-2025 (este repo) — núcleo demográfico.
 
+## ESTADO CATÁLOGO (21/Ago) — P1 HECHO
+- Catálogo de municipios: 8.109 municipios con código INE + coordenadas (Overpass
+  ref:ine + centro). Validado spot-check 17/17 contra códigos oficiales (Lorca 30024,
+  Madrid 28079, València 46250...). Cobertura 99,7% de la población 2025.
+  - Consulta Overpass: relation boundary=administrative admin_level=8 area España,
+    out tags center -> ref:ine (código INE), centroide.
+  - Cruce con población por (provincia, nombre normalizado: artículos gallegos/catalanes
+    "O/As/Les", bilingües "/", apóstrofos). Match EXACTO solamente (sin fuzzy).
+  - Tabla catalogo (provincia, municipio, codigo_ine, lat, lon, osm_name).
+  - PENDIENTE-catalogo.md: 27 sin match (4 disueltos sin OSM + 23 con nombre OSM
+    distinto: Torredelcampo/Torre del Campo, Noáin (Valle de Elorz)/Noain...).
+    Resolver con codmun INE para 100%.
+- Reproducible: ingest/overpass_municipios.json (OSM crudo) + ingest/ine_catalog_build.py.
+
 ## Roadmap
 - [x] P0.5: dataset INE población municipal 1996-2025 (8.132 municipios).
-- [ ] P1: catálogo municipios (códigos INE + coords) — Overpass o codmun INE.
+- [x] P1: catálogo municipios (códigos INE + coords) — 8.109 municipios (99,7%).
 - [ ] P2: página / con buscador + mapa Leaflet.
 - [ ] P3: ficha municipio: población (serie + variación), luego contratos del
       ayuntamiento (PLACSP export manual o crawl) y finanzas (Facturas CARM).
