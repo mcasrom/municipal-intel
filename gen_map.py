@@ -192,9 +192,10 @@ body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:v
 </div>
 <div id="foot">Municipal Intelligence · datos abiertos INE + OpenStreetMap · sin cookies</div>
 <script>
-var catalogo=[], series={};
+var catalogo=[], series={}, lorcaIntel=null;
 fetch('data/catalogo.json').then(r=>r.json()).then(d=>{catalogo=d; pintar();});
 fetch('data/series.json').then(r=>r.json()).then(d=>series=d);
+fetch('data/lorca_intel.json').then(r=>r.json()).then(d=>lorcaIntel=d);
 
 var map=L.map('map',{renderer:L.canvas(),zoomControl:true}).setView([40.3,-3.6],6);
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(map);
@@ -275,10 +276,28 @@ function mostrar(m){
     ctxLine.textContent=txt;
   }
   var fich=document.getElementById('sFicha');
-  if(m.c==='30024'){
+  if(m.c==='30024' && lorcaIntel){
+    var li=lorcaIntel;
+    var rows='';
+    li.top.forEach(function(t){rows+='<tr><td>'+t.n+'</td><td class="r"><b>'+t.c+'</b></td><td class="r">'+t.imp+' €</td></tr>';});
+    var alerta='';
+    if(li.alerta&&li.alerta.length){
+      alerta='<div style="background:#7f1d1d;border:1px solid #b91c1c;border-radius:8px;padding:8px 10px;margin:8px 0;font-size:12px"><b style="color:#fca5a5">Posible troceado:</b> '+li.alerta.map(function(a){return a.c+' a '+a.n;}).join(', ')+'</div>';
+    }
     fich.style.display='block';
-    fich.innerHTML='<a href="ficha_lorca.html" style="color:#38bdf8;font-size:13px;font-weight:600">Ver la ficha de transparencia de Lorca → (contratos del Ayuntamiento)</a>';
-  } else { fich.style.display='none'; }
+    fich.innerHTML='<div style="border-top:1px solid #334155;margin-top:10px;padding-top:10px">'+
+      '<div style="font-weight:700;color:#38bdf8;font-size:13px;margin-bottom:6px">Transparencia del Ayuntamiento (Lorca)</div>'+
+      '<div class="kpis" style="margin:6px 0">'+
+      '<div class="kpi"><b>'+fmt(li.nmen)+'</b><span>contratos menores 24-26</span></div>'+
+      '<div class="kpi"><b>'+li.gasto+' €</b><span>gasto</span></div>'+
+      '<div class="kpi"><b>'+li.nfor+'</b><span>formales</span></div>'+
+      '</div>'+
+      '<div style="font-size:11px;color:#94a3b8;margin-bottom:4px">Proveedores por nº de contratos menores</div>'+
+      '<table style="width:100%;font-size:11px;border-collapse:collapse"><tr style="color:#94a3b8;text-align:left"><th>Proveedor</th><th>#</th><th>Importe</th></tr>'+rows+'</table>'+
+      alerta+
+      '<a href="ficha_lorca.html" style="display:block;text-align:center;margin-top:8px;padding:8px;border:1px solid #334155;border-radius:8px;color:#38bdf8;font-size:12px;font-weight:600">Ver la ficha completa de Lorca →</a>'+
+      '</div>';
+  } else { fich.style.display='none'; fich.innerHTML=''; }
   document.getElementById('side').style.display='block';
   dibujar(m.c, compCode);
   if(compCode){

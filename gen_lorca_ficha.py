@@ -144,4 +144,16 @@ for k, v in TOKENS.items():
 
 with open("dashboard/ficha_lorca.html", "w", encoding="utf-8") as f:
     f.write(html)
-print("ficha_lorca.html generado:", len(html) // 1024, "KB")
+
+# resumen para el mapa (panel lateral)
+intel = {
+    "n": "Lorca", "p25": fmt_e(p25), "var": ("+" if var >= 0 else "") + str(var),
+    "rank": rank_murcia, "nmen": len(m), "gasto": fmt_e(total_gasto), "nfor": len(formales),
+    "conc": ("%.1f" % (gasto_top5 / total_gasto * 100)) if total_gasto else "—",
+    "alerta": [{"n": r, "c": n} for r, n in flag[:5]],
+    "top": [{"n": r, "c": len(items), "imp": fmt_e(sum(x["importe"] for x in items))} for r, items in top_num[:8]],
+}
+with open("dashboard/data/lorca_intel.json", "w", encoding="utf-8") as f:
+    json.dump(intel, f, ensure_ascii=False)
+print("lorca_intel.json guardado")
+
