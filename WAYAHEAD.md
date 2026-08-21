@@ -116,6 +116,30 @@ sin inventar causalidad.
 - 3) Vía alternativa: datasets de contratos municipales en datos.gob.es / portales regionales
      (patrón transparencia_osint).
 
+## ANÁLISIS EXTERNO REVISADO (21/Ago) — CERTEZA/FALSEDAD + SPRINTS
+- Verificado contra el estado real: los POSITIVOS del análisis son ciertos; los NEGATIVOS
+  estaban DESACTUALIZADOS (el análisis precedió al sprint SEO): meta/og ya diferenciadas,
+  JSON-LD presente, 8.109 páginas estáticas, sitemap 8.112 URLs, vitrinas actualizadas.
+- CIERTOS pendientes: llms.txt (404, gap de consistencia), contenido editorial long-tail,
+  ficha Lorca = solo 1 municipio (piloto), nombre en inglés (marca), gobernanza de anomalías.
+- PARCIAL-FALSO: Overpass runtime — el mapa usa JSON estático; Overpass solo en re-ingesta anual.
+
+## SPRINT A (en curso) — QUICK WINS SEO
+- [ ] llms.txt para municipal (consistencia con el ecosistema; actualmente 404).
+- [ ] title/meta con "2025 (INE)" + términos de intención ("Población de los municipios de España 2025").
+
+## SPRINT B (pendiente) — SEO LONG-TAIL
+- [ ] Páginas editoriales desde los datos: "Municipios que más crecen en [provincia] 2025",
+      "pueblos que se despueblan", top-10 por provincia (contenido indexable que el mapa no da).
+
+## SPRINT C (pendiente) — PRODUCTO
+- [ ] Alertas/RSS ("avísame si mi municipio cambia de posición") — reutiliza el cron.
+- [ ] Isolation Forest en contratos menores para automatizar el troceado a escala.
+
+## SPRINT D (en WAYAHEAD)
+- [ ] Extender transparencia a otros ayuntamientos; distribución "España vaciada"
+      (X/Mastodon/Bluesky; HN/Reddit problemáticos por experiencia).
+
 ## Roadmap
 - [x] P0.5: dataset INE población municipal 1996-2025 (8.132 municipios).
 - [x] P1: catálogo municipios (códigos INE + coords) — 8.109 municipios (99,7%).
