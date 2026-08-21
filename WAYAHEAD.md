@@ -96,6 +96,16 @@ sin inventar causalidad.
 - Limpieza opcional futura: archivar lorca_pdf viejos (comprimidos) y VACUUM del
   sqlite. No necesario hoy.
 
+## KPI GRÁFICO (sprint en curso) — maximizar uso
+- Feedback usuario: "más impacto visual observar un KPI gráfico". Convertir los KPIs
+  numéricos del panel lateral del mapa y la ficha de Lorca en visualizaciones:
+  1) Estructura de edad → barra apilada horizontal (3 grupos, H/M en dos tonos).
+  2) Evolución 1996-2025 → gráfico de área (línea + relleno degradado).
+  3) Crecimiento 1/5/10 años → mini-barras verdes/rojas por signo.
+  4) Transparencia Lorca → barras visuales por proveedor (troceado de un vistazo).
+  5) Ranking → barra de posición en España.
+- Se mantienen los números (datos fiables) convertidos en SVG/Canvas (gen_map.py + gen_lorca_ficha.py).
+
 ## PRÓXIMO SPRINT — EXPANDIR LA FICHA DE TRANSPARENCIA A OTROS AYUNTAMIENTOS
 - Lorca fue la prueba de concepto (validado el pipeline completo). Pipeline listo y replicable.
 - 1) Generalizar gen_lorca_ficha.py → gen_ficha_municipio.py (parametrizado por municipio +
