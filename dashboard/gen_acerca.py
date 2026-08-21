@@ -1,0 +1,127 @@
+import json, os
+
+# Página "Acerca / Metodología / Fuentes" de Municipal Intelligence
+# Se genera desde gen_map.py (mismo estilo oscuro) como acerca.html
+
+DATA = {
+    "poblacion": {
+        "fecha": "1 de enero de 2025",
+        "publicacion": "11 de diciembre de 2025",
+        "serie": "1996-2025 (29 referencias; 1997 no publicado; 1996 referida a 1 de mayo)",
+        "municipios": "8.132 municipios oficiales (+ 4 disueltos que se conservan en la serie histórica)",
+        "fuente": "INE · Cifras oficiales de población de los municipios españoles: Revisión del Padrón Municipal",
+        "api": "https://servicios.ine.es/wstempus/js/ES/DATOS_TABLA/{id_tabla} (52 tablas provinciales)",
+        "nota": "Las cifras de población son las oficiales del Padrón Municipal (revisión anual), aprobadas por Real Decreto y publicadas en el BOE.",
+    },
+    "catalogo": {
+        "coordenadas": "Nodo admin_centre de cada municipio (el pueblo), vía Overpass/OpenStreetMap",
+        "codigos": "ref:ine (código INE de 5 dígitos: 2 de provincia + 3 de municipio)",
+        "cobertura": "8.109 municipios con coordenadas y código (99,7% de la población 2025); el resto documentado como pendiente",
+    },
+    "indicadores": {
+        "variaciones": "Variación 1 año (2024→2025), 5 años (2020→2025) y 10 años (2016→2025), calculadas sobre cifras oficiales",
+        "rankings": "Posición por población (2025) a nivel nacional y provincial; rankings de crecimiento/descenso 2016→2025 filtrados a municipios con ≥1.000 habitantes en 2016 para evitar el ruido de pueblos pequeños",
+        "anomalias": "Troceado (proveedor con volumen muy alto de contratos menores de importe bajo) y concentración (% del gasto en los principales proveedores), metodología del proyecto transparencia_osint",
+    },
+    "contratos_lorca": {
+        "fuente": "Portal de Transparencia del Ayuntamiento de Lorca (transparencia.lorca.es)",
+        "menores": "Relaciones de contratos menores publicadas por trimestre (PDF), serie 2019-2026",
+        "formales": "Listado de contratos formales (expediente, objeto, procedimiento, importe, adjudicatario)",
+        "nota": "Los contratos menores se publican en PDF trimestral; el parser captura el grueso de las filas con formato de importe, no el 100%.",
+    },
+}
+
+HTML = """<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Metodología y fuentes · Municipal Intelligence</title>
+<meta name="description" content="Metodología, fuentes, fecha de los datos y licencias de Municipal Intelligence, el mapa de población de los 8.132 municipios de España y la ficha de transparencia de Lorca.">
+<link rel="canonical" href="https://municipal.viajeinteligencia.com/acerca.html">
+<link rel="icon" type="image/png" href="icon-192.png">
+<meta property="og:image" content="https://municipal.viajeinteligencia.com/og-municipal.png">
+<style>
+:root{--bg:#0f172a;--card:#1e293b;--fg:#e2e8f0;--mut:#94a3b8;--acc:#38bdf8}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--fg);line-height:1.65}
+.wrap{max-width:820px;margin:0 auto;padding:24px}
+h1{font-size:24px;margin-bottom:4px}
+h2{font-size:17px;color:var(--acc);margin:28px 0 10px;border-bottom:1px solid #334155;padding-bottom:6px}
+h3{font-size:14px;margin:14px 0 6px}
+.mut{color:var(--mut);font-size:12px}
+.kpi{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
+.kpi div{background:var(--card);border-radius:10px;padding:12px 14px;min-width:160px;flex:1}
+.kpi b{display:block;font-size:18px}
+.kpi span{font-size:11px;color:var(--mut)}
+li{margin:4px 0 4px 18px}
+code{background:#0f172a;border:1px solid #334155;border-radius:5px;padding:1px 6px;font-size:12px;word-break:break-all}
+a{color:var(--acc)}
+.note{background:var(--card);border-radius:10px;padding:14px;margin:12px 0;font-size:13px}
+.note b{color:var(--acc)}
+.btn{display:inline-block;margin-top:6px;padding:9px 16px;border:1px solid #334155;border-radius:8px;color:var(--fg);text-decoration:none;font-size:13px}
+.btn:hover{background:#334155}
+.src{font-size:11px;color:var(--mut);margin-top:34px;line-height:1.7}
+</style></head><body><div class="wrap">
+
+<h1>Municipal Intelligence</h1>
+<div class="mut">Mapa de población de los 8.132 municipios de España + ficha de transparencia del Ayuntamiento de Lorca. Datos oficiales y trazables.</div>
+
+<div class="kpi">
+  <div><b>01/01/2025</b><span>fecha de la población (INE, publicada 11/12/2025)</span></div>
+  <div><b>8.132</b><span>municipios oficiales</span></div>
+  <div><b>1996-2025</b><span>serie de evolución</span></div>
+  <div><b>Q2 2026</b><span>últimos contratos menores de Lorca</span></div>
+</div>
+
+<h2>Fecha de los datos</h2>
+<ul>
+<li>Población: cifras oficiales a <b>1 de enero de 2025</b>, publicadas por el INE el <b>11 de diciembre de 2025</b> (Revisión del Padrón Municipal).</li>
+<li>Serie histórica: 1996-2025 (29 referencias; 1997 no publicado; la de 1996 está referida a 1 de mayo).</li>
+<li>Contratos del Ayuntamiento de Lorca: relaciones trimestrales de contratos menores; la última publicada corresponde al segundo trimestre de 2026.</li>
+</ul>
+
+<h2>Metodología</h2>
+<h3>Población municipal</h3>
+<ul>
+<li>Fuente: INE, operación «Cifras oficiales de población de los municipios españoles: Revisión del Padrón Municipal» (padre 525).</li>
+<li>Obtención: API de datos abiertos del INE (<code>servicios.ine.es/wstempus/js/ES/DATOS_TABLA/{id_tabla}</code>), 52 tablas provinciales.</li>
+<li>Limpieza: se excluyen las 12 filas agregadas provinciales/autonómicas (detectadas porque su valor 2025 es igual a la suma del resto); se conservan los 4 municipios disueltos con valor 0 desde su fusión (Cesuras/Oza dos Ríos → Oza-Cesuras; Cerdedo/Cotobade → Cerdedo-Cotobade).</li>
+</ul>
+<h3>Catálogo y coordenadas</h3>
+<ul>
+<li>Coordenadas: nodo <code>admin_centre</code> de cada municipio (la localidad, no el centroide del término, que en municipios costeros puede caer fuera), vía Overpass/OpenStreetMap.</li>
+<li>Códigos: etiqueta <code>ref:ine</code> (código INE de 5 dígitos).</li>
+<li>Cobertura: 8.109 municipios con código y coordenadas (99,7% de la población 2025); los restantes están documentados como pendientes.</li>
+</ul>
+<h3>Indicadores</h3>
+<ul>
+<li>Variaciones a 1, 5 y 10 años, calculadas sobre las cifras oficiales.</li>
+<li>Rankings de crecimiento/descenso 2016→2025 limitados a municipios con ≥1.000 habitantes en 2016 (evita el ruido de los pueblos pequeños).</li>
+<li>Anomalías de contratación (troceado, concentración): misma metodología que el proyecto transparencia_osint.</li>
+</ul>
+
+<h2>Fuentes</h2>
+<ul>
+<li><a href="https://www.ine.es">Instituto Nacional de Estadística (INE)</a> — Cifras oficiales de población de los municipios españoles (Revisión del Padrón Municipal).</li>
+<li><a href="https://www.openstreetmap.org">OpenStreetMap</a> / <a href="https://overpass-api.de">Overpass API</a> — coordenadas (admin_centre) y códigos INE (ref:ine).</li>
+<li><a href="https://transparencia.lorca.es">Portal de Transparencia del Ayuntamiento de Lorca</a> — contratos menores (PDF trimestrales) y contratos formales.</li>
+<li>Tiles del mapa: © OpenStreetMap contributors.</li>
+</ul>
+
+<h2>Licencia y datos</h2>
+<div class="note">
+<b>Datos:</b> los datos de población son cifras oficiales del INE; los de contratos son publicaciones oficiales del Ayuntamiento de Lorca en su portal de transparencia; los datos geográficos son de OpenStreetMap (<a href="https://www.openstreetmap.org/copyright">© contribuidores de OpenStreetMap, licencia ODbL</a>).<br><br>
+<b>Regla del proyecto:</b> datos fiables y trazables primero; sin datos inventados; se señala explícitamente lo pendiente. La fecha de cada dato está indicada en la interfaz.<br><br>
+<b>Código:</b> proyecto de código abierto. Repositorio en GitHub (mcasrom/municipal-intel).
+</div>
+
+<h2>Apoyar el proyecto</h2>
+<p>Es un proyecto independiente, gratis y sin publicidad. Si te resulta útil, puedes apoyarlo en Ko-fi:</p>
+<p><a class="btn" href="https://ko-fi.com/m_castillo">☕ Apoyar en Ko-fi</a>
+<a class="btn" href="mailto:info@viajeinteligencia.com">✉ Contacto: info@viajeinteligencia.com</a></p>
+
+<div class="src">Municipal Intelligence — proyecto independiente de datos abiertos. Los indicadores (variaciones, rankings, anomalías) se calculan sobre las cifras oficiales citadas; no se modifican ni se inventan datos. © OpenStreetMap contributors para los datos geográficos. Contacto vía el repositorio.</div>
+</div></body></html>
+"""
+
+with open("dashboard/acerca.html", "w", encoding="utf-8") as f:
+    f.write(HTML)
+print("acerca.html generado:", len(HTML) // 1024, "KB")
