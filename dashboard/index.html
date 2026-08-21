@@ -66,7 +66,8 @@ body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:v
 <body>
 <div id="map"></div>
 <div id="top">
-  <h1>Municipal Intelligence<small>Población de los 8.132 municipios de España · INE 1996-2025</small></h1>
+  <h1>Municipal Intelligence<small>Población de los 8.132 municipios de España · INE</small></h1>
+  <div id="fresco" style="font-size:10px;color:#94a3b8;margin-bottom:8px">Datos: población a 01/01/2025 (INE, publicado 11/12/2025). Contratos de Lorca: trimestrales hasta Q2 2026 (transparencia.lorca.es).</div>
   <input id="buscar" placeholder="Busca un municipio… (ej. Lorca)" autocomplete="off">
   <ul id="sug"></ul>
   <button class="btn" onclick="verRankings()">Rankings · crecimientos · descensos</button>
@@ -100,7 +101,7 @@ body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:v
   <input id="cmp" placeholder="Escribe un municipio…" autocomplete="off">
   <ul id="sug2"></ul>
   <div id="cmp2"><b id="cmpNom"></b> <span id="cmpVal" class="mut" style="font-size:11px"></span><br><span id="cmpSerie" style="font-size:11px"></span></div>
-  <div class="src">Fuente: INE · Cifras oficiales de población (Revisión del Padrón Municipal), serie 1996-2025 (1997 no publicado; 1996 a 1 de mayo). Coordenadas y códigos: © OpenStreetMap (ref:ine) · Overpass. Indicadores calculados sobre datos INE. Datos trazables, sin inventar.</div>
+  <div class="src">Datos actualizados: población INE a 01/01/2025 (publicada 11/12/2025), serie 1996-2025 (1997 no publicado; 1996 a 1 de mayo). Contratos del Ayuntamiento de Lorca: relaciones trimestrales de contratos menores (última Q2 2026) y formales vía transparencia.lorca.es. Coordenadas y códigos: © OpenStreetMap (ref:ine) · Overpass. Indicadores calculados sobre datos oficiales. Sin datos inventados.</div>
 </div>
 <div class="legend">
   <div><i style="background:#0ea5e9"></i>&lt; 1.000</div>
@@ -132,9 +133,10 @@ function pintar(){
   catalogo.forEach(function(m,i){
     idx[m.c]=i;
     var c=clase(m.po);
-    L.circleMarker([m.la,m.lo],{radius:c.r,color:c.color,fillColor:c.color,fillOpacity:.75,weight:1}).addTo(grupo)
-      .bindPopup('<b>'+m.n+'</b><br>'+m.p+' · '+m.po.toLocaleString('es-ES')+' hab');
-    grupo.eachLayer?null:null;
+    var crec=m.g16!=null?(m.g16>=0?'<br><span style="color:#4ade80">▲ +'+m.g16.toFixed(1)+'% en 10 años</span>':'<br><span style="color:#f87171">▼ '+m.g16.toFixed(1)+'% en 10 años</span>'):'';
+    var mk=L.circleMarker([m.la,m.lo],{radius:c.r,color:c.color,fillColor:c.color,fillOpacity:.75,weight:1}).addTo(grupo);
+    mk.bindPopup('<b>'+m.n+'</b> ('+m.p+')<br>'+m.po.toLocaleString('es-ES')+' hab (2025)'+crec);
+    mk.on('click',function(){map.setView([m.la,m.lo],10,{animate:true});mostrar(m);});
   });
 }
 
