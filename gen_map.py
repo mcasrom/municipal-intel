@@ -202,7 +202,7 @@ body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:v
   <div><i style="background:#f59e0b"></i>20.000-100.000</div>
   <div><i style="background:#ef4444"></i>&gt; 100.000</div>
 </div>
-<div id="foot">Municipal Intelligence · datos abiertos INE + OpenStreetMap · sin cookies</div>
+<div id="foot">Municipal Intelligence · datos abiertos INE + OpenStreetMap · <a href="acerca.html" style="color:#38bdf8">Metodología, fuentes y licencia</a> · <a href="https://ko-fi.com/m_castillo" style="color:#38bdf8">Ko-fi</a> · sin cookies</div>
 <script>
 var catalogo=[], series={}, lorcaIntel=null;
 fetch('data/catalogo.json').then(r=>r.json()).then(d=>{catalogo=d; pintar();});
