@@ -53,14 +53,28 @@ sin inventar causalidad.
   - Deploy: /home/deploy/municipal-intel/dashboard + vhost nginx
     municipal.viajeinteligencia.com + certbot. Commit fbd6145.
 
+## ESTADO SEO ESTRUCTURAL (21/Ago) — PÁGINAS + JSON-LD
+- JSON-LD: Dataset en index + Dataset/GovernmentService en ficha_lorca.
+- **300 páginas estáticas por municipio** (`/municipio/{slug}.html`): capitales de
+  provincia + top población 2025. Cada ficha: H1, KPIs (2025/1996/Δ%), rank
+  nacional, variaciones 1/5/10 años, SVG de evolución, serie completa en <details>
+  (texto indexable), JSON-LD Dataset, canonical/OG. Enlace cruzado: mapa →
+  ficha (top 300) y Lorca → ficha de transparencia.
+- **Sitemap 303 URLs** (mapa + ficha Lorca + acerca + 300 municipios).
+- Corrección del análisis externo: "sitemap será 1 URL" = FALSO (son 303 tras
+  este trabajo; antes 3). El resto del análisis (SPA pobre en texto, sin JSON-LD,
+  sin URLs por municipio, Lorca mal enmarcado) = CIERTO y corregido aquí.
+- Pendiente del análisis: separar landing mapa vs transparencia Lorca; OG dinámico
+  por municipio ("tu pueblo perdió el 30%"); cruce con Alquimetría (población +
+  alquiler); extender más allá de los 300 municipios.
+
 ## Roadmap
 - [x] P0.5: dataset INE población municipal 1996-2025 (8.132 municipios).
 - [x] P1: catálogo municipios (códigos INE + coords) — 8.109 municipios (99,7%).
 - [x] P2: mapa Leaflet + buscador + sparkline — DESPLEGADO.
+- [x] P3 (parcial): ficha de transparencia de Lorca (contratos + troceado + renta).
+- [x] SEO: JSON-LD + 300 fichas estáticas + sitemap 303 URLs.
 - [ ] P3: ficha municipio: contratos del ayuntamiento (PLACSP export manual o
       crawl) y finanzas (Facturas CARM). Población ya en la ficha del mapa.
 - [ ] P4: indicadores + cambios + comparador (rankings, variaciones interanuales).
 - Patrón: estático generado + nginx (como transparencia_osint y alquimetria).
-
-## Regla
-- Datos fiables y trazables primero. No inventar. Señalar claramente lo pendiente.
