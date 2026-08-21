@@ -112,7 +112,8 @@ a{color:var(--acc)}
 
 <h2>Apoyar el proyecto</h2>
 <p>Es un proyecto independiente, gratis y sin publicidad. Si te resulta útil, puedes apoyarlo en Ko-fi:</p>
-<p><a class="btn" href="https://ko-fi.com/m_castillo">☕ Apoyar en Ko-fi</a></p>
+<p><a class="btn" href="https://ko-fi.com/m_castillo">☕ Apoyar en Ko-fi</a>
+<a class="btn" href="mailto:info@viajeinteligencia.com">✉ Contacto: info@viajeinteligencia.com</a></p>
 
 <div class="src">Municipal Intelligence — proyecto independiente de datos abiertos. Los indicadores (variaciones, rankings, anomalías) se calculan sobre las cifras oficiales citadas; no se modifican ni se inventan datos. © OpenStreetMap contributors para los datos geográficos. Contacto vía el repositorio.</div>
 </div></body></html>

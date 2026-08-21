@@ -120,6 +120,9 @@ body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:v
 #landBox .close{position:absolute;top:12px;right:16px;background:none;border:none;color:var(--mut);font-size:22px;cursor:pointer}
 .cta{flex:1;min-width:130px;padding:10px 12px;border:1px solid #334155;border-radius:8px;background:#0f172a;color:var(--fg);font-size:13px;cursor:pointer}
 .cta:hover{border-color:var(--acc);background:#1e293b}
+#kofi{position:absolute;bottom:44px;left:12px;z-index:1500;width:42px;height:42px;border-radius:50%;background:var(--card);border:1px solid #334155;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 10px rgba(0,0,0,.5)}
+#kofi a{text-decoration:none}
+#kofi:hover{border-color:var(--acc);background:#334155}
 .legend{position:absolute;bottom:24px;right:12px;z-index:999;background:var(--card);border-radius:8px;padding:8px 10px;font-size:11px;color:var(--mut);box-shadow:0 2px 10px rgba(0,0,0,.4)}
 .legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px}
 #top .btn{width:100%;margin-top:8px;padding:8px;border:1px solid #334155;border-radius:8px;background:#0f172a;color:var(--fg);font-size:12px;cursor:pointer}
@@ -166,6 +169,10 @@ body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:v
       <button class="cta" onclick="cerrarLanding()">Explorar el mapa</button>
       <button class="cta" onclick="irLorca()">Ver Lorca (transparencia)</button>
       <button class="cta" onclick="verRankings()">Ver rankings</button>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+      <a class="cta" style="display:block;text-align:center;text-decoration:none" href="https://ko-fi.com/m_castillo" target="_blank" rel="noopener">☕ Apoyar en Ko-fi</a>
+      <a class="cta" style="display:block;text-align:center;text-decoration:none" href="mailto:info@viajeinteligencia.com">Contacto</a>
     </div>
     <div style="font-size:11px;color:#94a3b8;margin-top:10px">
       Datos: INE a 01/01/2025 (publicado 11/12/2025) · © OpenStreetMap · <a href="acerca.html" style="color:#38bdf8">Metodología, fuentes y licencia</a>
@@ -228,7 +235,8 @@ body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:v
   <div><i style="background:#f59e0b"></i>20.000-100.000</div>
   <div><i style="background:#ef4444"></i>&gt; 100.000</div>
 </div>
-<div id="foot">Municipal Intelligence · datos abiertos INE + OpenStreetMap · <a href="acerca.html" style="color:#38bdf8">Metodología, fuentes y licencia</a> · <a href="https://ko-fi.com/m_castillo" style="color:#38bdf8">Ko-fi</a> · sin cookies</div>
+<div id="kofi" title="Apoyar el proyecto en Ko-fi"><a href="https://ko-fi.com/m_castillo" target="_blank" rel="noopener">☕</a></div>
+<div id="foot">Municipal Intelligence · datos abiertos INE + OpenStreetMap · <a href="acerca.html" style="color:#38bdf8">Metodología, fuentes y licencia</a> · <a href="mailto:info@viajeinteligencia.com" style="color:#38bdf8">Contacto</a> · <a href="https://ko-fi.com/m_castillo" style="color:#38bdf8">Ko-fi</a> · sin cookies</div>
 <script>
 var catalogo=[], series={}, lorcaIntel=null;
 fetch('data/catalogo.json').then(r=>r.json()).then(d=>{catalogo=d; pintar();});
