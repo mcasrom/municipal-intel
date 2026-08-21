@@ -278,6 +278,7 @@ function mostrar(m){
       '</div>'+
       '<div style="font-size:11px;color:#94a3b8;margin-bottom:4px">Proveedores por nº de contratos menores</div>'+
       '<table style="width:100%;font-size:11px;border-collapse:collapse"><tr style="color:#94a3b8;text-align:left"><th>Proveedor</th><th>#</th><th>Importe</th></tr>'+rows+'</table>'+
+      (li.renta?('<div class="kpis" style="margin:8px 0"><div class="kpi"><b>'+li.renta.neta_persona.toLocaleString('es-ES')+' €</b><span>renta neta/persona '+li.renta.anyo+'</span></div><div class="kpi"><b>'+li.renta.neta_hogar.toLocaleString('es-ES')+' €</b><span>neta/hogar</span></div></div><div style="font-size:11px;color:#94a3b8">Murcia capital: '+li.renta.murcia_capital.toLocaleString('es-ES')+' €/persona · INE Atlas</div>'):'')+
       alerta+
       '<a href="ficha_lorca.html" style="display:block;text-align:center;margin-top:8px;padding:8px;border:1px solid #334155;border-radius:8px;color:#38bdf8;font-size:12px;font-weight:600">Ver la ficha completa de Lorca →</a>'+
       '</div>';

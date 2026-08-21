@@ -3,6 +3,7 @@ from collections import defaultdict
 
 menores = json.load(open("lorca_menores.json"))
 formales = json.load(open("lorca_contratos.json"))
+renta = json.load(open("lorca_renta.json"))
 DBP = "data/poblacion_municipal.sqlite"
 if not os.path.exists(DBP):
     DBP = "poblacion_municipal.sqlite"
@@ -61,6 +62,8 @@ HTML = """<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
 <title>Lorca · Municipal Intelligence</title>
 <meta name="description" content="Ficha de inteligencia municipal de Lorca: población INE 1996-2025 y contratos del Ayuntamiento (formales + menores) con anomalías detectadas.">
 <link rel="canonical" href="https://municipal.viajeinteligencia.com/ficha_lorca.html">
+<link rel="icon" type="image/png" href="icon-192.png">
+<meta property="og:image" content="https://municipal.viajeinteligencia.com/og-municipal.png">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
@@ -109,6 +112,15 @@ a{color:var(--acc)}
 
 @@ALERTA@@
 
+<h2>Renta de los hogares (INE · Atlas de distribución de renta)</h2>
+<div class="grid">
+  <div class="kpi"><b>@@RNET@@ €</b><span>renta neta media por persona (2022)</span></div>
+  <div class="kpi"><b>@@RHOG@@ €</b><span>renta neta media por hogar (2022)</span></div>
+  <div class="kpi"><b>@@RMED@@ €</b><span>mediana por unidad de consumo (2022)</span></div>
+  <div class="kpi"><b>@@RPROV@@ €</b><span>Murcia capital (renta/persona)</span></div>
+</div>
+<div class="alert" style="background:#1e293b;border:1px solid #334155"><b style="color:#fca5a5">Contexto:</b> la renta neta media por persona de Lorca (11.470 € en 2022) está por debajo de Murcia capital (13.906 €) y Cartagena (13.126 €) — refleja su perfil agrario y rural. La serie 2019→2022 sube de 9.777 € a 11.470 € (+17,3%).</div>
+
 <h2>Proveedores por número de contratos menores (2024-2026)</h2>
 <table><tr><th>#</th><th>Proveedor</th><th class="r">Contratos</th><th class="r">Importe</th><th class="r">Media</th></tr>
 @@TROWN@@
@@ -138,7 +150,11 @@ TOKENS = {"@@P25@@": fmt_e(p25), "@@P96@@": fmt_e(p96), "@@SIGN@@": "pos" if var
           "@@NMEN@@": str(len(m)), "@@GASTO@@": fmt_e(total_gasto), "@@NFOR@@": str(len(formales)),
           "@@CONC@@": ("%.1f%%" % (gasto_top5 / total_gasto * 100)) if total_gasto else "—",
           "@@ALERTA@@": alerta, "@@TROWN@@": row_top_num, "@@IROWN@@": row_top_imp,
-          "@@FROWN@@": row_form, "@@COD@@": cata[0] if cata else "30024"}
+          "@@FROWN@@": row_form, "@@COD@@": cata[0] if cata else "30024",
+          "@@RNET@@": fmt_e(renta["municipios"]["Lorca"].get("Renta neta media por persona", {}).get("2022", 0)),
+          "@@RHOG@@": fmt_e(renta["municipios"]["Lorca"].get("Renta neta media por hogar", {}).get("2022", 0)),
+          "@@RMED@@": fmt_e(renta["municipios"]["Lorca"].get("Mediana de la renta por unidad de consumo", {}).get("2022", 0)),
+          "@@RPROV@@": fmt_e(renta["municipios"]["Murcia"].get("Renta neta media por persona", {}).get("2022", 0))}
 html = HTML
 for k, v in TOKENS.items():
     html = html.replace(k, str(v))
@@ -152,6 +168,13 @@ intel = {
     "rank": rank_murcia, "nmen": len(m), "gasto": fmt_e(total_gasto), "nfor": len(formales),
     "conc": ("%.1f" % (gasto_top5 / total_gasto * 100)) if total_gasto else "—",
     "alerta": [{"n": r, "c": n} for r, n in flag[:5]],
+    "renta": {
+        "neta_persona": renta["municipios"]["Lorca"].get("Renta neta media por persona", {}).get("2022"),
+        "neta_hogar": renta["municipios"]["Lorca"].get("Renta neta media por hogar", {}).get("2022"),
+        "mediana_uc": renta["municipios"]["Lorca"].get("Mediana de la renta por unidad de consumo", {}).get("2022"),
+        "murcia_capital": renta["municipios"]["Murcia"].get("Renta neta media por persona", {}).get("2022"),
+        "anyo": 2022,
+    },
     "top": [{"n": r, "c": len(items), "imp": fmt_e(sum(x["importe"] for x in items))} for r, items in top_num[:8]],
 }
 with open("dashboard/data/lorca_intel.json", "w", encoding="utf-8") as f:
