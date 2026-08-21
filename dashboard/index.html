@@ -163,6 +163,9 @@ body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:v
   </div>
   <div id="sDatos" style="display:none">
   <div id="sFichaMun" style="display:none;margin:6px 0"></div>
+  <div id="sShare" style="display:none;margin:6px 0">
+    <button id="shareBtn" class="cta" style="width:100%;min-width:0">🔗 Compartir este municipio</button>
+  </div>
   <div id="sRank"></div>
   <div class="kpis">
     <div class="kpi"><b id="s2025"></b><span>2025</span></div>
@@ -300,6 +303,10 @@ function mostrar(m){
   var fichaMun=document.getElementById('sFichaMun');
   if(m.sl){ fichaMun.style.display='block'; fichaMun.innerHTML='<a href="municipio/'+m.sl+'.html" style="color:#38bdf8;font-size:13px;font-weight:600">Ver ficha de población de '+m.n+' →</a>'; }
   else { fichaMun.style.display='none'; fichaMun.innerHTML=''; }
+  var sh=document.getElementById('sShare');
+  if(m.sl){ sh.style.display='block'; shareBtn.textContent='🔗 Compartir este municipio'; }
+  else { sh.style.display='none'; }
+  try{history.replaceState(null,'','?m='+m.c);}catch(e){}
   var fich=document.getElementById('sFicha');
   if(m.c==='30024' && lorcaIntel){
     var li=lorcaIntel;
@@ -340,6 +347,22 @@ function mostrar(m){
   }
 }
 function fmtNum(x){return x==null?'—':(x>=0?'+':'')+x.toFixed(1);}
+// COMPARTIR: copia el enlace a la ficha estatica del municipio
+function compartir(m){
+  var url='https://municipal.viajeinteligencia.com/municipio/'+(m.sl?m.sl:'.html');
+  if(navigator.clipboard){navigator.clipboard.writeText(url).then(function(){shareBtn.textContent='✓ Enlace copiado';setTimeout(function(){shareBtn.textContent='🔗 Compartir este municipio';},1500);});}
+  else{window.prompt('Copia el enlace:', url);}
+}
+var shareBtn=document.getElementById('shareBtn');
+shareBtn.addEventListener('click',function(){if(actual)compartir(actual);});
+// DEEP-LINK: ?m=CODIGO abre ese municipio; actualiza la URL al seleccionar
+function muniDeURL(){
+  var q=new URLSearchParams(location.search).get('m');
+  if(!q)return;
+  var m=catalogo.find(function(x){return x.c===q;});
+  if(m)setTimeout(function(){irA(m);},600);
+}
+window.addEventListener('load',muniDeURL);
 function ocultarPanel(){
   document.getElementById('sWelcome').style.display='block';
   document.getElementById('sDatos').style.display='none';
