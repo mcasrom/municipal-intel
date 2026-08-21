@@ -158,6 +158,19 @@ sin inventar causalidad.
   gen_lorca_ficha.py → gen_ficha_municipio.py; localizar portales de la misma plantilla
   que Lorca; vía datos.gob.es) + distribución (posts/datos.gob.es listos) + OG dinámico.
 
+## DECISIÓN ESTRATÉGICA (21/Ago) — EL PROBLEMA ES EL ALCANCE, NO LA FRECUENCIA
+- Conclusión del usuario (correcta): publicar a diario no sirve si nadie nos ve en
+  X/Mastodon/Bluesky. El problema es el ALCANCE (reach), no la frecuencia.
+- Sin seguidores no hay reach orgánico en ninguna red. La distribución social sin
+  audiencia = gritar en el vacío.
+- Los únicos canales que dan descubrimiento SIN audiencia previa:
+  1) SEO (Google/Bing) — lento (semanas) pero el único escalable sin seguidores.
+  2) datos.gob.es (directorio) — descubrimiento real para proyectos de datos.
+  3) El gancho viral puntual (el post de nearme dio 39+6 clics reales SIN audiencia:
+     la X los mostró por hashtags/búsqueda) — señal de que un hook fuerte llega solo.
+- ACCIÓN (no más posts por posts): priorizar SEO + datos.gob.es; los posts sociales
+  SOLO cuando haya un hook real y para validar (no como canal principal).
+
 ## Roadmap
 - [x] P0.5: dataset INE población municipal 1996-2025 (8.132 municipios).
 - [x] P1: catálogo municipios (códigos INE + coords) — 8.109 municipios (99,7%).
