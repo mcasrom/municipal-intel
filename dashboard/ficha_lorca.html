@@ -1,0 +1,75 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lorca · Municipal Intelligence</title>
+<meta name="description" content="Ficha de inteligencia municipal de Lorca: población INE 1996-2025 y contratos del Ayuntamiento (formales + menores) con anomalías detectadas.">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+:root{--bg:#0f172a;--card:#1e293b;--fg:#e2e8f0;--mut:#94a3b8;--acc:#38bdf8;--rojo:#f87171;--verde:#4ade80}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--fg);line-height:1.5}
+.wrap{max-width:960px;margin:0 auto;padding:20px}
+h1{font-size:26px}
+h2{font-size:18px;margin:26px 0 10px;color:var(--acc);border-bottom:1px solid #334155;padding-bottom:6px}
+.mut{color:var(--mut);font-size:12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin:14px 0}
+.kpi{background:var(--card);border-radius:10px;padding:14px}
+.kpi b{display:block;font-size:22px}
+.kpi span{font-size:11px;color:var(--mut)}
+.kpi .pos{color:var(--verde)}.kpi .neg{color:var(--rojo)}
+table{width:100%;border-collapse:collapse;font-size:13px;background:var(--card);border-radius:8px;overflow:hidden}
+th{background:#0f172a;color:var(--mut);text-align:left;padding:8px 10px;font-size:11px;text-transform:uppercase}
+td{padding:8px 10px;border-top:1px solid #1e293b}
+td.r{text-align:right}
+.alert{background:#7f1d1d;border:1px solid #b91c1c;border-radius:8px;padding:12px 14px;margin:12px 0}
+.alert b{color:#fca5a5}
+#mapa{height:220px;border-radius:10px;margin-top:10px}
+.src{font-size:10px;color:var(--mut);margin-top:30px;line-height:1.6}
+a{color:var(--acc)}
+</style></head><body><div class="wrap">
+
+<h1>Lorca <span class="mut">· Municipal Intelligence</span></h1>
+<div class="mut">Ayuntamiento de Lorca · Región de Murcia · código INE 30024 · datos trazables (INE + Portal de Transparencia del Ayuntamiento)</div>
+
+<h2>Población (INE, Revisión del Padrón)</h2>
+<div class="grid">
+  <div class="kpi"><b>98.969</b><span>habitantes (2025)</span></div>
+  <div class="kpi"><b>69.045</b><span>en 1996</span></div>
+  <div class="kpi"><b class="pos">+43.3</b><span>variación 1996 → 2025</span></div>
+  <div class="kpi"><b>3</b><span>rank en Murcia (45 municipios)</span></div>
+</div>
+<div id="mapa"></div>
+
+<h2>Contratos del Ayuntamiento de Lorca</h2>
+<div class="grid">
+  <div class="kpi"><b>8472</b><span>contratos menores 2024-2026 (publicados)</span></div>
+  <div class="kpi"><b>16.164.304 €</b><span>gasto menor 2024-2026</span></div>
+  <div class="kpi"><b>52</b><span>contratos formales (lote actual)</span></div>
+  <div class="kpi"><b>4.4%</b><span>del gasto menor en sus 5 principales proveedores</span></div>
+</div>
+
+<div class='alert'><b>Posible troceado:</b> proveedores con un volumen muy alto de contratos menores en 2024-2026 — <b>296</b> a A. PALLARES PERIAGO Y OTROS, <b>78</b> a LORCAEPIS S.L., <b>76</b> a CERRAJEROS LIDONS S.L.U, <b>53</b> a AUTOCARES LORCA BUS S.L.U. Contratos de importe bajo repetidos en el mismo periodo es el patrón clásico de fraccionamiento del gasto.</div>
+
+<h2>Proveedores por número de contratos menores (2024-2026)</h2>
+<table><tr><th>#</th><th>Proveedor</th><th class="r">Contratos</th><th class="r">Importe</th><th class="r">Media</th></tr>
+<tr><td>1</td><td>A. PALLARES PERIAGO Y OTROS</td><td class='r'><b>296</b></td><td class='r'>58.732</td><td class='r'>198</td></tr><tr><td>2</td><td>LORCAEPIS S.L.</td><td class='r'><b>78</b></td><td class='r'>78.435</td><td class='r'>1.006</td></tr><tr><td>3</td><td>CERRAJEROS LIDONS S.L.U</td><td class='r'><b>76</b></td><td class='r'>10.037</td><td class='r'>132</td></tr><tr><td>4</td><td>AUTOCARES LORCA BUS S.L.U</td><td class='r'><b>53</b></td><td class='r'>50.577</td><td class='r'>954</td></tr><tr><td>5</td><td>SCALA IMAGEN S.L.U</td><td class='r'><b>43</b></td><td class='r'>18.954</td><td class='r'>441</td></tr><tr><td>6</td><td>COMPAÑIA TEATRO GUERRA S.L.U</td><td class='r'><b>42</b></td><td class='r'>154.370</td><td class='r'>3.675</td></tr><tr><td>7</td><td>SONEPAR IBERICA SPAIN S.A.U</td><td class='r'><b>38</b></td><td class='r'>120.464</td><td class='r'>3.170</td></tr><tr><td>8</td><td>LABORAL J.P.S. DE LORCA S.L.</td><td class='r'><b>37</b></td><td class='r'>53.929</td><td class='r'>1.458</td></tr><tr><td>9</td><td>AMBULANCIAS MAR MENOR S.L.U</td><td class='r'><b>23</b></td><td class='r'>52.628</td><td class='r'>2.288</td></tr><tr><td>10</td><td>ANTONIO RUIZ E HIJOS S.COOP</td><td class='r'><b>23</b></td><td class='r'>6.296</td><td class='r'>274</td></tr><tr><td>11</td><td>AIA ESTUDIO S.L.</td><td class='r'><b>22</b></td><td class='r'>112.352</td><td class='r'>5.107</td></tr><tr><td>12</td><td>APERCOM S.COOP</td><td class='r'><b>20</b></td><td class='r'>15.446</td><td class='r'>772</td></tr><tr><td>13</td><td>LA OPINION DE MURCIA S.A.U</td><td class='r'><b>19</b></td><td class='r'>25.829</td><td class='r'>1.359</td></tr><tr><td>14</td><td>SANEAMIENTOS PEREZ CARRASCO Material de fontanería necesario para reparaciones</td><td class='r'><b>16</b></td><td class='r'>2.133</td><td class='r'>133</td></tr><tr><td>15</td><td>EDIFICACIONES VIMOGON S.L   Reposición de azulejos por desprendimientos de los</td><td class='r'><b>14</b></td><td class='r'>5.076</td><td class='r'>363</td></tr>
+</table>
+
+<h2>Proveedores por importe (2024-2026)</h2>
+<table><tr><th>#</th><th>Proveedor</th><th class="r">Importe</th><th class="r">Contratos</th></tr>
+<tr><td>1</td><td>DINAMO INSTALACIONES S.L.   Contratación de la ejecución de la obra de</td><td class='r'><b>180.196</b></td><td class='r'>6</td></tr><tr><td>2</td><td>COMPAÑIA TEATRO GUERRA S.L.U</td><td class='r'><b>154.370</b></td><td class='r'>42</td></tr><tr><td>3</td><td>FLORES Y MARTINEZ OBRAS Y   Contratación de la ejecución de la obra de</td><td class='r'><b>130.148</b></td><td class='r'>4</td></tr><tr><td>4</td><td>EUROEVO GLOBAL S.L.U</td><td class='r'><b>126.324</b></td><td class='r'>8</td></tr><tr><td>5</td><td>SONEPAR IBERICA SPAIN S.A.U</td><td class='r'><b>120.464</b></td><td class='r'>38</td></tr><tr><td>6</td><td>AIA ESTUDIO S.L.</td><td class='r'><b>112.352</b></td><td class='r'>22</td></tr><tr><td>7</td><td>LORCAEPIS S.L.</td><td class='r'><b>78.435</b></td><td class='r'>78</td></tr><tr><td>8</td><td>HNOS. GONZALEZ LUCAS S.A.   Demolición de viviendas Parcelas 12, 17, 19 y 20 en</td><td class='r'><b>77.440</b></td><td class='r'>2</td></tr><tr><td>9</td><td>HNOS. GONZALEZ LUCAS S.A.   Relación de trabajos para la construcción,</td><td class='r'><b>72.431</b></td><td class='r'>4</td></tr><tr><td>10</td><td>BITCEFALIA S.L.             ADQUISICIÓN DE LA WEB VISITLORCA DENTRO</td><td class='r'><b>67.760</b></td><td class='r'>4</td></tr>
+</table>
+
+<h2>Contratos formales (publicados actualmente)</h2>
+<table><tr><th>Exp.</th><th>Objeto</th><th>Proced.</th><th class="r">Importe</th><th>Adjudicatario</th><th>Estado</th></tr>
+<tr><td>1/2026</td><td>SERVICIOS PARA DESARROLLAR EL PROGRAMA ESCUELAS DE SEMANA SANTA DE 2026: DIVIRT</td><td>Abierto simplificado</td><td class='r'>18.071 €</td><td>EBONE SERVICIOS EDUCACIÓN DEPORTE S.L.</td><td>RESUELTO</td></tr><tr><td>2/2026</td><td>SERVICIOS DE CONCILIACIÓN PLAN CORRESPONSABLES</td><td>Abierto</td><td class='r'>199.940 €</td><td>Iniciativas El Gigante, Sociedad Limitad</td><td>RESUELTO</td></tr><tr><td>3/2026</td><td>CONTRATACION DEL CONCIERTO DE "DELAOSSA" EL DÍA 25 DE SEPTIEMBRE EN LA FERIA Y F</td><td>Negociado sin publicidad</td><td class='r'>159.750 €</td><td>PROCREED EVENTS S.L</td><td>RESUELTO</td></tr><tr><td>4/2026</td><td>CONCIERTO DE LA ARTISTA "MERCHE" EL DÍA 5 DE SEPTIEMBRE EN LA FERIA CHICA DE LOR</td><td>Negociado sin publicidad</td><td class='r'>19.360 €</td><td>COSTA CALIDA ENTERTAINMENT S.L.</td><td>RESUELTO</td></tr><tr><td>5/2026</td><td>SEGURO DE VIDA PARA EL PERSONAL FUNCIONARIO, PERSONAL LABORAL Y MIEMBROS DE LA C</td><td>Abierto</td><td class='r'>155.000 €</td><td>MAPFRE VIDA,, SOCIEDAD ANÓNIMA DE SEGURO</td><td>RESUELTO</td></tr><tr><td>6/2026</td><td>REPRESENTACION EN EL AUDITORIO MARGARITA LOZANO DE LA OPERA "LA BOHÉME", DE G. P</td><td>Negociado sin publicidad</td><td class='r'>26.620 €</td><td>OPERA 2001 S.L.</td><td>RESUELTO</td></tr><tr><td>8/2026</td><td>SERVICIO DE MONTAJE Y DESMONTAJE DE CARPAS Y BOXES EN DISTINTOS LUGARES DE LA CI</td><td>Abierto simplificado</td><td class='r'>72.116 €</td><td>TELEMAG DE LORCA S.L.</td><td>RESUELTO</td></tr><tr><td>11/2026</td><td>SERVICIOS PARA DESARROLLAR LAS ACTIVIDADES DE CONCILIACIÓN DE LA VIDA LABORAL, P</td><td>Abierto simplificado</td><td class='r'>22.968 €</td><td>EDUCACION EN MOVIMIENTO SL</td><td>RESUELTO</td></tr><tr><td>12/2026</td><td>SERVICIO DE MANTENIMIENTO DE DESFIBRILADORES SEMIAUTOMÁTICOS (DESA)</td><td>Abierto</td><td class='r'>30.450 €</td><td>LAZARUS VITAL S.L.</td><td>RESUELTO</td></tr><tr><td>13/2026</td><td>SERVICIO DE PREVENCIÓN AJENO EN LAS ESPECIALIDADES DE MEDICINA DEL TRABAJO (VIGI</td><td>Abierto</td><td class='r'>76.100 €</td><td>VITALY HEALTH SERVICES, SL</td><td>ADJUDICADO</td></tr><tr><td>14/2026</td><td>TERMINACIÓN DE OBRAS DE URBANIZACIÓN DEL SECTOR 3-R LOS JOPOS DE P.G.M.O. DE LOR</td><td>Abierto simplificado</td><td class='r'>218.257 €</td><td>TECNO URBS, S.L.</td><td>RESUELTO</td></tr><tr><td>15/2026</td><td>CONTRATO DE SERVICIOS DE ESPECTACULO TAURINO DE CORRIDA DE TOROS, A CELEBRAR EL </td><td>Negociado sin publicidad</td><td class='r'>311.956 €</td><td>CUVHICA TAURINA S.L</td><td>RESUELTO</td></tr><tr><td>16/2026</td><td>SUMINISTRO EN REGIMEN DE ALQUILER DE "CUATRO VEHICULOS ", CON DESTINO A LOS SERV</td><td>Abierto</td><td class='r'>259.200 €</td><td></td><td>RESUELTO</td></tr><tr><td>18/2026</td><td>PRESTACIÓN DEL SERVICIO DE CONSERVACIÓN DE LOS APARATOS ELEVADORES INSTALADOS EN</td><td>Abierto</td><td class='r'>265.584 €</td><td>OTIS MOBILITY S.A.</td><td>ADJUDICADO</td></tr><tr><td>20/2026</td><td>MEJORA DE LAS INFRAESTRUCTURAS BÁSICAS EN CALLE ORIA Y CANTORIA</td><td>Abierto</td><td class='r'>83.584 €</td><td>TERCYLOR, S.L.</td><td>RESUELTO</td></tr>
+</table>
+
+<div class="src">Fuentes: INE · Cifras oficiales de población de los municipios españoles (Revisión del Padrón Municipal), serie 1996-2025 (1997 no publicado; 1996 a 1 de mayo). Portal de Transparencia del Ayuntamiento de Lorca (transparencia.lorca.es): relaciones de contratos menores (PDF trimestrales) y contratos formales. Coordenadas y códigos: © OpenStreetMap (ref:ine) · Overpass. Análisis (troceado, concentración) calculado sobre esos datos oficiales. Sin datos inventados. Nota: los contratos menores se publican en PDF trimestral; el parseo captura el grueso de las filas con formato de importe (€), no el 100%.</div>
+</div>
+<script>
+var mapa=L.map('mapa',{scrollWheelZoom:false}).setView([37.68,-1.70],11);
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(mapa);
+L.circleMarker([37.695,-1.705],{radius:10,color:'#ef4444',fillColor:'#ef4444',fillOpacity:.8,weight:1}).addTo(mapa).bindPopup('<b>Lorca</b><br>98.969 hab (2025)');
+</script>
+</body></html>

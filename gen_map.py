@@ -120,6 +120,7 @@ body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:v
 #top .btn{width:100%;margin-top:8px;padding:8px;border:1px solid #334155;border-radius:8px;background:#0f172a;color:var(--fg);font-size:12px;cursor:pointer}
 #top .btn:hover{background:#334155}
 #sRank{font-size:13px;color:var(--acc);margin:6px 0}
+#sCtx{font-size:13px;line-height:1.5;color:var(--fg);background:#0f172a;border-radius:8px;padding:10px 12px;margin:6px 0}
 .chips{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
 .chip{padding:3px 8px;border-radius:14px;font-size:11px;background:#0f172a;border:1px solid #334155}
 .chip b{color:var(--acc)}
@@ -172,8 +173,10 @@ body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:v
     <div class="kpi"><b id="sVar"></b><span>Δ total</span></div>
   </div>
   <div class="chips" id="sChips"></div>
-  <canvas id="graf"></canvas>
   <div class="delta" id="sDelta"></div>
+  <div id="sCtx"></div>
+  <div id="sFicha" style="display:none;margin-top:10px"></div>
+  <canvas id="graf"></canvas>
   <div id="cmpLabel">Comparar con otro municipio</div>
   <input id="cmp" placeholder="Escribe un municipio…" autocomplete="off">
   <ul id="sug2"></ul>
@@ -262,6 +265,20 @@ function mostrar(m){
   chips+='<span class="chip">5 años: <b>'+fmtNum(m.g5)+'%</b></span>';
   chips+='<span class="chip">10 años: <b>'+fmtNum(m.g16)+'%</b></span>';
   document.getElementById('sChips').innerHTML=chips;
+  var ctxLine=document.getElementById('sCtx');
+  if(m.g16==null){ctxLine.textContent='Sin datos suficientes de evolución para este municipio.';}
+  else{
+    var dir=m.g16>=0?'ha crecido':'ha caído';
+    var txt=m.n+' '+dir+' un '+Math.abs(m.g16).toFixed(1)+'% en los últimos 10 años';
+    if(m.g1!=null)txt+=' · último año: '+(m.g1>=0?'+':'')+m.g1.toFixed(1)+'%';
+    txt+=' · es el '+m.rp+'º municipio de '+m.p+' por población';
+    ctxLine.textContent=txt;
+  }
+  var fich=document.getElementById('sFicha');
+  if(m.c==='30024'){
+    fich.style.display='block';
+    fich.innerHTML='<a href="ficha_lorca.html" style="color:#38bdf8;font-size:13px;font-weight:600">Ver la ficha de transparencia de Lorca → (contratos del Ayuntamiento)</a>';
+  } else { fich.style.display='none'; }
   document.getElementById('side').style.display='block';
   dibujar(m.c, compCode);
   if(compCode){
