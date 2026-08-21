@@ -38,7 +38,12 @@ for prov in sorted(set(r[1] for r in pob)):
         rank_prov[r[2]] = i + 1
 
 for muni, prov, code, lat, lon, pop in pob:
-    catalogo.append({"c": code, "n": muni, "p": prov, "la": lat, "lo": lon, "po": int(pop),
+    import unicodedata as _u, re as _re
+    _sl = _u.normalize('NFD', muni).encode('ascii','ignore').decode().lower()
+    for _art in ('la ','el ','los ','las ',"l'"):
+        if _sl.startswith(_art): _sl = _sl[len(_art):]
+    _sl = _re.sub(r"[^a-z0-9]+", "-", _sl).strip("-")
+    catalogo.append({"c": code, "n": muni, "p": prov, "la": lat, "lo": lon, "po": int(pop), "sl": _sl,
                      "r": rank_spain[code], "rp": rank_prov[code],
                      "g1": g1[code], "g5": g5[code], "g16": g16[code]})
 with open(os.path.join(OUT, "data", "catalogo.json"), "w") as f:
@@ -95,6 +100,21 @@ HTML = r"""<!DOCTYPE html>
 <link rel="icon" type="image/png" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta property="og:image" content="https://municipal.viajeinteligencia.com/og-municipal.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Dataset",
+  "name": "Población de los municipios de España (INE 1996-2025)",
+  "description": "Cifras oficiales de población de los 8.132 municipios de España: Revisión del Padrón Municipal (INE), serie 1996-2025, con evolución, rankings y comparador.",
+  "url": "https://municipal.viajeinteligencia.com/",
+  "dateModified": "2026-08-21",
+  "creator": {"@type": "Person", "name": "M. Castillo"},
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "temporalCoverage": "1996/2025",
+  "spatialCoverage": {"@type": "Place", "name": "España", "address": {"@type": "PostalAddress", "addressCountry": "ES"}},
+  "distribution": {"@type": "DataDownload", "contentUrl": "https://servicios.ine.es/wstempus/js/ES/DATOS_TABLA/2883", "encodingFormat": "JSON"}
+}
+</script>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
@@ -222,6 +242,7 @@ body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:v
     </div>
   </div>
   <div id="sDatos" style="display:none">
+  <div id="sFichaMun" style="display:none;margin:6px 0"></div>
   <div id="sRank"></div>
   <div class="kpis">
     <div class="kpi"><b id="s2025"></b><span>2025</span></div>
@@ -340,6 +361,9 @@ function mostrar(m){
     txt+=' · es el '+m.rp+'º municipio de '+m.p+' por población';
     ctxLine.textContent=txt;
   }
+  var fichaMun=document.getElementById('sFichaMun');
+  if(m.sl){ fichaMun.style.display='block'; fichaMun.innerHTML='<a href="municipio/'+m.sl+'.html" style="color:#38bdf8;font-size:13px;font-weight:600">Ver ficha de población de '+m.n+' →</a>'; }
+  else { fichaMun.style.display='none'; fichaMun.innerHTML=''; }
   var fich=document.getElementById('sFicha');
   if(m.c==='30024' && lorcaIntel){
     var li=lorcaIntel;
