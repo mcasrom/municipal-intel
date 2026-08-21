@@ -68,6 +68,18 @@ sin inventar causalidad.
   por municipio ("tu pueblo perdió el 30%"); cruce con Alquimetría (población +
   alquiler); extender más allá de los 300 municipios.
 
+## ACTUALIZACIÓN PROGRAMADA (21/Ago) — CRON DIARIO 05:30 UTC
+- update.sh: detecta trimestres nuevos de contratos de Lorca (lorca_check_new.py,
+  compara PDFs publicados vs ingeridos; re-ingesta si hay nuevos) + detecta año
+  nuevo del INE (ine_check_new.py, Revisión del Padrón ~diciembre; avisa si hay
+  re-ingesta manual) + regenera el sitio (map, ficha, 300 páginas, sitemap, acerca).
+- Cron: `30 5 * * * /home/deploy/municipal-intel/update.sh`. Log: logs/update.log.
+- Health: municipal ya en ecosystem-healthcheck.sh (cada 5 min, alerta Telegram).
+- MEDICIÓN: los scripts KPI son host-agnósticos → municipal y alquimetría ya se
+  miden (municipal 67 IPs humanas, alquimetría 26 IPs el 21/Ago). Nota: ambos en
+  naranja → el total de requests sale infraestimado (Cloudflare cachea assets),
+  pero las IPs humanas se capturan bien.
+
 ## Roadmap
 - [x] P0.5: dataset INE población municipal 1996-2025 (8.132 municipios).
 - [x] P1: catálogo municipios (códigos INE + coords) — 8.109 municipios (99,7%).

@@ -1,0 +1,43 @@
+
+=== 2026-08-21 12:55:02 ===
+-- Lorca: trimestres nuevos?
+PDFs descargados: 28 de 28
+Traceback (most recent call last):
+  File "/home/deploy/municipal-intel/lorca_menores_ingest.py", line 108, in <module>
+    regs = parse_pdf(os.path.join(PDF_DIR, f))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/deploy/municipal-intel/lorca_menores_ingest.py", line 36, in parse_pdf
+    txt = subprocess.run(["pdftotext", "-layout", pdf, "-"], capture_output=True, text=True).stdout
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "/usr/lib/python3.12/subprocess.py", line 1955, in _execute_child
+    raise child_exception_type(errno_num, err_msg, err_filename)
+FileNotFoundError: [Errno 2] No such file or directory: 'pdftotext'
+PDFs publicados: 28 | ingeridos: 23 | nuevos: 5
+NUEVOS trimestres: ['pdf/2019/Primer trimestre 2019.pdf', 'pdf/2019/segundo trimestre 2019.pdf', 'pdf/2021/Publicacion de Contratos Menores.pdf', 'pdf/2024/2-contratos-menores.pdf', 'pdf/2024/Publicacion de Contratos Menores.pdf']
+Traceback (most recent call last):
+  File "/home/deploy/municipal-intel/lorca_check_new.py", line 48, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/home/deploy/municipal-intel/lorca_check_new.py", line 43, in main
+    subprocess.run([sys.executable, INGEST], check=True)
+  File "/usr/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['/usr/bin/python3', '/home/deploy/municipal-intel/lorca_menores_ingest.py']' returned non-zero exit status 1.
+-- INE: año nuevo?
+INE año máximo: 2025 | BD año máximo: 2025
+-- regeneración del sitio
+catalogo: 8109
+rankings.json OK
+series: 8108 | fichero KB: 2679
+index.html: 25 KB
+OK: dashboard/ generado
+lorca_intel.json guardado
+paginas municipio generadas: 300
+sitemap URLs: 303
+acerca.html generado: 5 KB
+regenerado OK (lorca_cambios=1 ine_cambios=0)
