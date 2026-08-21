@@ -38,7 +38,8 @@ def send_email(to, subject, html):
         return False
     body = json.dumps({"from": RESEND_FROM, "to": [to], "subject": subject, "html": html}).encode()
     req = urllib.request.Request("https://api.resend.com/emails", data=body, method="POST",
-        headers={"Authorization": "Bearer " + RESEND_KEY, "Content-Type": "application/json"})
+        headers={"Authorization": "Bearer " + RESEND_KEY, "Content-Type": "application/json",
+                 "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/124.0 municipal-alert-api/1.0"})
     try:
         with urllib.request.urlopen(req, timeout=15) as r:
             return r.status == 200
