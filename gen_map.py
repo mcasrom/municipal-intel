@@ -115,6 +115,11 @@ body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:v
 .leaflet-popup-content-wrapper{background:#1e293b;color:var(--fg)}
 .leaflet-popup-tip{background:#1e293b}
 #foot{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);z-index:999;font-size:10px;color:var(--mut);background:rgba(15,23,42,.85);padding:4px 10px;border-radius:20px;white-space:nowrap}
+#landing{position:absolute;inset:0;z-index:2000;background:rgba(2,6,23,.82);display:none;align-items:center;justify-content:center;padding:20px}
+#landBox{background:var(--card);border-radius:14px;max-width:560px;width:100%;padding:26px;box-shadow:0 10px 50px rgba(0,0,0,.6);position:relative}
+#landBox .close{position:absolute;top:12px;right:16px;background:none;border:none;color:var(--mut);font-size:22px;cursor:pointer}
+.cta{flex:1;min-width:130px;padding:10px 12px;border:1px solid #334155;border-radius:8px;background:#0f172a;color:var(--fg);font-size:13px;cursor:pointer}
+.cta:hover{border-color:var(--acc);background:#1e293b}
 .legend{position:absolute;bottom:24px;right:12px;z-index:999;background:var(--card);border-radius:8px;padding:8px 10px;font-size:11px;color:var(--mut);box-shadow:0 2px 10px rgba(0,0,0,.4)}
 .legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px}
 #top .btn{width:100%;margin-top:8px;padding:8px;border:1px solid #334155;border-radius:8px;background:#0f172a;color:var(--fg);font-size:12px;cursor:pointer}
@@ -146,6 +151,27 @@ body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:v
 </head>
 <body>
 <div id="map"></div>
+<div id="landing">
+  <div id="landBox">
+    <button class="close" onclick="cerrarLanding()">&times;</button>
+    <h1 style="font-size:22px;margin-bottom:4px">Municipal Intelligence</h1>
+    <div style="color:#94a3b8;font-size:13px;margin-bottom:14px">Mapa de la población oficial de los <b style="color:#e2e8f0">8.132 municipios de España</b> · INE 1996-2025</div>
+    <div style="font-size:14px;line-height:1.6;margin-bottom:14px">
+      Busca cualquier municipio y mira <b>su población, su evolución y su posición</b> en el ranking de España.<br>
+      Compara dos municipios entre sí.<br>
+      Descubre <b>quién crece y quién se vacía</b> (España vaciada).<br>
+      En <b>Lorca</b>, además, la <b>transparencia del Ayuntamiento</b>: contratos menores, proveedores y posibles troceados.
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px">
+      <button class="cta" onclick="cerrarLanding()">Explorar el mapa</button>
+      <button class="cta" onclick="irLorca()">Ver Lorca (transparencia)</button>
+      <button class="cta" onclick="verRankings()">Ver rankings</button>
+    </div>
+    <div style="font-size:11px;color:#94a3b8;margin-top:10px">
+      Datos: INE a 01/01/2025 (publicado 11/12/2025) · © OpenStreetMap · <a href="acerca.html" style="color:#38bdf8">Metodología, fuentes y licencia</a>
+    </div>
+  </div>
+</div>
 <div id="top">
   <h1>Municipal Intelligence<small>Población de los 8.132 municipios de España · INE</small></h1>
   <div id="fresco" style="font-size:10px;color:#94a3b8;margin-bottom:8px">Datos: población a 01/01/2025 (INE, publicado 11/12/2025). Contratos de Lorca: trimestrales hasta Q2 2026 (transparencia.lorca.es).</div>
@@ -212,6 +238,11 @@ fetch('data/lorca_intel.json').then(r=>r.json()).then(d=>lorcaIntel=d);
 var map=L.map('map',{renderer:L.canvas(),zoomControl:true}).setView([40.3,-3.6],6);
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(map);
 var grupo=L.layerGroup().addTo(map);
+
+// ---- LANDING (funnel) ----
+function cerrarLanding(){document.getElementById('landing').style.display='none';}
+function irLorca(){cerrarLanding();var m=catalogo.find(x=>x.c==='30024');if(m)irA(m);}
+try{if(!sessionStorage.getItem('municipal_visto')){document.getElementById('landing').style.display='flex';sessionStorage.setItem('municipal_visto','1');}}catch(e){document.getElementById('landing').style.display='flex';}
 
 function clase(p){
   if(p<1000)return {r:3,color:'#0ea5e9'};
