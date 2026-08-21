@@ -1,5 +1,13 @@
 import json, sqlite3, os
 
+SLUGMAP = {}
+sm_path = os.path.join("dashboard", "data", "municipio_slugs.json")
+if os.path.exists(sm_path):
+    try:
+        SLUGMAP = json.load(open(sm_path))
+    except Exception:
+        pass
+
 DB = "data/poblacion_municipal.sqlite"
 if not os.path.exists(DB):
     DB = "poblacion_municipal.sqlite"
@@ -38,11 +46,7 @@ for prov in sorted(set(r[1] for r in pob)):
         rank_prov[r[2]] = i + 1
 
 for muni, prov, code, lat, lon, pop in pob:
-    import unicodedata as _u, re as _re
-    _sl = _u.normalize('NFD', muni).encode('ascii','ignore').decode().lower()
-    for _art in ('la ','el ','los ','las ',"l'"):
-        if _sl.startswith(_art): _sl = _sl[len(_art):]
-    _sl = _re.sub(r"[^a-z0-9]+", "-", _sl).strip("-")
+    _sl = SLUGMAP.get(code, "")
     catalogo.append({"c": code, "n": muni, "p": prov, "la": lat, "lo": lon, "po": int(pop), "sl": _sl,
                      "r": rank_spain[code], "rp": rank_prov[code],
                      "g1": g1[code], "g5": g5[code], "g16": g16[code]})

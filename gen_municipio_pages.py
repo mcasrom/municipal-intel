@@ -24,7 +24,7 @@ def slug(name, prov):
 # seleccion: top 300 por poblacion 2025
 rows = con.execute("""SELECT c.municipio, c.provincia, c.codigo_ine, c.lat, c.lon, p.poblacion
     FROM catalogo c JOIN poblacion p ON p.provincia=c.provincia AND p.municipio=c.municipio
-    AND p.anyo=2025 AND p.sexo='Total' ORDER BY p.poblacion DESC LIMIT 300""").fetchall()
+    AND p.anyo=2025 AND p.sexo='Total' ORDER BY p.poblacion DESC""").fetchall()
 
 # slugs unicos
 used = {}
@@ -154,6 +154,11 @@ for pg in pages:
         f.write(html)
     sitemap.append(f"https://municipal.viajeinteligencia.com/municipio/{slugv}.html")
     n += 1
+
+# exportar mapa code -> slug (para el enlace del mapa con colisiones)
+slugmap = {pg["code"]: pg["slug"] for pg in pages}
+with open(os.path.join("dashboard", "data", "municipio_slugs.json"), "w") as f:
+    json.dump(slugmap, f, separators=(",", ":"))
 
 # sitemap
 sm = ['<?xml version="1.0" encoding="UTF-8"?>',
