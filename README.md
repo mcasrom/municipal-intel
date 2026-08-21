@@ -47,8 +47,10 @@ formales y anomalías) como prueba de concepto local.
 - [x] P2 mapa + buscador + rankings + comparador
 - [x] P3(parcial) ficha de transparencia de Lorca (contratos + troceado + renta)
 - [x] SEO: JSON-LD (Dataset/GovernmentService), 8.109 fichas estáticas, sitemap 8.112 URLs
+- [ ] PWA (manifest + service worker) para el mapa (instalable y offline)
 - [ ] Extender la ficha de transparencia a otros ayuntamientos (parser listo)
 - [ ] Edad/sexo por municipio (INE) — pendiente de localizar tabla
 - [ ] Precio vivienda compra municipal → proyecto alquimetria (crawl Registradores)
+- [ ] GSC: enviar sitemap (8.112 URLs) — propiedad registrada
 
 © 2026 M. Castillo — datos abiertos INE + OpenStreetMap. Repositorio del ecosistema: https://www.viajeinteligencia.com
