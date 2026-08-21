@@ -96,6 +96,16 @@ sin inventar causalidad.
 - Limpieza opcional futura: archivar lorca_pdf viejos (comprimidos) y VACUUM del
   sqlite. No necesario hoy.
 
+## PRÓXIMO SPRINT — EXPANDIR LA FICHA DE TRANSPARENCIA A OTROS AYUNTAMIENTOS
+- Lorca fue la prueba de concepto (validado el pipeline completo). Pipeline listo y replicable.
+- 1) Generalizar gen_lorca_ficha.py → gen_ficha_municipio.py (parametrizado por municipio +
+     sus contratos; el parser de PDFs ya es genérico).
+- 2) Localizar ayuntamientos con portal de transparencia de la MISMA plantilla que Lorca
+     (publican "Relación de contratos menores" trimestral en el mismo formato PDF) → parser
+     casi sin cambios. El trabajo es LOCALIZAR portales compatibles, no el código.
+- 3) Vía alternativa: datasets de contratos municipales en datos.gob.es / portales regionales
+     (patrón transparencia_osint).
+
 ## Roadmap
 - [x] P0.5: dataset INE población municipal 1996-2025 (8.132 municipios).
 - [x] P1: catálogo municipios (códigos INE + coords) — 8.109 municipios (99,7%).
