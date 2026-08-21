@@ -106,7 +106,28 @@ a{color:var(--acc)}
 <details><summary>Serie completa de población (1996-2025)</summary>
 <table>@@ROWS@@</table>
 </details>
+<div class="alerta-box" style="background:var(--card);border-radius:10px;padding:14px;margin:14px 0">
+  <b style="color:#38bdf8">¿Avísame si cambian los datos de @@MUNI@@?</b>
+  <div style="font-size:12px;color:#94a3b8;margin:4px 0">Recibirás un email cuando se actualicen los datos de este municipio (población, ranking o contratos). Sin spam; baja fácil.</div>
+  <div style="display:flex;gap:8px;margin-top:8px">
+    <input type="email" id="alertEmail" placeholder="tu@email.com" style="flex:1;padding:8px 10px;border:1px solid #334155;border-radius:8px;background:#0f172a;color:#e2e8f0;font-size:13px">
+    <button onclick="suscribir()" style="padding:8px 14px;border:1px solid #334155;border-radius:8px;background:#1e293b;color:#e2e8f0;font-size:13px;cursor:pointer">Avísame</button>
+  </div>
+  <div id="alertMsg" style="font-size:12px;margin-top:6px;color:#94a3b8"></div>
+</div>
 <div class="src">Municipal Intelligence © 2026 M. Castillo · fuente: INE, Cifras oficiales de población (Revisión del Padrón Municipal), población a 01/01/2025 publicada el 11/12/2025 · coordenadas y códigos: © OpenStreetMap (ref:ine) · ver <a href="../acerca.html">metodología completa</a>.</div>
+<script>
+function suscribir(){
+  var email=document.getElementById('alertEmail').value.trim();
+  var msg=document.getElementById('alertMsg');
+  if(!email||!email.includes('@')){msg.textContent='Email no válido';return;}
+  msg.textContent='Enviando…';
+  fetch('../api/alerta',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:email,codigo:'@@CODE@@'})})
+    .then(function(r){return r.json();})
+    .then(function(d){msg.textContent=d.ok?'Revisa tu email para confirmar':(d.error||'Error');})
+    .catch(function(){msg.textContent='Error de red';});
+}
+</script>
 </div></body></html>"""
 
 def build_svg(serie):

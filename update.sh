@@ -26,3 +26,10 @@ python3 gen_municipio_pages.py >> "$LOG" 2>&1
 python3 gen_acerca.py >> "$LOG" 2>&1
 python3 gen_rss.py >> "$LOG" 2>&1
 echo "regenerado OK (lorca_cambios=$LORCA_CHANGED ine_cambios=$INE_CHANGED)" >> "$LOG"
+
+# alertas: notificar a suscriptores cuyo municipio cambio
+SECRET=$(grep ALERT_SECRET data/alerts.env 2>/dev/null | cut -d= -f2)
+if [ -n "$SECRET" ]; then
+  curl -s -X POST "http://127.0.0.1:8201/api/alerta/notificar" -H "X-Alert-Secret: $SECRET" >> "$LOG" 2>&1
+  echo "alertas notificadas" >> "$LOG"
+fi

@@ -193,6 +193,27 @@ a{color:var(--acc)}
 </table>
 
 <div class="src">Fuentes: INE · Cifras oficiales de población de los municipios españoles (Revisión del Padrón Municipal), serie 1996-2025 (1997 no publicado; 1996 a 1 de mayo). Portal de Transparencia del Ayuntamiento de Lorca (transparencia.lorca.es): relaciones de contratos menores (PDF trimestrales) y contratos formales. Coordenadas y códigos: © OpenStreetMap (ref:ine) · Overpass. Análisis (troceado, concentración) calculado sobre esos datos oficiales. Sin datos inventados. Nota: los contratos menores se publican en PDF trimestral; el parseo captura el grueso de las filas con formato de importe (€), no el 100%.</div>
+<div style="background:#1e293b;border:1px solid #334155;border-radius:10px;padding:14px;margin:14px 0">
+  <b style="color:#38bdf8">¿Avísame si cambian los datos de Lorca?</b>
+  <div style="font-size:12px;color:#94a3b8;margin:4px 0">Recibirás un email cuando se actualicen los datos (población, ranking o contratos). Sin spam; baja fácil.</div>
+  <div style="display:flex;gap:8px;margin-top:8px">
+    <input type="email" id="alertEmail" placeholder="tu@email.com" style="flex:1;padding:8px 10px;border:1px solid #334155;border-radius:8px;background:#0f172a;color:#e2e8f0;font-size:13px">
+    <button onclick="suscribir()" style="padding:8px 14px;border:1px solid #334155;border-radius:8px;background:#1e293b;color:#e2e8f0;font-size:13px;cursor:pointer">Avísame</button>
+  </div>
+  <div id="alertMsg" style="font-size:12px;margin-top:6px;color:#94a3b8"></div>
+</div>
+<script>
+function suscribir(){
+  var email=document.getElementById('alertEmail').value.trim();
+  var msg=document.getElementById('alertMsg');
+  if(!email||!email.includes('@')){msg.textContent='Email no válido';return;}
+  msg.textContent='Enviando…';
+  fetch('/api/alerta',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:email,codigo:'@@COD@@'})})
+    .then(function(r){return r.json();})
+    .then(function(d){msg.textContent=d.ok?'Revisa tu email para confirmar':(d.error||'Error');})
+    .catch(function(){msg.textContent='Error de red';});
+}
+</script>
 </div>
 <script>
 var mapa=L.map('mapa',{scrollWheelZoom:false}).setView([37.68,-1.70],11);
