@@ -578,6 +578,7 @@ document.getElementById('cmp2').addEventListener('dblclick',function(){
 var ranking={}, rkTipo='crec';
 fetch('data/rankings.json').then(r=>r.json()).then(d=>ranking=d);
 function verRankings(){
+  document.getElementById('landing').style.display='none';
   ocultarPanel();
   document.getElementById('rkTitulo').textContent='Crecimiento 2016 → 2025';
   rkTipo='crec';
