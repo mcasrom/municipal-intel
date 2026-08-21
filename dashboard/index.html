@@ -14,6 +14,9 @@
 <link rel="icon" type="image/png" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta property="og:image" content="https://municipal.viajeinteligencia.com/og-municipal.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#1e293b">
+<meta name="apple-mobile-web-app-capable" content="yes">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -197,6 +200,10 @@ fetch('data/lorca_intel.json').then(r=>r.json()).then(d=>lorcaIntel=d);
 var map=L.map('map',{renderer:L.canvas(),zoomControl:true}).setView([40.3,-3.6],6);
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(map);
 var grupo=L.layerGroup().addTo(map);
+
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('sw.js').catch(function(){});
+}
 
 // ---- LANDING (funnel) ----
 function cerrarLanding(){document.getElementById('landing').style.display='none';}

@@ -1,5 +1,13 @@
 import json, sqlite3, os
 
+SLUGMAP = {}
+sm_path = os.path.join("dashboard", "data", "municipio_slugs.json")
+if os.path.exists(sm_path):
+    try:
+        SLUGMAP = json.load(open(sm_path))
+    except Exception:
+        pass
+
 DB = "data/poblacion_municipal.sqlite"
 if not os.path.exists(DB):
     DB = "poblacion_municipal.sqlite"
@@ -38,7 +46,8 @@ for prov in sorted(set(r[1] for r in pob)):
         rank_prov[r[2]] = i + 1
 
 for muni, prov, code, lat, lon, pop in pob:
-    catalogo.append({"c": code, "n": muni, "p": prov, "la": lat, "lo": lon, "po": int(pop),
+    _sl = SLUGMAP.get(code, "")
+    catalogo.append({"c": code, "n": muni, "p": prov, "la": lat, "lo": lon, "po": int(pop), "sl": _sl,
                      "r": rank_spain[code], "rp": rank_prov[code],
                      "g1": g1[code], "g5": g5[code], "g16": g16[code]})
 with open(os.path.join(OUT, "data", "catalogo.json"), "w") as f:
@@ -84,17 +93,35 @@ HTML = r"""<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Municipal Intelligence · Mapa de municipios de España</title>
-<meta name="description" content="Población municipal de España 1996-2025 (INE): mapa, buscador, rankings y evolución de los 8.132 municipios. Transparencia del Ayuntamiento de Lorca (contratos menores).">
+<title>Municipal Intelligence · Mapa de población de los municipios de España</title>
+<meta name="description" content="Mapa de la población oficial de los 8.132 municipios de España (INE, 1996-2025): busca cualquier municipio, mira su evolución, comparala con otro y descubre quién crece y quién se vacía. Datos oficiales y trazables.">
 <link rel="canonical" href="https://municipal.viajeinteligencia.com/">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Municipal Intelligence · Mapa de municipios de España">
-<meta property="og:description" content="Población de los 8.132 municipios de España (INE 1996-2025): evolución, rankings y comparador. Transparencia del Ayuntamiento de Lorca.">
+<meta property="og:title" content="Municipal Intelligence · Mapa de población de los municipios de España">
+<meta property="og:description" content="Población oficial de los 8.132 municipios de España (INE 1996-2025): evolución, rankings y comparador.">
 <meta property="og:url" content="https://municipal.viajeinteligencia.com/">
 <meta name="twitter:card" content="summary">
 <link rel="icon" type="image/png" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta property="og:image" content="https://municipal.viajeinteligencia.com/og-municipal.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#1e293b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Dataset",
+  "name": "Población de los municipios de España (INE 1996-2025)",
+  "description": "Cifras oficiales de población de los 8.132 municipios de España: Revisión del Padrón Municipal (INE), serie 1996-2025, con evolución, rankings y comparador.",
+  "url": "https://municipal.viajeinteligencia.com/",
+  "dateModified": "2026-08-21",
+  "creator": {"@type": "Person", "name": "M. Castillo"},
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "temporalCoverage": "1996/2025",
+  "spatialCoverage": {"@type": "Place", "name": "España", "address": {"@type": "PostalAddress", "addressCountry": "ES"}},
+  "distribution": {"@type": "DataDownload", "contentUrl": "https://servicios.ine.es/wstempus/js/ES/DATOS_TABLA/2883", "encodingFormat": "JSON"}
+}
+</script>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
@@ -171,16 +198,19 @@ body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:v
     <button class="close" onclick="cerrarLanding()">&times;</button>
     <h1 style="font-size:22px;margin-bottom:4px">Municipal Intelligence</h1>
     <div style="color:#94a3b8;font-size:13px;margin-bottom:14px">Mapa de la población oficial de los <b style="color:#e2e8f0">8.132 municipios de España</b> · INE 1996-2025</div>
-    <div style="font-size:14px;line-height:1.6;margin-bottom:14px">
+    <div style="font-size:14px;line-height:1.6;margin-bottom:10px">
       Busca cualquier municipio y mira <b>su población, su evolución y su posición</b> en el ranking de España.<br>
       Compara dos municipios entre sí.<br>
-      Descubre <b>quién crece y quién se vacía</b> (España vaciada).<br>
-      En <b>Lorca</b>, además, la <b>transparencia del Ayuntamiento</b>: contratos menores, proveedores y posibles troceados.
+      Descubre <b>quién crece y quién se vacía</b> (España vaciada).
     </div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px">
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">
       <button class="cta" onclick="cerrarLanding()">Explorar el mapa</button>
-      <button class="cta" onclick="irLorca()">Ver Lorca (transparencia)</button>
       <button class="cta" onclick="verRankings()">Ver rankings</button>
+    </div>
+    <div style="border-top:1px solid #334155;padding-top:10px;margin-top:6px">
+      <div style="font-size:12px;font-weight:700;color:#38bdf8;margin-bottom:6px">Caso de estudio · Transparencia del Ayuntamiento de Lorca</div>
+      <div style="font-size:13px;color:#94a3b8;line-height:1.5;margin-bottom:8px">Contratos menores, proveedores y posibles troceados del Ayuntamiento — un ejemplo de la capa de inteligencia municipal.</div>
+      <button class="cta" onclick="irLorca()" style="background:#1e293b">Ver Lorca (transparencia) →</button>
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
       <a class="cta" style="display:block;text-align:center;text-decoration:none" href="https://ko-fi.com/m_castillo" target="_blank" rel="noopener">☕ Apoyar en Ko-fi</a>
@@ -222,6 +252,7 @@ body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:v
     </div>
   </div>
   <div id="sDatos" style="display:none">
+  <div id="sFichaMun" style="display:none;margin:6px 0"></div>
   <div id="sRank"></div>
   <div class="kpis">
     <div class="kpi"><b id="s2025"></b><span>2025</span></div>
@@ -249,7 +280,7 @@ body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:v
 </div>
 <div id="kofi" title="Apoyar el proyecto en Ko-fi"><a href="https://ko-fi.com/m_castillo" target="_blank" rel="noopener">☕</a></div>
 <div id="ecosistema" title="Ecosistema de datos abiertos de viajeinteligencia.com"><a href="https://www.viajeinteligencia.com" target="_blank" rel="noopener">🌍</a></div>
-<div id="foot">Municipal Intelligence · datos abiertos INE + OpenStreetMap · <a href="acerca.html" style="color:#38bdf8">Metodología, fuentes y licencia</a> · <a href="mailto:info@viajeinteligencia.com" style="color:#38bdf8">Contacto</a> · <a href="https://ko-fi.com/m_castillo" style="color:#38bdf8">Ko-fi</a> · <a href="https://www.viajeinteligencia.com" style="color:#38bdf8">Ecosistema</a> · sin cookies</div>
+<div id="foot">Municipal Intelligence © 2026 M. Castillo · datos abiertos INE + OpenStreetMap · <a href="acerca.html" style="color:#38bdf8">Metodología, fuentes y licencia</a> · <a href="mailto:info@viajeinteligencia.com" style="color:#38bdf8">Contacto</a> · <a href="https://ko-fi.com/m_castillo" style="color:#38bdf8">Ko-fi</a> · <a href="https://www.viajeinteligencia.com" style="color:#38bdf8">Ecosistema de datos abiertos</a> · sin cookies</div>
 <script>
 var catalogo=[], series={}, lorcaIntel=null;
 fetch('data/catalogo.json').then(r=>r.json()).then(d=>{catalogo=d; pintar();});
@@ -259,6 +290,10 @@ fetch('data/lorca_intel.json').then(r=>r.json()).then(d=>lorcaIntel=d);
 var map=L.map('map',{renderer:L.canvas(),zoomControl:true}).setView([40.3,-3.6],6);
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(map);
 var grupo=L.layerGroup().addTo(map);
+
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('sw.js').catch(function(){});
+}
 
 // ---- LANDING (funnel) ----
 function cerrarLanding(){document.getElementById('landing').style.display='none';}
@@ -340,6 +375,9 @@ function mostrar(m){
     txt+=' · es el '+m.rp+'º municipio de '+m.p+' por población';
     ctxLine.textContent=txt;
   }
+  var fichaMun=document.getElementById('sFichaMun');
+  if(m.sl){ fichaMun.style.display='block'; fichaMun.innerHTML='<a href="municipio/'+m.sl+'.html" style="color:#38bdf8;font-size:13px;font-weight:600">Ver ficha de población de '+m.n+' →</a>'; }
+  else { fichaMun.style.display='none'; fichaMun.innerHTML=''; }
   var fich=document.getElementById('sFicha');
   if(m.c==='30024' && lorcaIntel){
     var li=lorcaIntel;
@@ -359,6 +397,7 @@ function mostrar(m){
       '</div>'+
       '<div style="font-size:11px;color:#94a3b8;margin-bottom:4px">Proveedores por nº de contratos menores</div>'+
       '<table style="width:100%;font-size:11px;border-collapse:collapse"><tr style="color:#94a3b8;text-align:left"><th>Proveedor</th><th>#</th><th>Importe</th></tr>'+rows+'</table>'+
+      (li.renta?('<div class="kpis" style="margin:8px 0"><div class="kpi"><b>'+li.renta.neta_persona.toLocaleString('es-ES')+' €</b><span>renta neta/persona '+li.renta.anyo+'</span></div><div class="kpi"><b>'+li.renta.neta_hogar.toLocaleString('es-ES')+' €</b><span>neta/hogar</span></div></div><div style="font-size:11px;color:#94a3b8">Murcia capital: '+li.renta.murcia_capital.toLocaleString('es-ES')+' €/persona · INE Atlas</div>'):'')+
       alerta+
       '<a href="ficha_lorca.html" style="display:block;text-align:center;margin-top:8px;padding:8px;border:1px solid #334155;border-radius:8px;color:#38bdf8;font-size:12px;font-weight:600">Ver la ficha completa de Lorca →</a>'+
       '</div>';
