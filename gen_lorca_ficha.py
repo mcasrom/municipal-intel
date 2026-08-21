@@ -138,7 +138,8 @@ a{color:var(--acc)}
 
 @@ALERTA@@
 
-<h2>Estructura de edad (INE · Censo de Población 2021)</h2>
+<h2>Estructura de edad <span style="color:#94a3b8;font-size:13px">(Censo 2021)</span></h2>
+<div style="background:#7f1d1d;border:1px solid #b91c1c;border-radius:8px;padding:10px 12px;margin:10px 0;font-size:12px"><b style="color:#fca5a5">Aviso:</b> el desglose por edad procede del <b>Censo de Población 2021</b> (operación decenal; el siguiente es <b>2031</b>). El Padrón municipal no publica la edad por municipio vía API estándar, por lo que el Censo 2021 es la referencia oficial de estructura de edad. La <b>población total y su evolución</b> sí son del <b>Padrón 2025</b> (actuales).</div>
 <div class="grid">
   <div class="kpi"><b>@@H25@@</b><span>hombres (2025, Padrón)</span></div>
   <div class="kpi"><b>@@M25@@</b><span>mujeres (2025, Padrón)</span></div>
