@@ -125,8 +125,8 @@ sin inventar causalidad.
 - PARCIAL-FALSO: Overpass runtime — el mapa usa JSON estático; Overpass solo en re-ingesta anual.
 
 ## SPRINT A (en curso) — QUICK WINS SEO
-- [ ] llms.txt para municipal (consistencia con el ecosistema; actualmente 404).
-- [ ] title/meta con "2025 (INE)" + términos de intención ("Población de los municipios de España 2025").
+- [x] llms.txt para municipal (consistencia con el ecosistema) — HECHO, 200 (fix del 301).
+- [x] title/meta con "2025 (INE)" + intención de búsqueda — HECHO.
 
 ## SPRINT B (pendiente) — SEO LONG-TAIL
 - [ ] Páginas editoriales desde los datos: "Municipios que más crecen en [provincia] 2025",
