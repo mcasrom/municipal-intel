@@ -128,9 +128,13 @@ sin inventar causalidad.
 - [x] llms.txt para municipal (consistencia con el ecosistema) — HECHO, 200 (fix del 301).
 - [x] title/meta con "2025 (INE)" + intención de búsqueda — HECHO.
 
-## SPRINT B (pendiente) — SEO LONG-TAIL
-- [ ] Páginas editoriales desde los datos: "Municipios que más crecen en [provincia] 2025",
-      "pueblos que se despueblan", top-10 por provincia (contenido indexable que el mapa no da).
+## SPRINT B (21/Ago) — SEO LONG-TAIL HECHO
+- [x] 103 páginas editoriales desde los datos (gen_editorial_pages.py):
+      nacional (quiénes más crecen / más se despueblan / más poblados, top-50) +
+      por provincia (crecen y se despueblan, top-10, ≥1.000 hab en 2016).
+      Indexables (H1 con keyword, meta, canonical, JSON-LD no, tabla con enlaces a las
+      fichas de municipio). Sitemap actualizado (+103 URLs). Enlace "Tendencias" en el pie.
+      gen_editorial_pages.py en el cron (update.sh).
 
 ## SPRINT C (pendiente) — PRODUCTO
 - [x] **ALERTAS (Sprint C 2/2, 21/Ago)**: municipal-alert-api (stdlib, puerto 8201, pm2):
