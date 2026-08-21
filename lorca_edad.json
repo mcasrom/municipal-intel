@@ -1,0 +1,18 @@
+{
+ "fuente": "INE · Censo de Población y Viviendas 2021 (API SDC21, tabla per.ppal)",
+ "nota": "Estructura de edad en grandes grupos (Censo 2021, no Padrón). Referencia histórica oficial.",
+ "municipios": {
+  "Lorca": {
+   "Menos de 16": 17481,
+   "16-64": 63675,
+   "65 o más": 14574,
+   "Total": 95730
+  },
+  "Murcia": {
+   "Menos de 16": 80367,
+   "16-64": 305841,
+   "65 o más": 73572,
+   "Total": 459780
+  }
+ }
+}

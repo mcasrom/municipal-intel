@@ -4,6 +4,7 @@ from collections import defaultdict
 menores = json.load(open("lorca_menores.json"))
 formales = json.load(open("lorca_contratos.json"))
 renta = json.load(open("lorca_renta.json"))
+edad = json.load(open("lorca_edad.json"))
 DBP = "data/poblacion_municipal.sqlite"
 if not os.path.exists(DBP):
     DBP = "poblacion_municipal.sqlite"
@@ -135,6 +136,15 @@ a{color:var(--acc)}
 
 @@ALERTA@@
 
+<h2>Estructura de edad (INE · Censo de Población 2021)</h2>
+<div class="grid">
+  <div class="kpi"><b>@@E16@@</b><span>menores de 16 años</span></div>
+  <div class="kpi"><b>@@E1664@@</b><span>16 a 64 años</span></div>
+  <div class="kpi"><b>@@E65@@</b><span>65 o más</span></div>
+  <div class="kpi"><b>@@ETOT@@</b><span>población (Censo 2021)</span></div>
+</div>
+<div class="alert" style="background:#1e293b;border:1px solid #334155"><b style="color:#fca5a5">Contexto:</b> estructura por grandes grupos (Censo 2021): menores de 16 años @@E16PCT@@, 16-64 @@E1664PCT@@, 65+ @@E65PCT@@ — frente a @@EMUR_PCT@@ de mayores de 64 en Murcia capital. Perfil demográfico con envejecimiento moderado.</div>
+
 <h2>Renta de los hogares (INE · Atlas de distribución de renta)</h2>
 <div class="grid">
   <div class="kpi"><b>@@RNET@@ €</b><span>renta neta media por persona (2022)</span></div>
@@ -177,7 +187,15 @@ TOKENS = {"@@P25@@": fmt_e(p25), "@@P96@@": fmt_e(p96), "@@SIGN@@": "pos" if var
           "@@RNET@@": fmt_e(renta["municipios"]["Lorca"].get("Renta neta media por persona", {}).get("2022", 0)),
           "@@RHOG@@": fmt_e(renta["municipios"]["Lorca"].get("Renta neta media por hogar", {}).get("2022", 0)),
           "@@RMED@@": fmt_e(renta["municipios"]["Lorca"].get("Mediana de la renta por unidad de consumo", {}).get("2022", 0)),
-          "@@RPROV@@": fmt_e(renta["municipios"]["Murcia"].get("Renta neta media por persona", {}).get("2022", 0))}
+          "@@RPROV@@": fmt_e(renta["municipios"]["Murcia"].get("Renta neta media por persona", {}).get("2022", 0)),
+          "@@E16@@": fmt_e(edad["municipios"]["Lorca"]["Menos de 16"]),
+          "@@E1664@@": fmt_e(edad["municipios"]["Lorca"]["16-64"]),
+          "@@E65@@": fmt_e(edad["municipios"]["Lorca"]["65 o más"]),
+          "@@ETOT@@": fmt_e(edad["municipios"]["Lorca"]["Total"]),
+          "@@E16PCT@@": ("%.1f%%" % (edad["municipios"]["Lorca"]["Menos de 16"] / edad["municipios"]["Lorca"]["Total"] * 100)),
+          "@@E1664PCT@@": ("%.1f%%" % (edad["municipios"]["Lorca"]["16-64"] / edad["municipios"]["Lorca"]["Total"] * 100)),
+          "@@E65PCT@@": ("%.1f%%" % (edad["municipios"]["Lorca"]["65 o más"] / edad["municipios"]["Lorca"]["Total"] * 100)),
+          "@@EMUR_PCT@@": ("%.1f%%" % (edad["municipios"]["Murcia"]["65 o más"] / edad["municipios"]["Murcia"]["Total"] * 100))}
 html = HTML
 for k, v in TOKENS.items():
     html = html.replace(k, str(v))
