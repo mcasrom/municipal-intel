@@ -80,6 +80,22 @@ sin inventar causalidad.
   naranja → el total de requests sale infraestimado (Cloudflare cachea assets),
   pero las IPs humanas se capturan bien.
 
+## EMBUDO / LORCA (21/Ago) — SEPARACIÓN DE PÚBLICOS
+- Aplicado el comentario del análisis: la meta-description y el H1 del mapa ya NO
+  mezclan "8.132 municipios" con "transparencia de Lorca" — el mapa es solo
+  población nacional; la ficha_lorca.html es la landing SEO de Lorca (title/meta
+  propios). El overlay de bienvenida separa ambos: mapa nacional + "Caso de
+  estudio · Transparencia del Ayuntamiento de Lorca" como bloque distinto con su
+  CTA.
+
+## POLÍTICA DE RETENCIÓN DE DATOS (21/Ago)
+- Logs de acceso (el único dato infinito): logrotate diario, 14 días, comprimido.
+- Datos de la app (~100MB, +~15MB/año): SIN rotación — los contratos de Lorca y la
+  población son el producto (inteligencia histórica) y la trazabilidad es regla.
+  Disco 17G libre = años de margen.
+- Limpieza opcional futura: archivar lorca_pdf viejos (comprimidos) y VACUUM del
+  sqlite. No necesario hoy.
+
 ## Roadmap
 - [x] P0.5: dataset INE población municipal 1996-2025 (8.132 municipios).
 - [x] P1: catálogo municipios (códigos INE + coords) — 8.109 municipios (99,7%).
