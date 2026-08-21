@@ -2,3 +2,4 @@ dashboard/municipio/
 __pycache__/
 *.pyc
 lorca_pdf/
+data/alerts.env
