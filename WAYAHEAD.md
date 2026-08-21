@@ -150,6 +150,14 @@ sin inventar causalidad.
 - [ ] Extender transparencia a otros ayuntamientos; distribución "España vaciada"
       (X/Mastodon/Bluesky; HN/Reddit problemáticos por experiencia).
 
+## SESIÓN 21/Ago — CERRADA (retomar mañana)
+- Sprint A (llms.txt + title/meta) HECHO. Sprint B (103 editoriales long-tail) HECHO.
+- Sprint C (RSS + alertas municipales) HECHO (fix envío: User-Agent en Resend; seguridad env).
+- Último commit: b7322b6.
+- PRÓXIMO (Sprint D): extender transparencia a otros ayuntamientos (generalizar
+  gen_lorca_ficha.py → gen_ficha_municipio.py; localizar portales de la misma plantilla
+  que Lorca; vía datos.gob.es) + distribución (posts/datos.gob.es listos) + OG dinámico.
+
 ## Roadmap
 - [x] P0.5: dataset INE población municipal 1996-2025 (8.132 municipios).
 - [x] P1: catálogo municipios (códigos INE + coords) — 8.109 municipios (99,7%).
