@@ -41,3 +41,16 @@ paginas municipio generadas: 300
 sitemap URLs: 303
 acerca.html generado: 5 KB
 regenerado OK (lorca_cambios=1 ine_cambios=0)
+
+=== 2026-08-21 20:20:36 ===
+-- Lorca: trimestres nuevos?
+PDFs publicados: 28 | ingeridos: 28 | nuevos: 0
+-- INE: año nuevo?
+INE año máximo: 2025 | BD año máximo: 2025
+-- regeneración del sitio
+catalogo: 8109
+rankings.json OK
+series: 8108 | fichero KB: 2679
+index.html: 31 KB
+OK: dashboard/ generado
+lorca_intel.json guardado

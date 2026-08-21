@@ -24,4 +24,5 @@ python3 gen_map.py >> "$LOG" 2>&1
 python3 gen_lorca_ficha.py >> "$LOG" 2>&1
 python3 gen_municipio_pages.py >> "$LOG" 2>&1
 python3 gen_acerca.py >> "$LOG" 2>&1
+python3 gen_rss.py >> "$LOG" 2>&1
 echo "regenerado OK (lorca_cambios=$LORCA_CHANGED ine_cambios=$INE_CHANGED)" >> "$LOG"
