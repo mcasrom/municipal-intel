@@ -181,8 +181,8 @@ function mostrar(m){
   chips+='<span class="chip">5 años: <b>'+fmtNum(m.g5)+'%</b></span>';
   chips+='<span class="chip">10 años: <b>'+fmtNum(m.g16)+'%</b></span>';
   document.getElementById('sChips').innerHTML=chips;
-  dibujar(m.c, compCode);
   document.getElementById('side').style.display='block';
+  dibujar(m.c, compCode);
   if(compCode){
     var cm=catalogo[idx[compCode]];
     if(cm){
