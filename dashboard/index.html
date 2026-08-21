@@ -20,7 +20,7 @@ body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:v
 #sug{list-style:none;margin-top:6px;max-height:200px;overflow:auto;display:none}
 #sug li{padding:8px 10px;border-radius:6px;cursor:pointer;font-size:13px}
 #sug li:hover{background:#334155}
-#side{position:absolute;top:12px;right:12px;bottom:12px;z-index:1000;width:330px;max-width:calc(100vw - 24px);background:var(--card);border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,.4);display:none;overflow:auto;padding:16px}
+#side{position:absolute;top:12px;right:12px;bottom:12px;z-index:1000;width:330px;max-width:calc(100vw - 24px);background:var(--card);border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,.4);display:block;overflow:auto;padding:16px}
 #side h2{font-size:18px}
 #side .mut{color:var(--mut);font-size:12px;margin:2px 0 10px}
 #side .kpis{display:flex;gap:8px;margin:10px 0}
@@ -86,6 +86,16 @@ body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:v
   <button class="close" onclick="ocultarPanel()">&times;</button>
   <h2 id="sNom"></h2>
   <div class="mut"><span id="sProv"></span> · código INE <span id="sCod"></span></div>
+  <div id="sWelcome" style="margin-top:12px;line-height:1.6">
+    <div style="font-size:14px;font-weight:600;color:#38bdf8;margin-bottom:8px">¿Cómo usar?</div>
+    <div style="font-size:13px;color:#94a3b8">
+      <b style="color:#e2e8f0">Clic en un punto</b> del mapa → ficha del municipio (población, evolución, ranking, comparador).<br><br>
+      <b style="color:#e2e8f0">Clic en Lorca</b> → además, la transparencia del Ayuntamiento (contratos menores, troceado).<br><br>
+      <b style="color:#e2e8f0">Botón "Rankings"</b> (arriba) → municipios que más crecen / caen / mayores.<br><br>
+      Usa el <b style="color:#e2e8f0">buscador</b> para ir directo a un municipio.
+    </div>
+  </div>
+  <div id="sDatos" style="display:none">
   <div id="sRank"></div>
   <div class="kpis">
     <div class="kpi"><b id="s2025"></b><span>2025</span></div>
@@ -102,6 +112,7 @@ body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:v
   <ul id="sug2"></ul>
   <div id="cmp2"><b id="cmpNom"></b> <span id="cmpVal" class="mut" style="font-size:11px"></span><br><span id="cmpSerie" style="font-size:11px"></span></div>
   <div class="src">Datos actualizados: población INE a 01/01/2025 (publicada 11/12/2025), serie 1996-2025 (1997 no publicado; 1996 a 1 de mayo). Contratos del Ayuntamiento de Lorca: relaciones trimestrales de contratos menores (última Q2 2026) y formales vía transparencia.lorca.es. Coordenadas y códigos: © OpenStreetMap (ref:ine) · Overpass. Indicadores calculados sobre datos oficiales. Sin datos inventados.</div>
+  </div>
 </div>
 <div class="legend">
   <div><i style="background:#0ea5e9"></i>&lt; 1.000</div>
@@ -219,6 +230,8 @@ function mostrar(m){
       '<a href="ficha_lorca.html" style="display:block;text-align:center;margin-top:8px;padding:8px;border:1px solid #334155;border-radius:8px;color:#38bdf8;font-size:12px;font-weight:600">Ver la ficha completa de Lorca →</a>'+
       '</div>';
   } else { fich.style.display='none'; fich.innerHTML=''; }
+  document.getElementById('sWelcome').style.display='none';
+  document.getElementById('sDatos').style.display='block';
   document.getElementById('side').style.display='block';
   dibujar(m.c, compCode);
   if(compCode){
@@ -233,7 +246,12 @@ function mostrar(m){
   }
 }
 function fmtNum(x){return x==null?'—':(x>=0?'+':'')+x.toFixed(1);}
-function ocultarPanel(){document.getElementById('side').style.display='none';}
+function ocultarPanel(){
+  document.getElementById('sWelcome').style.display='block';
+  document.getElementById('sDatos').style.display='none';
+  document.getElementById('sNom').textContent='Municipal Intelligence';
+  document.getElementById('sProv').textContent='Mapa de los 8.132 municipios de España · población INE 1996-2025';
+}
 
 var busq=document.getElementById('buscar'), sug=document.getElementById('sug');
 busq.addEventListener('input',function(){
