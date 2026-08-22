@@ -183,6 +183,16 @@ sin inventar causalidad.
 - Commit aeca312. PRÓXIMO: generalizar gen_ficha_municipio.py (un solo generador para
   cualquier ayuntamiento + su dataset) y añadir el parser de Malaga al cron de update.
 
+## GENERADOR GENERALIZADO (22/Ago) ✅
+- gen_ficha_municipio.py: config-driven (AYUNTAMIENTOS list). Un generador para cualquier
+  ayuntamiento + su dataset de contratos (campo empresa = adjudicatario o razon; menores
+  cap 40.000 €; troceado; renta/edad/formales opcionales; lorca_intel.json si intel:True).
+- Reemplaza gen_lorca_ficha.py y gen_ficha_malaga.py (deprecados). update.sh usa el nuevo.
+- Para añadir un ayuntamiento nuevo: (1) dataset en datos.gob.es/portal, (2) ingestar al
+  formato {expediente, objeto, importe, cif, empresa, duracion, periodo}, (3) fila en
+  AYUNTAMIENTOS. El parser de Málaga (XLSX/ODS header-driven) sirve de plantilla.
+- PRÓXIMO: añadir Madrid/Barcelona/Valencia (grandes gastadores en datos.gob.es) al CONFIG.
+
 ## Roadmap
 - [x] P0.5: dataset INE población municipal 1996-2025 (8.132 municipios).
 - [x] P1: catálogo municipios (códigos INE + coords) — 8.109 municipios (99,7%).
