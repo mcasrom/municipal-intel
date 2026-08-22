@@ -193,6 +193,14 @@ sin inventar causalidad.
   AYUNTAMIENTOS. El parser de Málaga (XLSX/ODS header-driven) sirve de plantilla.
 - PRÓXIMO: añadir Madrid/Barcelona/Valencia (grandes gastadores en datos.gob.es) al CONFIG.
 
+## FIX MÓVIL — PWA REAL (22/Ago) ✅
+- Bug: en ≤700px la side window (bottom sheet) cubría media pantalla y no se podía
+  cerrar; junto al top dejaban el mapa en una franja. Arreglado (commit 6633654):
+  en móvil la side window está OCULTA por defecto (mapa a pantalla completa); solo
+  aparece como bottom sheet (42vh) al seleccionar un municipio, y el cierre (×) la
+  elimina del todo. Top compacto en móvil (título, buscador, sin línea de fechas).
+- La PWA es real en smartphone: el mapa es el protagonista, la ficha es contextual.
+
 ## Roadmap
 - [x] P0.5: dataset INE población municipal 1996-2025 (8.132 municipios).
 - [x] P1: catálogo municipios (códigos INE + coords) — 8.109 municipios (99,7%).
