@@ -241,3 +241,30 @@ Antes de dar una tarea por cerrada, verificar TODAS:
       crawl) y finanzas (Facturas CARM). Población ya en la ficha del mapa.
 - [ ] P4: indicadores + cambios + comparador (rankings, variaciones interanuales).
 - Patrón: estático generado + nginx (como transparencia_osint y alquimetria).
+
+## SPRINT E (22/Ago) — PLANIFICADO: credibilidad, visual, cobertura
+Análisis completo en el repo local del portátil: 220826_municipal-analisis-sprint-E.md.
+GAPS VERIFICADOS (22/Ago):
+1. SIN CSV descargable — el guest post lo promete y datos.gob.es lo exige (claim falso hoy).
+2. KPI gráfico a medias (los 5 visuales del feedback no implementados).
+3. Comparador sin permalink indexable (/comparar/a-vs-b.html = long-tail perdido).
+4. 27 municipios fuera de mapa/fichas (catálogo 99,7%).
+5. Renta solo en Lorca/Málaga; sin malla interna geográfica.
+6. OG dinámico limitado a 234 imágenes.
+PLAN (orden recomendado):
+- P0 (medio día): E1 gen_export_csv.py (CSV nacional completo + README + página /datos.html,
+  en update.sh tras ingestas) -> E2 alta en datos.gob.es con URL real -> E3 GSC + IndexNow
+  para editoriales/OG nuevas.
+- P1 (1-2 días): E4 KPI gráfico (edad apilada, área evolución, mini-barras ±, barras
+  proveedores, barra ranking; en gen_municipio_pages + gen_ficha_municipio) · E5 comparador
+  permalink estático con pares semilla · E6 OG dinámico top-1.000 + top movers %.
+- P2 (1-2 días): E7 catálogo 100% vía codmun INE oficial (cierra los 27) · E8 renta Atlas INE
+  municipal en TODAS las fichas ("renta [pueblo]" = volumen SEO real) · E9 bloque "Cercanos"
+  (<=15 km, 5 enlaces, coords del catálogo) en cada ficha (~40k enlaces internos nuevos).
+- P3 (backlog): E10 scouting CARM (Murcia capital/Cartagena; regla anti-alquimetría:
+  solo 2024-2026 accesible; generador listo = 1 línea CONFIG) · E11 Isolation Forest
+  cuando haya >=3 ayuntamientos.
+- Quick win: loop viral en alertas (post-confirmación -> "comparte tu pueblo" con og:image).
+REGLA: nada se distribuye (guest post/datos.gob.es) hasta cerrar E1 (el claim CSV debe ser verdad).
+BACKUP: todos los repos del ecosistema tienen remoto GitHub (auditoría 22/Ago: 21 repos mcasrom/*,
+municipal-intel 0 commits pendientes de push).
