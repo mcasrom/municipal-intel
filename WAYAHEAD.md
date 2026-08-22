@@ -268,3 +268,17 @@ PLAN (orden recomendado):
 REGLA: nada se distribuye (guest post/datos.gob.es) hasta cerrar E1 (el claim CSV debe ser verdad).
 BACKUP: todos los repos del ecosistema tienen remoto GitHub (auditoría 22/Ago: 21 repos mcasrom/*,
 municipal-intel 0 commits pendientes de push).
+
+## SPRINT E — E1 HECHO (22/Ago): EXPORT CSV PUBLICO ✅
+- gen_export_csv.py: dashboard/data/csv/poblacion-municipal-espana-1996-2025.csv
+  (235.376 filas = 8.136 municipios x 29 anos, Total; codigo_ine via catalogo LEFT JOIN,
+  NULLS LAST), README.txt (campos/licencia CC-BY-4.0/fuente INE) y landing datos.html
+  (JSON-LD Dataset con DataDownload, canonical, OG).
+- VALIDADO: total Espana 2025 = 49.114.494 (== validacion INE del P1).
+- gen_municipio_pages.py: datos.html anadido a la base del sitemap (8.114 URLs).
+- update.sh: gen_export_csv.py primero en la regeneracion (cron 05:30).
+- VERIFICADO en vivo: /datos.html 200, CSV 9,1 MB raw (~2,3 MB gzip), README 200.
+- NOTA OPERATIVA: gen_municipio_pages tarda ~20 min en el VPS; lanzar siempre
+  desacoplado (nohup/setsid o pm2) — una sesion ssh muerta se llevo la primera
+  corrida sin escribir sitemap. El CSV se versiona (cambia solo cuando cambia el INE).
+- SIGUIENTE: E2 (alta en datos.gob.es apuntando al CSV real) -> E3 (IndexNow/GSC).

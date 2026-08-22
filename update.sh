@@ -20,6 +20,7 @@ python3 ine_check_new.py >> "$LOG" 2>&1
 INE_CHANGED=$?
 
 echo "-- regeneración del sitio" >> "$LOG"
+python3 gen_export_csv.py >> "$LOG" 2>&1
 python3 gen_map.py >> "$LOG" 2>&1
 python3 gen_ficha_municipio.py >> "$LOG" 2>&1
 python3 gen_og_dinamico.py >> "$LOG" 2>&1

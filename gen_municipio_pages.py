@@ -156,7 +156,7 @@ def build_svg(serie):
 def build_rows(serie):
     return "".join(f"<tr><td>{a}</td><td style='text-align:right'>{fmt(p)}</td></tr>" for a, p in serie)
 
-sitemap = ["https://municipal.viajeinteligencia.com/", "https://municipal.viajeinteligencia.com/ficha_lorca.html", "https://municipal.viajeinteligencia.com/ficha_malaga.html", "https://municipal.viajeinteligencia.com/acerca.html"]
+sitemap = ["https://municipal.viajeinteligencia.com/", "https://municipal.viajeinteligencia.com/ficha_lorca.html", "https://municipal.viajeinteligencia.com/ficha_malaga.html", "https://municipal.viajeinteligencia.com/acerca.html", "https://municipal.viajeinteligencia.com/datos.html"]
 n = 0
 OGD = {}
 try:
