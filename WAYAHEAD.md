@@ -171,6 +171,18 @@ sin inventar causalidad.
 - ACCIÓN (no más posts por posts): priorizar SEO + datos.gob.es; los posts sociales
   SOLO cuando haya un hook real y para validar (no como canal principal).
 
+## SPRINT D — SEGUNDA FICHA DE TRANSPARENCIA: MÁLAGA (22/Ago) ✅
+- Via datos.gob.es (camino B, mas robusto que cazar la plantilla del portal de Lorca):
+  datasets "Contratos Menores [trimestre] · Ayuntamiento de Málaga" (datosabiertos.malaga.eu).
+- Ingesta: malaga_ingest.py (parser ROBUSTO header-driven: detecta la fila de columnas por
+  nombre, maneja XLSX y ODS, importe con € o numero plano, cap 40.000 € para menores).
+- Datos: 1.976 contratos menores (2024-Q1 a 2026-Q2), 100% con importe y adjudicatario.
+- ficha_malaga.html: poblacion (599.063 en 2025), renta 13.847 €/persona (2022, Atlas),
+  estructura de edad (Censo 2021), troceado (top proveedores), gasto 15,07 M€.
+- Enlace desde /municipio/malaga.html + sitemap (8.113 URLs).
+- Commit aeca312. PRÓXIMO: generalizar gen_ficha_municipio.py (un solo generador para
+  cualquier ayuntamiento + su dataset) y añadir el parser de Malaga al cron de update.
+
 ## Roadmap
 - [x] P0.5: dataset INE población municipal 1996-2025 (8.132 municipios).
 - [x] P1: catálogo municipios (códigos INE + coords) — 8.109 municipios (99,7%).
