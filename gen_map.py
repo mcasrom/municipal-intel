@@ -510,7 +510,7 @@ function provBars(top){
 }
 // COMPARTIR: copia el enlace a la ficha estatica del municipio
 function compartir(m){
-  var url='https://municipal.viajeinteligencia.com/municipio/'+(m.sl?m.sl:'.html');
+  var url='https://municipal.viajeinteligencia.com/municipio/'+(m.sl?m.sl+'\.html':'.html');
   if(navigator.clipboard){navigator.clipboard.writeText(url).then(function(){shareBtn.textContent='✓ Enlace copiado';setTimeout(function(){shareBtn.textContent='🔗 Compartir este municipio';},1500);});}
   else{window.prompt('Copia el enlace:', url);}
 }
