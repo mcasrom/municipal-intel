@@ -163,6 +163,12 @@ body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:v
 #ecosistema{position:absolute;bottom:44px;left:60px;z-index:1500;width:42px;height:42px;border-radius:50%;background:var(--card);border:1px solid #334155;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 10px rgba(0,0,0,.5)}
 #ecosistema a{text-decoration:none}
 #ecosistema:hover{border-color:var(--acc);background:#334155}
+@media (max-width:700px){
+  #side{top:auto;bottom:8px;left:8px;right:8px;width:auto;max-width:none;max-height:46vh;min-height:0;border-radius:12px}
+  #top{max-width:none;width:calc(100vw - 24px)}
+  #topPanel{left:8px;top:8px;max-width:calc(100vw - 16px);max-height:70vh}
+  #landBox{max-width:100%}
+}
 .legend{position:absolute;bottom:96px;left:12px;z-index:999;background:var(--card);border-radius:8px;padding:8px 10px;font-size:11px;color:var(--mut);box-shadow:0 2px 10px rgba(0,0,0,.4)}
 .legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px}
 #top .btn{width:100%;margin-top:8px;padding:8px;border:1px solid #334155;border-radius:8px;background:#0f172a;color:var(--fg);font-size:12px;cursor:pointer}
