@@ -201,6 +201,21 @@ sin inventar causalidad.
   elimina del todo. Top compacto en móvil (título, buscador, sin línea de fechas).
 - La PWA es real en smartphone: el mapa es el protagonista, la ficha es contextual.
 
+## HITO 22/Ago — OG DINÁMICO + TOGGLE + CONSISTENCIA ✅
+- **OG dinámico** (234 imágenes compartibles): crecen/despueblan/mayores por cambio
+  absoluto + % (Yebes +95%, Calañas -44%, Lorca, Madrid...). gen_og_dinamico.py, og:image
+  por ficha (fallback genérico). Commit 99b4574.
+- **Toggle claro/oscuro** en las 8.109 fichas (template, CSS variables + JS vanilla +
+  localStorage). Fix: emoji real en textContent (las entidades HTML se veían &h127 literal).
+  Commit bf3733a.
+- **Consistencia**: quitar la referencia a Alquimetría del acerca de municipal (declarada
+  FRAUDE, on hold). Commit 1e116a0. LECCIÓN: al declarar un servicio fraude, limpiar TODAS
+  sus referencias cruzadas, no solo la vitrina.
+- **Scouting expansión (honesto)**: Madrid/Barcelona/Valencia NO publican contratos recientes
+  de forma accesible (Barcelona 2014-2022, Madrid portal bloqueado, Valencia solo regional).
+  La expansión queda LIMITADA POR DATOS (no forzar con obsoletos = lección alquimetría).
+  El generador está listo (1 línea en CONFIG cuando haya dato reciente).
+
 ## Roadmap
 - [x] P0.5: dataset INE población municipal 1996-2025 (8.132 municipios).
 - [x] P1: catálogo municipios (códigos INE + coords) — 8.109 municipios (99,7%).
