@@ -53,7 +53,7 @@ TEMPLATE = """<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
 <meta property="og:type" content="article">
 <meta property="og:title" content="@@MUNI@@ · Población @@PROV@@">
 <meta property="og:description" content="@@POP@@ habitantes (2025, INE) · evolución 1996-2025 · ranking nacional.">
-<meta property="og:image" content="https://municipal.viajeinteligencia.com/og-municipal.png">
+<meta property="og:image" content="https://municipal.viajeinteligencia.com/@@OGIMG@@">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -149,6 +149,11 @@ def build_rows(serie):
 
 sitemap = ["https://municipal.viajeinteligencia.com/", "https://municipal.viajeinteligencia.com/ficha_lorca.html", "https://municipal.viajeinteligencia.com/ficha_malaga.html", "https://municipal.viajeinteligencia.com/acerca.html"]
 n = 0
+OGD = {}
+try:
+    OGD = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "dashboard", "data", "og_dinamico.json")))
+except Exception:
+    pass
 for pg in pages:
     muni, prov, code, slugv = pg["muni"], pg["prov"], pg["code"], pg["slug"]
     p25 = pg["pop"]; p96 = pop_of(prov, muni, 1996) or p25
@@ -170,6 +175,7 @@ for pg in pages:
                  "@@SIGN@@": "pos" if (var or 0) >= 0 else "neg",
                  "@@VAR@@": ("+" if (var or 0) >= 0 else "") + str(var or 0),
                  "@@RANK@@": f"{rank}º", "@@CTX@@": ctx, "@@LORCA_LINK@@": lorca_link,
+                 "@@OGIMG@@": OGD.get(code, "og-municipal.png"),
                  "@@G1@@": ("+" if (g1 or 0) >= 0 else "") + str(g1 or 0) + "%",
                  "@@G5@@": ("+" if (g5 or 0) >= 0 else "") + str(g5 or 0) + "%",
                  "@@G16@@": ("+" if (g16 or 0) >= 0 else "") + str(g16 or 0) + "%",
