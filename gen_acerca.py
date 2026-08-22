@@ -120,9 +120,6 @@ pantalla de inicio de tu móvil u ordenador y consultar las fichas sin conexión
 actualizan al volver a tener red. Busca la opción "Instalar app" / "Añadir a pantalla de inicio"
 en tu navegador, o usa el enlace del pie del mapa.</p>
 
-<h2>Relacionados</h2>
-<p><a class="btn" href="https://alquimetria.viajeinteligencia.com">🏠 Alquimetría · La subida del alquiler por comunidad (2011-2024)</a></p>
-
 <h2>Apoyar el proyecto</h2>
 <p>Es un proyecto independiente, gratis y sin publicidad. Si te resulta útil, puedes apoyarlo en Ko-fi:</p>
 <p><a class="btn" href="https://ko-fi.com/m_castillo">☕ Apoyar en Ko-fi</a>
