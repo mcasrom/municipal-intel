@@ -60,3 +60,24 @@ acerca.html generado: 6 KB
 rss.xml generado: 42 items | 17987 bytes
 regenerado OK (lorca_cambios=0 ine_cambios=0)
 {"ok": true, "enviadas": []}alertas notificadas
+
+=== 2026-08-22 05:30:02 ===
+-- Lorca: trimestres nuevos?
+PDFs publicados: 28 | ingeridos: 28 | nuevos: 0
+-- INE: año nuevo?
+INE año máximo: 2025 | BD año máximo: 2025
+-- regeneración del sitio
+catalogo: 8109
+rankings.json OK
+series: 8108 | fichero KB: 2679
+index.html: 31 KB
+OK: dashboard/ generado
+lorca_intel.json guardado
+paginas municipio generadas: 8109
+sitemap URLs: 8112
+acerca.html generado: 6 KB
+rss.xml generado: 42 items | 17987 bytes
+paginas editoriales generadas: 103
+sitemap actualizado con 103 URLs editoriales
+regenerado OK (lorca_cambios=0 ine_cambios=0)
+{"ok": true, "enviadas": ["miguelcastillo@gmail.com/30024", "mcasrom@gmail.com/46214"]}alertas notificadas

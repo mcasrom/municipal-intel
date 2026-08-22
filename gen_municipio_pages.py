@@ -147,7 +147,7 @@ def build_svg(serie):
 def build_rows(serie):
     return "".join(f"<tr><td>{a}</td><td style='text-align:right'>{fmt(p)}</td></tr>" for a, p in serie)
 
-sitemap = ["https://municipal.viajeinteligencia.com/", "https://municipal.viajeinteligencia.com/ficha_lorca.html", "https://municipal.viajeinteligencia.com/acerca.html"]
+sitemap = ["https://municipal.viajeinteligencia.com/", "https://municipal.viajeinteligencia.com/ficha_lorca.html", "https://municipal.viajeinteligencia.com/ficha_malaga.html", "https://municipal.viajeinteligencia.com/acerca.html"]
 n = 0
 for pg in pages:
     muni, prov, code, slugv = pg["muni"], pg["prov"], pg["code"], pg["slug"]
@@ -159,7 +159,11 @@ for pg in pages:
     ctx = (f"ha crecido un {abs(g16):.1f}% en los últimos 10 años (2016→2025) " if g16 and g16 > 0
            else f"ha perdido el {abs(g16):.1f}% de su población en los últimos 10 años (2016→2025) " if g16 else "presenta una serie estable ")
     ctx += f"y ocupa el puesto {rank} de 8.132 municipios de España por población en 2025. Fuente: INE."
-    lorca_link = (f'<div style="background:#1e293b;border:1px solid #334155;border-radius:10px;padding:12px;margin:12px 0"><a href="../ficha_lorca.html" style="color:#38bdf8;font-weight:600">Ver la ficha de transparencia de Lorca →</a> (contratos del Ayuntamiento, menores y troceados)</div>' if code == "30024" else "")
+    lorca_link = ""
+    if code == "30024":
+        lorca_link = f'<div style="background:#1e293b;border:1px solid #334155;border-radius:10px;padding:12px;margin:12px 0"><a href="../ficha_lorca.html" style="color:#38bdf8;font-weight:600">Ver la ficha de transparencia de Lorca →</a> (contratos del Ayuntamiento, menores y troceados)</div>'
+    elif code == "29067":
+        lorca_link = f'<div style="background:#1e293b;border:1px solid #334155;border-radius:10px;padding:12px;margin:12px 0"><a href="../ficha_malaga.html" style="color:#38bdf8;font-weight:600">Ver la ficha de transparencia de Málaga →</a> (contratos menores del Ayuntamiento, datos.gob.es)</div>'
     html = TEMPLATE
     for k, v in {"@@MUNI@@": muni, "@@PROV@@": prov, "@@CODE@@": code, "@@SLUG@@": slugv,
                  "@@POP@@": fmt(p25), "@@P96@@": fmt(p96),
