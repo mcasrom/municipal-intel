@@ -216,6 +216,21 @@ sin inventar causalidad.
   La expansión queda LIMITADA POR DATOS (no forzar con obsoletos = lección alquimetría).
   El generador está listo (1 línea en CONFIG cuando haya dato reciente).
 
+## CHECKLIST DE DESARROLLO (obligatoria, 22/Ago) — evita descuidos
+Antes de dar una tarea por cerrada, verificar TODAS:
+1) **Destino de archivos**: los generados van a `dashboard/`, NUNCA a la raíz del repo
+   (revisar rutas de scp/escritura; los datos lorca_*/malaga_menores.json sí van en raíz).
+2) **Cron**: todo generador nuevo se añade a `update.sh` EN EL ORDEN de dependencias
+   (ej. gen_og_dinamico ANTES de gen_municipio_pages, porque las páginas leen su mapping).
+3) **Declarar un servicio fraude/on-hold**: limpiar TODAS sus referencias — vitrina
+   (index+ecosistema+ItemList), healthcheck, enlaces cruzados en OTROS servicios.
+4) **Higiene final**: `git status` limpio, sin ficheros sueltos en raíz, `git ls-files`
+   revisado, y el generado servido verificado (curl 200 + contenido esperado).
+5) **Datos**: nunca forzar datos obsoletos para "completar" una ficha (lección alquimetría);
+   si la fuente es antigua, documentarlo y NO publicar como si fuera actual.
+6) **Procesos en segundo plano**: lanzar con pm2 (no setsid/nohup que mueren al cerrar ssh),
+   y limpiar el proceso al terminar.
+
 ## Roadmap
 - [x] P0.5: dataset INE población municipal 1996-2025 (8.132 municipios).
 - [x] P1: catálogo municipios (códigos INE + coords) — 8.109 municipios (99,7%).
