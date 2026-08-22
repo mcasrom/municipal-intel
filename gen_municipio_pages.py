@@ -85,7 +85,16 @@ summary{cursor:pointer;font-weight:600;color:var(--acc)}
 a{color:var(--acc)}
 .nav{display:flex;gap:12px;font-size:13px;margin-bottom:14px}
 .src{font-size:11px;color:var(--mut);margin-top:28px}
+.toggle{position:fixed;top:14px;right:16px;z-index:99;background:var(--card);border:1px solid #334155;color:var(--fg);border-radius:50%;width:38px;height:38px;cursor:pointer;font-size:17px;box-shadow:0 2px 10px rgba(0,0,0,.3)}
+body.light{--bg:#f1f5f9;--card:#ffffff;--fg:#0f172a;--mut:#64748b;--acc:#0284c7;--verde:#059669;--rojo:#dc2626}
+body.light table{background:#ffffff}
+body.light th{background:#f1f5f9}
+body.light td{color:#1e293b;border-color:#e2e8f0}
+body.light .src{color:#64748b}
 </style></head><body><div class="wrap">
+<button class="toggle" onclick="tema()" id="temaBtn" title="Modo claro/oscuro">&#127769;</button>
+<script>function tema(){var b=document.body;b.classList.toggle("light");var l=b.classList.contains("light");document.getElementById("temaBtn").textContent=l?"&#127769;":"&#9728;&#65039;";try{localStorage.setItem("municip-tema",l?"light":"dark");}catch(e){}}</script>
+<script>try{if(localStorage.getItem("municip-tema")==="light"){document.body.classList.add("light");document.getElementById("temaBtn").textContent="&#127769;";}}catch(e){}</script>
 <div class="nav"><a href="../">← Mapa de municipios de España</a> · <a href="../acerca.html">Metodología y fuentes</a> · <a href="https://www.viajeinteligencia.com">Ecosistema de datos abiertos</a></div>
 <h1>@@MUNI@@ <span class="mut">· @@PROV@@</span></h1>
 <div class="mut">Código INE @@CODE@@ · datos oficiales de la Revisión del Padrón Municipal (INE) · sin datos inventados</div>
