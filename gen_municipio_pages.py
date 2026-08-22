@@ -93,8 +93,8 @@ body.light td{color:#1e293b;border-color:#e2e8f0}
 body.light .src{color:#64748b}
 </style></head><body><div class="wrap">
 <button class="toggle" onclick="tema()" id="temaBtn" title="Modo claro/oscuro">&#127769;</button>
-<script>function tema(){var b=document.body;b.classList.toggle("light");var l=b.classList.contains("light");document.getElementById("temaBtn").textContent=l?"&#127769;":"&#9728;&#65039;";try{localStorage.setItem("municip-tema",l?"light":"dark");}catch(e){}}</script>
-<script>try{if(localStorage.getItem("municip-tema")==="light"){document.body.classList.add("light");document.getElementById("temaBtn").textContent="&#127769;";}}catch(e){}</script>
+<script>function tema(){var b=document.body;b.classList.toggle("light");var l=b.classList.contains("light");document.getElementById("temaBtn").textContent=l?"🌙":"☀️";try{localStorage.setItem("municip-tema",l?"light":"dark");}catch(e){}}</script>
+<script>try{if(localStorage.getItem("municip-tema")==="light"){document.body.classList.add("light");document.getElementById("temaBtn").textContent="🌙";}}catch(e){}</script>
 <div class="nav"><a href="../">← Mapa de municipios de España</a> · <a href="../acerca.html">Metodología y fuentes</a> · <a href="https://www.viajeinteligencia.com">Ecosistema de datos abiertos</a></div>
 <h1>@@MUNI@@ <span class="mut">· @@PROV@@</span></h1>
 <div class="mut">Código INE @@CODE@@ · datos oficiales de la Revisión del Padrón Municipal (INE) · sin datos inventados</div>
