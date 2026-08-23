@@ -145,6 +145,10 @@ def main():
                                     "total_ok": ok, "municipios": sorted(resultados, key=lambda x: -x["poblacion"])},
                                    ensure_ascii=False, indent=1))
     print(f"[FIN] ok={ok} sin_datos={sin_datos} errores={errores} duración={dur//60}m{dur%60}s")
+    gen = BASE / "scripts/gen_alquiler_page.py"
+    if gen.exists():
+        r = subprocess.run([sys.executable, str(gen)], capture_output=True, text=True)
+        print("[pagina]", r.stdout.strip() or r.stderr.strip()[-120:])
 
 
 if __name__ == "__main__":
