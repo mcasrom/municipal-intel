@@ -10,7 +10,7 @@ Creado 23/Ago/2026 · para seguimiento junto a SEGUIMIENTO.md · estado: PROPUES
 - [ ] H3.3 tarjeta en www + ecosistema
 
 ### P2 España Vaciada Radar
-- [ ] H2.1 Fórmula índice vaciamiento definida y documentada
+- [x] H2.1 Fórmula índice vaciamiento definida y documentada — v0 EN PRODUCCIÓN 23/Ago (solo componente Δpoblación; 3.189 municipios evaluados; 506 críticos; sanity check top-15 = España Vaciada real ✓). v1 añadirá envejecimiento+saldo vegetativo+paro
 - [ ] H2.2 Ingest paro SEPE municipal (mensual)
 - [ ] H2.3 Sección "proyección 2040" en fichas municipales
 - [ ] H2.4 Mapa nacional + página índice
