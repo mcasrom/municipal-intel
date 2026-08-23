@@ -23,7 +23,7 @@ os.makedirs(OUTDIR, exist_ok=True)
 
 con = sqlite3.connect(DB)
 rows = con.execute(
-    """SELECT p.provincia, p.municipio, c.codigo_ine, p.anyo, p.poblacion
+    """SELECT c.codigo_ine, p.provincia, p.municipio, p.anyo, p.poblacion
        FROM poblacion p
        LEFT JOIN catalogo c ON c.provincia=p.provincia AND c.municipio=p.municipio
        WHERE p.sexo='Total'
