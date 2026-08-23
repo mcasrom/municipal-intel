@@ -117,6 +117,23 @@ Creado 23/Ago/2026 · para seguimiento junto a SEGUIMIENTO.md · estado: PROPUES
 3. **P4 Incendios** — aprovechar cola de la temporada; archivo FIRMS ya accesible.
 4. **P1 Radar Alquiler** — probar viabilidad del scraper en 10 municipios ANTES de comprometerse. Si pasa la prueba → flagship absoluto (y P5/P8 se desbloquean solos).
 
+## 🏃 SPRINT F (aprobado pendiente ejecución)
+### F-A = H1.2 scraper VIA completo
+- Universo: municipios ≥20k hab de NUESTRO CSV INE 2025 (~150)
+- Slug pisos.com: minúsculas sin tildes, espacios→"-"; validar h1 contiene nombre; fallos a log
+- Paginación: descubrir patrón (?pagina=N), máx 3 pág/ciudad · rate 4s · retry ×2 · flock
+- Cron dominical 06:00 (~30 min ciclo) → SQLite via_index + JSON
+- Publicar solo con ≥5 anuncios; aceptación: ≥80% municipios válidos primer ciclo
+- PASO 0: validar 10 slugs difíciles (A Coruña, San Sebastián…)
+
+### F-B = H2.1 fórmula IV (Índice de Vaciamiento 0-100)
+- IV = 35·ΔPob10a + 25·envejecimiento + 20·saldo_vegetativo + 20·paro_vs_provincia
+- s₁: pérdida ≥15%/10a → 1.0 (YA en nuestro CSV) · s₂: %65+ vs media nacional (ingest futura)
+- s₃: saldo vegetativo INE anual · s₄: SEPE mensual (llega con H2.2)
+- Umbrales: ≥60 crítico / 40-60 alto / 20-40 tensión / <20 estable
+- Proyección 2040: P·(1+Δ/10)^15 cap±40% etiquetada "proyección simple"
+- MVP hoy: IV con s₁+s₃ → top-50 ranking + sanity check (Soria/Teruel/Asturias rural)
+
 ## Registro de decisiones
 | Fecha | Decisión |
 |---|---|
