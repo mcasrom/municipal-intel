@@ -21,6 +21,10 @@ MANUAL = {
     "Castelló de la Plana": ("castellon", "castello"),
     "Palmas de Gran Canaria, Las": ("las-palmas-de-gran-canaria", "palmas"),
     "Alacant/Alicante": ("alicante", "alicante"),
+    # verificados a mano 23/Ago (probe scripts/slugs_rescatados.json)
+    "Coruña, A": ("a-coruna", "coruna"),
+    "Pamplona/Iruña": ("pamplona", "pamplona"),
+    "Ejido, El": ("el-ejido", "ejido"),
 }
 
 RE_PRECIO = re.compile(r"(\d{1,3}(?:\.\d{3})+|\d{3,5})\s*€")
@@ -102,7 +106,6 @@ def municipios_objetivo():
 
 
 def main():
-    limit = int(sys.argv[sys.argv.index("--limit") + 1]) if "--limit" in sys.argv else None
     fecha = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     DB_PATH.parent.mkdir(parents=True, exist_ok=True)
     db = sqlite3.connect(DB_PATH)
@@ -114,9 +117,14 @@ def main():
         fecha TEXT, ok INTEGER, sin_datos INTEGER, errores INTEGER, duracion_s REAL, PRIMARY KEY(fecha))""")
 
     munis = municipios_objetivo()
-    if limit:
-        munis = munis[:limit]
-    print(f"[{fecha}] inicio: {len(munis)} municipios >= {MIN_POB} hab")
+    solo = None
+    if "--solo" in sys.argv:
+        solo = open(sys.argv[sys.argv.index("--solo") + 1]).read().splitlines()
+        solo_set = set(solo)
+        munis = [m for m in munis if m[2] in solo_set]
+    if "--limit" in sys.argv:
+        munis = munis[:int(sys.argv[sys.argv.index("--limit") + 1])]
+    print(f"[{fecha}] inicio: {len(munis)} municipios" + (" (MODO SOLO rescate)" if solo else ""))
     t0, ok, sin_datos, errores, resultados = time.time(), 0, 0, 0, []
     for ine, prov, nombre, pob in munis:
         if nombre in SKIP:
@@ -139,11 +147,13 @@ def main():
             errores += 1
             print(f"  XX {nombre:28} ERROR {type(e).__name__}: {str(e)[:60]}")
     dur = round(time.time() - t0)
-    db.execute("INSERT OR REPLACE INTO via_runs VALUES (?,?,?,?,?)", (fecha, ok, sin_datos, errores, dur))
+    if not solo:   # en rescate parcial no tocar estadisticas ni JSON del ciclo completo
+        db.execute("INSERT OR REPLACE INTO via_runs VALUES (?,?,?,?,?)", (fecha, ok, sin_datos, errores, dur))
     db.commit()
-    JSON_OUT.write_text(json.dumps({"fecha": fecha, "generado": datetime.now(timezone.utc).isoformat(),
-                                    "total_ok": ok, "municipios": sorted(resultados, key=lambda x: -x["poblacion"])},
-                                   ensure_ascii=False, indent=1))
+    if not solo:
+        JSON_OUT.write_text(json.dumps({"fecha": fecha, "generado": datetime.now(timezone.utc).isoformat(),
+                                        "total_ok": ok, "municipios": sorted(resultados, key=lambda x: -x["poblacion"])},
+                                       ensure_ascii=False, indent=1))
     print(f"[FIN] ok={ok} sin_datos={sin_datos} errores={errores} duración={dur//60}m{dur%60}s")
     gen = BASE / "scripts/gen_alquiler_page.py"
     if gen.exists():
