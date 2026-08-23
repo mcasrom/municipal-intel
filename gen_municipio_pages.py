@@ -1,4 +1,5 @@
 import json, sqlite3, os, re, unicodedata
+import datetime
 
 DBP = "data/poblacion_municipal.sqlite"
 if not os.path.exists(DBP):
@@ -6,6 +7,21 @@ if not os.path.exists(DBP):
 OUT = os.path.join("dashboard", "municipio")
 os.makedirs(OUT, exist_ok=True)
 con = sqlite3.connect(DBP)
+
+# H1.5: bloque "Alquiler hoy" desde el Indice VIA (si aun no hay datos, fichas salen sin bloque)
+VIA = {}
+VIADB = os.path.join("dashboard", "data", "via", "via.db")
+if os.path.exists(VIADB):
+    try:
+        _c = sqlite3.connect(f"file:{VIADB}?mode=ro", uri=True)
+        for _m, _eur, _alq, _an in _c.execute(
+            "SELECT municipio, eur_m2_mediana, alq_mediana_80m2, anuncios "
+            "FROM via_index WHERE fecha=(SELECT MAX(fecha) FROM via_index) AND anuncios>=5"):
+            VIA[_m] = {"eur": _eur, "alq": _alq, "an": _an}
+        _c.close()
+    except sqlite3.OperationalError:
+        VIA = {}
+TODAY = datetime.date.today().isoformat()
 
 def pop_of(prov, muni, anyo):
     r = con.execute("SELECT poblacion FROM poblacion WHERE provincia=? AND municipio=? AND anyo=? AND sexo='Total'", (prov, muni, anyo)).fetchone()
@@ -115,6 +131,7 @@ body.light .src{color:#64748b}
 <details><summary>Serie completa de población (1996-2025)</summary>
 <table>@@ROWS@@</table>
 </details>
+@@ALQUILER@@
 <div class="alerta-box" style="background:var(--card);border-radius:10px;padding:14px;margin:14px 0">
   <b style="color:#38bdf8">¿Avísame si cambian los datos de @@MUNI@@?</b>
   <div style="font-size:12px;color:#94a3b8;margin:4px 0">Recibirás un email cuando se actualicen los datos de este municipio (población, ranking o contratos). Sin spam; baja fácil.</div>
@@ -179,6 +196,16 @@ for pg in pages:
     elif code == "29067":
         lorca_link = f'<div style="background:#1e293b;border:1px solid #334155;border-radius:10px;padding:12px;margin:12px 0"><a href="../ficha_malaga.html" style="color:#38bdf8;font-weight:600">Ver la ficha de transparencia de Málaga →</a> (contratos menores del Ayuntamiento, datos.gob.es)</div>'
     html = TEMPLATE
+    v = VIA.get(muni)
+    if v:
+        alquiler_html = (
+            '<div class="kpi" style="margin:14px 0;font-size:14px">💰 <b>Alquiler hoy:</b> '
+            + str(round(v["eur"], 2)).replace(".", ",") + ' €/m² mediana · piso de 80 m² ≈ '
+            + fmt(v["alq"]) + ' €/mes '
+            + '<span style="color:#94a3b8">(mediana de ' + str(v["an"]) + ' anuncios activos · '
+            + '<a href="../alquiler.html" style="color:#58a6ff">índice completo</a>)</span></div>')
+    else:
+        alquiler_html = ""
     for k, v in {"@@MUNI@@": muni, "@@PROV@@": prov, "@@CODE@@": code, "@@SLUG@@": slugv,
                  "@@POP@@": fmt(p25), "@@P96@@": fmt(p96),
                  "@@SIGN@@": "pos" if (var or 0) >= 0 else "neg",
@@ -188,7 +215,8 @@ for pg in pages:
                  "@@G1@@": ("+" if (g1 or 0) >= 0 else "") + str(g1 or 0) + "%",
                  "@@G5@@": ("+" if (g5 or 0) >= 0 else "") + str(g5 or 0) + "%",
                  "@@G16@@": ("+" if (g16 or 0) >= 0 else "") + str(g16 or 0) + "%",
-                 "@@SVG@@": build_svg(serie), "@@ROWS@@": build_rows(serie)}.items():
+                 "@@SVG@@": build_svg(serie), "@@ROWS@@": build_rows(serie),
+                 "@@ALQUILER@@": alquiler_html}.items():
         html = html.replace(k, str(v))
     with open(os.path.join(OUT, f"{slugv}.html"), "w", encoding="utf-8") as f:
         f.write(html)
@@ -204,7 +232,7 @@ with open(os.path.join("dashboard", "data", "municipio_slugs.json"), "w") as f:
 sm = ['<?xml version="1.0" encoding="UTF-8"?>',
       '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
 for u in sitemap:
-    sm.append(f"  <url><loc>{u}</loc><lastmod>2026-08-21</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>")
+    sm.append(f"  <url><loc>{u}</loc><lastmod>{TODAY}</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>")
 sm.append("</urlset>")
 with open(os.path.join("dashboard", "sitemap.xml"), "w") as f:
     f.write("\n".join(sm))
