@@ -27,6 +27,55 @@ MANUAL = {
     "Ejido, El": ("el-ejido", "ejido"),
 }
 
+MANUAL.update({
+    "Hospitalet de Llobregat, L'": ("hospitalet_de_llobregat", None),
+    "Elx/Elche": ("elx_elche", "elx"),
+    "Jerez de la Frontera": ("jerez_de_la_frontera", None),
+    "Alcalá de Henares": ("alcala_de_henares", None),
+    "Donostia/San Sebastián": ("san_sebastian_donostia", "san sebastian"),
+    "San Cristóbal de La Laguna": ("san_cristobal_de_la_laguna", None),
+    "Torrejón de Ardoz": ("torrejon_de_ardoz", None),
+    "Dos Hermanas": ("dos_hermanas", None),
+    "Roquetas de Mar": ("roquetas_de_mar", None),
+    "Santiago de Compostela": ("santiago_de_compostela", None),
+    "Rozas de Madrid, Las": ("las_rozas_de_madrid", None),
+    "Sant Cugat del Vallès": ("sant_cugat_del_valles", None),
+    "San Sebastián de los Reyes": ("san_sebastian_de_los_reyes", None),
+    "San Fernando": ("san_fernando", None),
+    "Cornellà de Llobregat": ("cornella_de_llobregat", None),
+    "Chiclana de la Frontera": ("chiclana_de_la_frontera", None),
+    "Puerto de Santa María, El": ("el_puerto_de_santa_maria", None),
+    "Pozuelo de Alarcón": ("pozuelo_de_alarcon", None),
+    "Vélez-Málaga": ("velez_malaga", None),
+    "Sant Boi de Llobregat": ("sant_boi_de_llobregat", None),
+    "Talavera de la Reina": ("talavera_de_la_reina", None),
+    "Santa Lucía de Tirajana": ("santa_lucia_de_tirajana", None),
+    "Molina de Segura": ("molina_de_segura", None),
+    "Alcalá de Guadaíra": ("alcala_de_guadaira", None),
+    "Ciudad Real": ("ciudad_real", None),
+    "Sagunt/Sagunto": ("sagunt_sagunto", "sagunt"),
+    "Vilanova i la Geltrú": ("vilanova_i_la_geltru", None),
+    "Sanlúcar de Barrameda": ("sanlucar_de_barrameda", None),
+    "Collado Villalba": ("collado_villalba", None),
+    "Boadilla del Monte": ("boadilla_del_monte", None),
+    "Prat de Llobregat, El": ("el_prat_de_llobregat", None),
+    "Línea de la Concepción, La": ("la_linea_de_la_concepcion", None),
+    "Alcoi/Alcoy": ("alcoi_alcoy", "alcoi"),
+    "Arganda del Rey": ("arganda_del_rey", None),
+    "Sant Vicent del Raspeig/San Vicente del Raspeig": ("sant_vicent_del_raspeig_san_vicente_del_raspeig", None),
+    "Granadilla de Abona": ("granadilla_de_abona", None),
+    "Colmenar Viejo": ("colmenar_viejo", None),
+    "Cerdanyola del Vallès": ("cerdanyola_del_valles", None),
+    "Tres Cantos": ("tres_cantos", None),
+    "San Bartolomé de Tirajana": ("san_bartolome_de_tirajana", None),
+    "Vila-real": ("vila_real", None),
+    "Mollet del Vallès": ("mollet_del_valles", None),
+    "Rincón de la Victoria": ("rincon_de_la_victoria", None),
+    "Vitoria-Gasteiz": ("vitoria_gasteiz", None),
+})
+
+
+
 RE_PRECIO = re.compile(r"(\d{1,3}(?:\.\d{3})+|\d{3,5})\s*€")
 RE_M2 = re.compile(r"(\d{2,4})\s*m²")
 RE_TITULO = re.compile(r"<title>([^<]*)</title>", re.I)

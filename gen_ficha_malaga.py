@@ -17,7 +17,7 @@ def fmt_e(n): return "%s" % format(int(round(n)), ",").replace(",", ".")
 
 # renta y edad (extraidas)
 renta = {"neta_persona": 13847, "neta_hogar": 36640, "anyo": 2022}
-edad = {"g1": 91371, "g2": 381255, "g3": 105441}
+edad = None  # datos sin trazabilidad eliminados 24/Ago
 t_edad = edad["g1"] + edad["g2"] + edad["g3"]
 
 # contratos menores

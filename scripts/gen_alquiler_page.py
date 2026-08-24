@@ -57,23 +57,38 @@ html = f"""<!DOCTYPE html>
 "creator":{{"@type":"Organization","name":"Municipal Intelligence","url":"https://municipal.viajeinteligencia.com"}}}}
 </script>
 <style>
-body{{font-family:system-ui,sans-serif;margin:0;background:#0d1117;color:#e6edf3}}
-header{{padding:24px 20px;border-bottom:1px solid #21262d}}
-h1{{margin:0 0 6px;font-size:1.45em}} .sub{{color:#8b949e;font-size:.95em}}
-main{{max-width:900px;margin:0 auto;padding:16px}}
+:root{{--bg:#F4F6FB;--panel:#FFFFFF;--line:#D6DDEA;--text:#16202E;--text2:#33415C;--dim:#5B6B84;--faint:#8A97AC;--accent:#d97706;--accent2:#16a34a;--link:#0366d6}}
+[data-theme="dark"]{{--bg:#0d1117;--panel:#161b22;--line:#21262d;--text:#e6edf3;--text2:#c9d1d9;--dim:#8b949e;--faint:#6e7681;--accent:#f59e0b;--accent2:#3fb950;--link:#58a6ff}}
+*{{box-sizing:border-box}}
+body{{font-family:system-ui,sans-serif;margin:0;background:var(--bg);color:var(--text);line-height:1.65;transition:background .2s,color .2s}}
+header{{padding:24px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}}
+h1{{margin:0 0 6px;font-size:1.45em}} .sub{{color:var(--dim);font-size:.92em}}
+.toggle{{display:inline-flex;align-items:center;gap:6px;cursor:pointer;font-size:12px;color:var(--dim);background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:6px 14px;user-select:none}}
+.toggle:hover{{border-color:var(--accent)}}
+main{{max-width:920px;margin:0 auto;padding:16px}}
 .kpis{{display:flex;gap:12px;flex-wrap:wrap;margin:14px 0}}
-.kpi{{background:#161b22;border:1px solid #21262d;border-radius:10px;padding:12px 18px}}
-.kpi b{{font-size:1.3em;display:block}} .kpi span{{color:#8b949e;font-size:.82em}}
+.kpi{{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 18px;min-width:150px}}
+.kpi b{{font-size:1.3em;display:block;color:var(--accent)}} .kpi span{{color:var(--dim);font-size:.82em}}
 table{{width:100%;border-collapse:collapse;font-size:.93em;margin-top:10px}}
-th{{text-align:left;color:#8b949e;font-weight:600;padding:8px 10px;border-bottom:1px solid #30363d;position:sticky;top:0;background:#0d1117}}
-td{{padding:8px 10px;border-bottom:1px solid #1b2129}}
-td.num{{text-align:right;font-variant-numeric:tabular-nums}} .rk{{color:#8b949e;width:34px}}
-.prov{{color:#8b949e;display:block;font-size:.8em}} .muted{{color:#6e7681}}
-.note{{color:#8b949e;font-size:.83em;margin-top:18px;line-height:1.5}}
-a{{color:#58a6ff;text-decoration:none}}
-</style></head><body>
-<header><h1>🏘️ Índice VIA — precio del alquiler <u>hoy</u></h1>
-<div class="sub">€/m² mediana de anuncios activos esta semana · {len(rows)} municipios · actualizado {fecha} · <a href="/">← explorador municipal</a> · <a href="/datos.html">dataset población</a></div></header>
+th{{text-align:left;color:var(--dim);font-weight:600;padding:8px 10px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--bg)}}
+td{{padding:8px 10px;border-bottom:1px solid var(--line)}}
+td.num{{text-align:right;font-variant-numeric:tabular-nums}} .rk{{color:var(--faint);width:34px}}
+.prov{{color:var(--dim);display:block;font-size:.8em}} .muted{{color:var(--faint)}}
+.note{{color:var(--dim);font-size:.85em;margin-top:20px;line-height:1.55;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px}}
+a{{color:var(--link);text-decoration:none}}
+.kofi{{display:inline-block;margin-top:16px;background:#29ABE0;color:#fff;font-weight:700;padding:9px 16px;border-radius:8px;text-decoration:none;font-size:13px}}
+.comunidades{{margin:20px 0;padding:14px;background:var(--panel);border:1px solid var(--line);border-radius:10px}}
+.comunidades b{{display:block;margin-bottom:8px}}
+.comunidades a{{color:var(--accent);text-decoration:none;margin:4px 10px 4px 0;display:inline-block}}
+</style>
+<script>
+function toggleTheme(){{var t=document.documentElement.getAttribute('data-theme');document.documentElement.setAttribute('data-theme',t==='dark'?'':'dark');localStorage.setItem('theme',t==='dark'?'light':'dark');}}
+(function(){{var s=localStorage.getItem('theme');if(s==='dark')document.documentElement.setAttribute('data-theme','dark');}})();
+</script>
+</head><body>
+<header><div><h1>🏘️ Índice VIA — precio del alquiler <u>hoy</u></h1>
+<div class="sub">€/m² mediana de anuncios activos esta semana · {len(rows)} municipios · actualizado {fecha} · <a href="/">← explorador municipal</a> · <a href="/datos.html">dataset población</a></div></div>
+<div class="toggle" onclick="toggleTheme()">🌓 Tema</div></header>
 <main>
 <div class="kpis">
 <div class="kpi"><b>{top[3]:.2f} €/m²</b><span>más caro: {top[0]}</span></div>
@@ -86,6 +101,9 @@ a{{color:#58a6ff;text-decoration:none}}
 (mínimo 5 anuncios para publicar dato; rango intercuartílico p25–p75 como dispersión).
 El índice refleja precios <i>de oferta</i>, no transacciones cerradas. Fuente de población: INE.
 Licencia CC BY 4.0 · Municipal Intelligence · previsión a 30 días disponible cuando la serie acumule 4 semanas.</p>
+<div class="comunidades"><b>🌍 Dónde es más asequible alquilar por comunidad:</b>
+<a href="/alquiler-asequible-andalucia.html">Andalucía</a><a href="/alquiler-asequible-baleares.html">Baleares</a><a href="/alquiler-asequible-c-valenciana.html">C. Valenciana</a><a href="/alquiler-asequible-canarias.html">Canarias</a><a href="/alquiler-asequible-castilla-y-leon.html">Castilla y León</a><a href="/alquiler-asequible-castilla-la-mancha.html">Castilla-La Mancha</a><a href="/alquiler-asequible-cataluna.html">Cataluña</a><a href="/alquiler-asequible-galicia.html">Galicia</a><a href="/alquiler-asequible-madrid.html">Madrid</a><a href="/alquiler-asequible-murcia.html">Murcia</a><a href="/alquiler-asequible-pais-vasco.html">País Vasco</a></div>
+<div style="text-align:center"><a class="kofi" href="https://ko-fi.com/m_castillo" target="_blank" rel="noopener noreferrer">☕ Apóyame en Ko-fi</a></div>
 </main></body></html>"""
 
 OUT.write_text(html, encoding="utf-8")

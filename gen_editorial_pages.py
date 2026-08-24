@@ -132,6 +132,8 @@ for prov in provs:
         open(os.path.join(OUT, "municipios-que-mas-se-desueblan-" + sl + ".html"), "w", encoding="utf-8").write(h)
         sitemap_extra.append("municipios-que-mas-se-desueblan-" + sl + ".html"); n += 1
 
+for _ca in ['alquiler-asequible-andalucia.html', 'alquiler-asequible-baleares.html', 'alquiler-asequible-c-valenciana.html', 'alquiler-asequible-canarias.html', 'alquiler-asequible-castilla-la-mancha.html', 'alquiler-asequible-castilla-y-leon.html', 'alquiler-asequible-cataluna.html', 'alquiler-asequible-galicia.html', 'alquiler-asequible-madrid.html', 'alquiler-asequible-murcia.html', 'alquiler-asequible-pais-vasco.html']:
+    sitemap_extra.append(_ca)
 print("paginas editoriales generadas:", n)
 
 # ===== sitemap: insertar las editoriales antes del cierre =====

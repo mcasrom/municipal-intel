@@ -9,7 +9,7 @@ Campos:
   anyo        Ano (a 1 de enero; serie 1996-2025)
   poblacion   Habitantes (Total; Hombres/Mujeres bajo peticion)
 
-Cobertura: 8136 municipios x 29 anos = 235376 filas.
+Cobertura: 8127 municipios x 29 anos = 235376 filas.
 Total Espana 2025: 49,114,494 habitantes (validado contra INE).
 
 Licencia: CC-BY-4.0. Menciona la fuente (INE) al reutilizar.

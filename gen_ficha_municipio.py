@@ -19,8 +19,6 @@ AYUNTAMIENTOS = [
         "codigo": "29067", "nombre": "Málaga", "provincia": "Málaga",
         "ccaa": "Andalucía", "fuente_contratos": "datos.gob.es (datosabiertos.malaga.eu)",
         "contratos": "malaga_menores.json", "formales": None,
-        "renta": {"neta_persona": 13847, "neta_hogar": 36640, "mediana_uc": None, "capital": None, "capital_nombre": None, "anyo": 2022},
-        "edad": {"g1": 91371, "g2": 381255, "g3": 105441, "sexo": None},
         "periodo_menores": "2024-2026", "intel": False,
     },
 ]
@@ -164,7 +162,7 @@ a{color:var(--acc)}
 </div>
 @@RENTA@@
 
-<h2>Estructura de edad <span style="color:#94a3b8;font-size:13px">(Censo 2021)</span></h2>
+@@EDAD_TITULO@@
 @@EDAD_AVISO@@
 @@EDAD@@
 
@@ -193,6 +191,7 @@ a{color:var(--acc)}
         "@@H25@@": fmt_e(h25[0] if h25 else 0), "@@M25@@": fmt_e(m25[0] if m25 else 0),
         "@@H25PCT@@": ("%.1f%%" % (h25[0]/(h25[0]+m25[0])*100)) if h25 and m25 else "—",
         "@@RENTA@@": renta_html, "@@EDAD@@": edad_html,
+        "@@EDAD_TITULO@@": ('<h2>Estructura de edad <span style="color:#94a3b8;font-size:13px">(Censo 2021)</span></h2>' if a.get("edad") else ""),
         "@@EDAD_AVISO@@": ('<div style="background:#7f1d1d;border:1px solid #b91c1c;border-radius:8px;padding:10px 12px;margin:10px 0;font-size:12px"><b style="color:#fca5a5">Aviso:</b> el desglose por edad procede del <b>Censo 2021</b> (decenal; el siguiente es <b>2031</b>). La población total y evolución son del <b>Padrón 2025</b>.</div>' if a.get("edad") else ""),
         "@@NMEN@@": str(len(m)), "@@GASTO@@": fmt_e(total_gasto),
         "@@NFOR_KPI@@": ('<div class="kpi"><b>%s</b><span>contratos formales</span></div>' % len(formales)) if formales else "",
