@@ -20,13 +20,22 @@ for m, lat, lon in cc.execute("SELECT municipio, lat, lon FROM catalogo WHERE la
     coords[m] = (lat, lon)
 cc.close()
 
+# variación de población 10 años (2016-2025) para la correlación
+cc2 = sqlite3.connect(f"file:{DB}?mode=ro", uri=True)
+pob25 = {m: p for m, p in cc2.execute("SELECT municipio, poblacion FROM poblacion WHERE anyo='2025' AND sexo='Total'")}
+pob16 = {m: p for m, p in cc2.execute("SELECT municipio, poblacion FROM poblacion WHERE anyo='2016' AND sexo='Total'")}
+cc2.close()
+
 puntos = []
 for m, (e, a) in via.items():
     if m in coords:
-        puntos.append({"m": m, "e": e, "a": a, "lat": coords[m][0], "lon": coords[m][1]})
+        v = None
+        if pob25.get(m) and pob16.get(m) and pob16[m] > 0:
+            v = round((pob25[m] - pob16[m]) / pob16[m] * 100, 1)
+        puntos.append({"m": m, "e": e, "a": a, "v": v, "lat": coords[m][0], "lon": coords[m][1]})
 
 pts_js = "[" + ",".join(
-    f'{{"m":"{p["m"]}","e":{p["e"]:.2f},"a":{p["a"]},"lat":{p["lat"]},"lon":{p["lon"]}}}' for p in puntos) + "]"
+    f'{{"m":"{p["m"]}","e":{p["e"]:.2f},"a":{p["a"]},"v":{p["v"] if p["v"] is not None else "null"},"lat":{p["lat"]},"lon":{p["lon"]}}}' for p in puntos) + "]"
 
 html_cabeza = f'''<!DOCTYPE html>
 <html lang="es"><head>
@@ -73,7 +82,8 @@ PUNTOS.forEach(function(p) {{
   else if (p.e >= 18 && p.e < 22) c = "#dc2626";
   else if (p.e >= 22) c = "#7f1d1d";
   L.circleMarker([p.lat, p.lon], {{radius:8, fillColor:c, fillOpacity:0.9, color:'#fff', weight:1}})
-    .bindPopup('<b>' + p.m + '</b><br>' + p.e.toFixed(2) + ' €/m² · ' + p.a + ' anunc')
+    .bindPopup('<b>' + p.m + '</b><br>' + p.e.toFixed(2) + ' €/m² · ' + p.a + ' anunc'
+      + (p.v != null ? '<br><span style="color:' + (p.v >= 0 ? '#4ade80' : '#f87171') + '">población ' + (p.v >= 0 ? '▲ +' : '▼ ') + p.v + '% (10 años)</span>' : ''))
     .addTo(map);
 }});
 </script>
