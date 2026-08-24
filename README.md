@@ -19,6 +19,11 @@ troceados de contratos. Datos oficiales, trazables, sin inventar.
     formales, troceado, renta (INE Atlas), estructura de edad (Censo 2021).
   - **Málaga** (`/ficha_malaga.html`): 1.976 contratos menores (2024-2026) vía
     datos.gob.es, troceado, renta y edad.
+- **Índice VIA — precio del alquiler** (`/alquiler.html`): €/m² mediana por municipio
+  (de anuncios activos en pisos.com, mínimo 5), rango p25-p75, buscador, KPI gráfico,
+  y **11 páginas por comunidad** (`/alquiler-asequible-{ccaa}.html`) con dónde es más barato.
+- **Mapa de calor del alquiler** (`/mapa-alquiler.html`): Leaflet con 290+ municipios
+  coloreados por franjas de precio (6 umbrales €/m²), leyenda y popups.
 - **RSS** (`/rss.xml`) con rankings · **Alertas por email** ("avísame si cambia"
     en cada municipio) · **Metodología** (`/acerca.html`).
 

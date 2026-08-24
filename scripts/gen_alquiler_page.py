@@ -40,6 +40,17 @@ filas = "\n".join(
 )
 
 top, bot = rows[0], rows[-1]
+# --- KPI gráfico: barras top 8 caros + bottom 8 baratos ---
+def _bar(m, eur, mx):
+    w = max(4, round(eur / mx * 100))
+    return (f'<div class="bar-row"><span class="bar-lab">{m}</span>'
+            f'<div class="bar-track"><div class="bar-fill" style="width:{w}%"></div></div>'
+            f'<span class="bar-val">{eur:.2f}</span></div>')
+_mx = max(r[3] for r in rows)
+_caros = "".join(_bar(r[0], r[3], _mx) for r in rows[:8])
+_baratos = "".join(_bar(r[0], r[3], _mx) for r in rows[-8:])
+chart = (f'<div class="legend">🟠 Los 8 más caros</div>{_caros}'
+         f'<div class="legend" style="margin-top:12px">🟢 Los 8 más baratos</div>{_baratos}')
 html = f"""<!DOCTYPE html>
 <html lang="es"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -77,6 +88,17 @@ td.num{{text-align:right;font-variant-numeric:tabular-nums}} .rk{{color:var(--fa
 .note{{color:var(--dim);font-size:.85em;margin-top:20px;line-height:1.55;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px}}
 a{{color:var(--link);text-decoration:none}}
 .kofi{{display:inline-block;margin-top:16px;background:#29ABE0;color:#fff;font-weight:700;padding:9px 16px;border-radius:8px;text-decoration:none;font-size:13px}}
+.search{{width:100%;max-width:460px;margin:18px auto 6px;display:block;padding:11px 16px;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--text);font-size:14px}}
+.search:focus{{outline:none;border-color:var(--accent)}}
+table{{width:100%;border-collapse:collapse;font-size:.93em;margin-top:10px}}
+td,th{{padding:8px 10px}}
+.chart{{display:flex;flex-direction:column;gap:6px;margin:18px 0}}
+.bar-row{{display:flex;align-items:center;gap:10px;font-size:13px}}
+.bar-lab{{flex:0 0 150px;color:var(--text2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}}
+.bar-track{{flex:1;background:var(--line);border-radius:4px;height:16px;overflow:hidden}}
+.bar-fill{{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--accent),var(--accent2))}}
+.bar-val{{flex:0 0 90px;text-align:right;font-variant-numeric:tabular-nums;font-weight:600}}
+.legend{{font-size:12px;color:var(--dim);margin:6px 0 2px}}
 .comunidades{{margin:20px 0;padding:14px;background:var(--panel);border:1px solid var(--line);border-radius:10px}}
 .comunidades b{{display:block;margin-bottom:8px}}
 .comunidades a{{color:var(--accent);text-decoration:none;margin:4px 10px 4px 0;display:inline-block}}
@@ -86,7 +108,8 @@ function toggleTheme(){{var t=document.documentElement.getAttribute('data-theme'
 (function(){{var s=localStorage.getItem('theme');if(s==='dark')document.documentElement.setAttribute('data-theme','dark');}})();
 </script>
 </head><body>
-<header><div><h1>🏘️ Índice VIA — precio del alquiler <u>hoy</u></h1>
+<header style="text-align:center;flex-direction:column;align-items:center"><div>
+<h1>🏘️ Índice VIA — precio del alquiler <u>hoy</u></h1>
 <div class="sub">€/m² mediana de anuncios activos esta semana · {len(rows)} municipios · actualizado {fecha} · <a href="/">← explorador municipal</a> · <a href="/datos.html">dataset población</a></div></div>
 <div class="toggle" onclick="toggleTheme()">🌓 Tema</div></header>
 <main>
@@ -95,7 +118,10 @@ function toggleTheme(){{var t=document.documentElement.getAttribute('data-theme'
 <div class="kpi"><b>{bot[3]:.2f} €/m²</b><span>más barato: {bot[0]}</span></div>
 <div class="kpi"><b>{sum(r[3] for r in rows)/len(rows):.2f} €/m²</b><span>media del índice</span></div>
 </div>
-<table><thead><tr><th>#</th><th>Municipio</th><th style="text-align:right">€/m² mediana</th><th style="text-align:right">80 m²/mes</th><th style="text-align:right">rango p25–p75</th><th style="text-align:right">anuncios</th></tr></thead>
+<h2 style="font-size:15px;margin:24px 0 6px;color:var(--accent)">📊 Más caros y más baratos (€/m²)</h2>
+<div class="chart">{chart}</div>
+<input class="search" id="search" placeholder="🔍 Busca tu municipio (ej: Lorca, Jerez, Hospitalet...)">
+<p style="font-size:12px;color:var(--faint);text-align:center;margin:4px 0 10px" id="count"></p><table id="tabla" class="munis"><thead><tr><th>#</th><th>Municipio</th><th style="text-align:right">€/m² mediana</th><th style="text-align:right">80 m²/mes</th><th style="text-align:right">rango p25–p75</th><th style="text-align:right">anuncios</th></tr></thead>
 <tbody>{filas}</tbody></table>
 <p class="note"><b>Metodología:</b> mediana de €/m² sobre anuncios activos en pisos.com durante la última semana
 (mínimo 5 anuncios para publicar dato; rango intercuartílico p25–p75 como dispersión).
@@ -104,7 +130,33 @@ Licencia CC BY 4.0 · Municipal Intelligence · previsión a 30 días disponible
 <div class="comunidades"><b>🌍 Dónde es más asequible alquilar por comunidad:</b>
 <a href="/alquiler-asequible-andalucia.html">Andalucía</a><a href="/alquiler-asequible-baleares.html">Baleares</a><a href="/alquiler-asequible-c-valenciana.html">C. Valenciana</a><a href="/alquiler-asequible-canarias.html">Canarias</a><a href="/alquiler-asequible-castilla-y-leon.html">Castilla y León</a><a href="/alquiler-asequible-castilla-la-mancha.html">Castilla-La Mancha</a><a href="/alquiler-asequible-cataluna.html">Cataluña</a><a href="/alquiler-asequible-galicia.html">Galicia</a><a href="/alquiler-asequible-madrid.html">Madrid</a><a href="/alquiler-asequible-murcia.html">Murcia</a><a href="/alquiler-asequible-pais-vasco.html">País Vasco</a></div>
 <div style="text-align:center"><a class="kofi" href="https://ko-fi.com/m_castillo" target="_blank" rel="noopener noreferrer">☕ Apóyame en Ko-fi</a></div>
-</main></body></html>"""
+</main>"""
+
+JS_BUSCADOR = """
+<script>
+(function() {
+  var input = document.getElementById('search');
+  var table = document.getElementById('tabla');
+  var count = document.getElementById('count');
+  if (!input || !table) return;
+  var rows = Array.prototype.slice.call(table.tBodies[0].rows);
+  function filtro() {
+    var q = input.value.toLowerCase().trim();
+    var vis = 0;
+    rows.forEach(function(r) {
+      var ok = !q || r.cells[1].textContent.toLowerCase().indexOf(q) >= 0;
+      r.style.display = ok ? '' : 'none';
+      if (ok) vis++;
+    });
+    if (count) count.textContent = q ? vis + ' de ' + rows.length + ' municipios' : rows.length + ' municipios';
+  }
+  input.addEventListener('input', filtro);
+  filtro();
+})();
+</script>
+</body></html>"""
+
+html = html + JS_BUSCADOR
 
 OUT.write_text(html, encoding="utf-8")
 print(f"OK alquiler.html: {len(rows)} municipios, fecha={fecha}")

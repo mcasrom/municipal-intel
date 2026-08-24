@@ -56,7 +56,7 @@ def main():
         mediana = statistics.median(valores)
         min_m = munis[-1]; max_m = munis[0]
         top10 = munis[:10]
-        bot8 = munis[-8:]
+        bot8 = list(reversed(munis[-8:]))  # ascendente: más barato primero
 
         def bar_row(m, e, a, mx):
             w = max(4, round(e / mx * 100))
