@@ -24,6 +24,9 @@ troceados de contratos. Datos oficiales, trazables, sin inventar.
   y **11 páginas por comunidad** (`/alquiler-asequible-{ccaa}.html`) con dónde es más barato.
 - **Mapa de calor del alquiler** (`/mapa-alquiler.html`): Leaflet con 290+ municipios
   coloreados por franjas de precio (6 umbrales €/m²), leyenda y popups.
+- **Exportación de datos** (`/data/csv/municipal-dataset.csv` y `.json`): dataset
+  combinado de los 8.109 municipios (población 2025/1996, variaciones, índice de
+  alquiler €/m², p25/p75, 80m²/mes) — para desarrolladores, investigadores y prensa.
 - **RSS** (`/rss.xml`) con rankings · **Alertas por email** ("avísame si cambia"
     en cada municipio) · **Metodología** (`/acerca.html`).
 
