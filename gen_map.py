@@ -163,6 +163,12 @@ body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:v
 #ecosistema{position:absolute;bottom:44px;left:60px;z-index:1500;width:42px;height:42px;border-radius:50%;background:var(--card);border:1px solid #334155;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 10px rgba(0,0,0,.5)}
 #ecosistema a{text-decoration:none}
 #ecosistema:hover{border-color:var(--acc);background:#334155}
+#mapaalquiler{position:absolute;bottom:44px;left:108px;z-index:1500;width:42px;height:42px;border-radius:50%;background:var(--card);border:1px solid #334155;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 10px rgba(0,0,0,.5)}
+#mapaalquiler a{text-decoration:none}
+#mapaalquiler:hover{border-color:var(--acc);background:#334155}
+#nearmeicon{position:absolute;bottom:44px;left:156px;z-index:1500;width:42px;height:42px;border-radius:50%;background:var(--card);border:1px solid #334155;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 10px rgba(0,0,0,.5)}
+#nearmeicon a{text-decoration:none}
+#nearmeicon:hover{border-color:var(--acc);background:#334155}
 @media (max-width:700px){
   #side{display:none;top:auto;bottom:8px;left:8px;right:8px;width:auto;max-width:none;max-height:42vh;min-height:0;border-radius:12px;padding:12px}
   #top{max-width:none;width:calc(100vw - 24px);padding:8px 10px}
@@ -217,6 +223,7 @@ body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:v
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">
       <button class="cta" onclick="cerrarLanding()">Explorar el mapa</button>
       <button class="cta" onclick="verRankings()">Ver rankings</button>
+      <button class="cta" onclick="window.location='data/csv/municipal-dataset.csv'" style="background:#1e293b">⬇️ Descargar dataset (CSV)</button>
     </div>
     <div style="border-top:1px solid #334155;padding-top:10px;margin-top:6px">
       <div style="font-size:12px;font-weight:700;color:#38bdf8;margin-bottom:6px">Caso de estudio · Transparencia del Ayuntamiento de Lorca</div>
@@ -296,6 +303,8 @@ body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:v
 </div>
 <div id="kofi" title="Apoyar el proyecto en Ko-fi"><a href="https://ko-fi.com/m_castillo" target="_blank" rel="noopener">☕</a></div>
 <div id="ecosistema" title="Ecosistema de datos abiertos de viajeinteligencia.com"><a href="https://www.viajeinteligencia.com" target="_blank" rel="noopener">🌍</a></div>
+<div id="mapaalquiler" title="Mapa del alquiler en España — €/m² por municipio"><a href="mapa-alquiler.html" target="_blank" rel="noopener">🏠</a></div>
+<div id="nearmeicon" title="NearMe — mapa de eventos en vivo (incendios, tráfico, aire)"><a href="https://nearme.viajeinteligencia.com" target="_blank" rel="noopener">🗺️</a></div>
 <div id="foot">Municipal Intelligence © 2026 M. Castillo · datos abiertos INE + OpenStreetMap · <a href="acerca.html" style="color:#38bdf8">Metodología, fuentes y licencia</a> · <a href="editorial/municipios-que-mas-crecen-espana.html" style="color:#38bdf8">Tendencias</a> · <a href="mailto:info@viajeinteligencia.com" style="color:#38bdf8">Contacto</a> · <a href="https://ko-fi.com/m_castillo" style="color:#38bdf8">Ko-fi</a> · <a href="https://www.viajeinteligencia.com" style="color:#38bdf8">Ecosistema de datos abiertos</a> · <a href="#" id="instalarBtn" style="color:#38bdf8;display:none">Instalar app</a> · sin cookies</div>
 <script>
 var catalogo=[], series={}, lorcaIntel=null;
