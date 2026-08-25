@@ -21,6 +21,18 @@ if os.path.exists(VIADB):
         _c.close()
     except sqlite3.OperationalError:
         VIA = {}
+
+PROV_CTX = {}
+try:
+    _c2 = sqlite3.connect(f"file:{VIADB}?mode=ro", uri=True)
+    for _m, _p, _e in _c2.execute(
+            "SELECT municipio, provincia, eur_m2_mediana FROM via_index "
+            "WHERE fecha=(SELECT MAX(fecha) FROM via_index) AND eur_m2_mediana>0"):
+        PROV_CTX.setdefault(_p, []).append((_e, _m))
+    _c2.close()
+except Exception:
+    PROV_CTX = {}
+
 TODAY = datetime.date.today().isoformat()
 
 def pop_of(prov, muni, anyo):
@@ -78,6 +90,7 @@ TEMPLATE = """<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
   "description": "Serie oficial de población de @@MUNI@@, código INE @@CODE@@, según la Revisión del Padrón Municipal (INE).",
   "url": "https://municipal.viajeinteligencia.com/municipio/@@SLUG@@.html",
   "license": "https://creativecommons.org/licenses/by/4.0/",
+  "creator": {"@type": "Organization", "name": "Municipal Intelligence · Viaje Inteligencia", "url": "https://www.viajeinteligencia.com"},
   "spatialCoverage": {"@type": "Place", "name": "@@MUNI@@", "address": {"@type": "PostalAddress", "addressCountry": "ES", "addressRegion": "@@PROV@@"}}
 }
 </script>
@@ -206,6 +219,23 @@ for pg in pages:
             + '<a href="../alquiler.html" style="color:#58a6ff">índice completo</a>)</span></div>')
     else:
         alquiler_html = ""
+        _pc = PROV_CTX.get(prov)
+        if _pc and len(_pc) >= 3:
+            _vals = sorted(_pc)
+            _media = sum(v for v, m in _pc) / len(_pc)
+            _min_v, _min_m = _vals[0]
+            _max_v, _max_m = _vals[-1]
+            alquiler_html = (
+                '<div class="kpi" style="margin:14px 0;font-size:14px">'
+                '💰 <b>Alquiler en tu provincia (' + prov + '):</b> media '
+                + str(round(_media, 2)).replace(".", ",") + ' €/m² '
+                + '<span style="color:#94a3b8">· ' + str(len(_pc)) + ' municipios con dato</span><br>'
+                + '<span style="font-size:12.5px;color:#94a3b8">'
+                + 'Más barato: <b style="color:#16a34a">' + _min_m + ' ' + str(round(_min_v, 2)).replace(".", ",") + ' €/m²</b>'
+                + ' · Más caro: <b style="color:#d97706">' + _max_m + ' ' + str(round(_max_v, 2)).replace(".", ",") + ' €/m²</b>'
+                + '</span><br>'
+                + '<span style="font-size:12px;color:#94a3b8">Este municipio no tiene suficientes anuncios activos para un dato propio.'
+                + ' <a href="../alquiler.html" style="color:#58a6ff">Índice completo</a></span></div>')
     for k, v in {"@@MUNI@@": muni, "@@PROV@@": prov, "@@CODE@@": code, "@@SLUG@@": slugv,
                  "@@POP@@": fmt(p25), "@@P96@@": fmt(p96),
                  "@@SIGN@@": "pos" if (var or 0) >= 0 else "neg",

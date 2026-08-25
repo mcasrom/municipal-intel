@@ -119,7 +119,7 @@ def generan_ficha(a):
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"Dataset","name":"@@NOMBRE@@: población y contratos del Ayuntamiento",
 "description":"Población oficial de @@NOMBRE@@ (INE 1996-2025) y contratos menores del Ayuntamiento con análisis de anomalías.",
-"url":"https://municipal.viajeinteligencia.com/@@FICHA@@","license":"https://creativecommons.org/licenses/by/4.0/",
+"url":"https://municipal.viajeinteligencia.com/@@FICHA@@","license":"https://creativecommons.org/licenses/by/4.0/","creator":{"@type":"Organization","name":"Municipal Intelligence · Viaje Inteligencia","url":"https://www.viajeinteligencia.com"},
 "spatialCoverage":{"@type":"Place","name":"@@NOMBRE@@","address":{"@type":"PostalAddress","addressCountry":"ES","addressRegion":"@@PROV@@}}}
 </script>
 <style>
