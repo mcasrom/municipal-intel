@@ -1,5 +1,5 @@
 const VERSION = 'municipal-v1';
-const CACHE = VERSION + '-20260821';
+const CACHE = VERSION + "-20260824c";
 const SHELL = [
   './',
   './index.html',

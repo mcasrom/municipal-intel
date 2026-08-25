@@ -120,6 +120,7 @@ function toggleTheme(){{var t=document.documentElement.getAttribute('data-theme'
 </div>
 <h2 style="font-size:15px;margin:24px 0 6px;color:var(--accent)">📊 Más caros y más baratos (€/m²)</h2>
 <div class="chart">{chart}</div>
+<p style="text-align:center;margin:14px 0"><a href="/mapa-alquiler.html" style="display:inline-block;background:var(--accent);color:#0d1117;font-weight:700;padding:13px 26px;border-radius:8px;text-decoration:none;font-size:15px">🗺️ Ver el mapa de calor del alquiler →</a></p>
 <input class="search" id="search" placeholder="🔍 Busca tu municipio (ej: Lorca, Jerez, Hospitalet...)">
 <p style="font-size:12px;color:var(--faint);text-align:center;margin:4px 0 10px" id="count"></p><table id="tabla" class="munis"><thead><tr><th>#</th><th>Municipio</th><th style="text-align:right">€/m² mediana</th><th style="text-align:right">80 m²/mes</th><th style="text-align:right">rango p25–p75</th><th style="text-align:right">anuncios</th></tr></thead>
 <tbody>{filas}</tbody></table>

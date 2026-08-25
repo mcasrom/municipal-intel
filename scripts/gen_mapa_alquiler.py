@@ -59,7 +59,12 @@ h1{{margin:0 0 4px;font-size:21px}} .sub{{color:var(--mut);font-size:13px}}
 </style>
 </head><body>
 <header><h1>🗺️ Mapa del alquiler en España</h1>
-<div class="sub">€/m² mediana de anuncios activos · {len(puntos)} municipios · actualizado {fecha}</div></header>
+<div class="sub">€/m² mediana de anuncios activos · {len(puntos)} municipios · actualizado {fecha}</div>
+<div style="margin-top:10px;font-size:13px">
+<a href="alquiler.html" style="color:#58a6ff;text-decoration:none;margin:0 8px">← Volver al índice de alquiler</a>
+<a href="/" style="color:#58a6ff;text-decoration:none;margin:0 8px">🏘️ Municipal</a>
+<a href="https://www.viajeinteligencia.com/ecosistema.html" style="color:#58a6ff;text-decoration:none;margin:0 8px">🌐 Ecosistema</a>
+</div></header>
 <div class="legend" style="position:absolute;z-index:1000;left:10px;bottom:10px">
 <b>Precio del alquiler (€/m²)</b>
 <div style="margin-top:6px"><span style="display:inline-block;width:14px;height:14px;border-radius:3px;background:#16a34a;margin-right:6px"></span>menos de 8</div>
