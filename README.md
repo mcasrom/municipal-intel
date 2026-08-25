@@ -71,3 +71,9 @@ troceados de contratos. Datos oficiales, trazables, sin inventar.
 - [ ] GSC: enviar sitemap (8.113 URLs) — propiedad registrada
 
 © 2026 M. Castillo — datos abiertos INE + OpenStreetMap. Repositorio del ecosistema: https://www.viajeinteligencia.com
+
+## Navegación cruzada (ecosistema)
+Municipal forma parte del ecosistema viajeinteligencia.com con enlaces cruzados
+basados en journeys reales: iconos flotantes en la home (Ko-fi, Ecosistema, Mapa
+de alquiler, NearMe) + botón de descarga del dataset. Los enlaces se regeneran
+con la home (gen_map.py, persistente en el cron 05:30).
