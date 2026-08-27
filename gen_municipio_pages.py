@@ -74,13 +74,13 @@ def pct(a, b):
 
 TEMPLATE = """<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>@@MUNI@@ · Población @@PROV@@ | Municipal Intelligence</title>
-<meta name="description" content="@@MUNI@@ (@@PROV@@): población oficial de @@POP@@ habitantes (2025), evolución 1996-2025 y ranking nacional. Datos INE, sin inventar.">
+<title>@@MUNI@@ (@@PROV@@): @@POP@@ habitantes según el INE 2025</title>
+<meta name="description" content="@@MUNI@@ (@@PROV@@) tiene @@POP@@ habitantes en 2025 (@@SIGN_G1_TXT@@) y es el @@RANK@@ municipio de España. Evolución INE 1996-2025, alquiler y datos demográficos oficiales, sin inventar.">
 <link rel="canonical" href="https://municipal.viajeinteligencia.com/municipio/@@SLUG@@.html">
 <link rel="icon" type="image/png" href="../icon-192.png">
 <meta property="og:type" content="article">
-<meta property="og:title" content="@@MUNI@@ · Población @@PROV@@">
-<meta property="og:description" content="@@POP@@ habitantes (2025, INE) · evolución 1996-2025 · ranking nacional.">
+<meta property="og:title" content="@@MUNI@@ (@@PROV@@): @@POP@@ habitantes en 2025">
+<meta property="og:description" content="@@POP@@ habitantes (INE 2025) · @@RANK@@ de España · evolución 1996-2025.">
 <meta property="og:image" content="https://municipal.viajeinteligencia.com/@@OGIMG@@">
 <script type="application/ld+json">
 {
@@ -241,6 +241,7 @@ for pg in pages:
                  "@@SIGN@@": "pos" if (var or 0) >= 0 else "neg",
                  "@@VAR@@": ("+" if (var or 0) >= 0 else "") + str(var or 0),
                  "@@RANK@@": f"{rank}º", "@@CTX@@": ctx, "@@LORCA_LINK@@": lorca_link,
+                 "@@SIGN_G1_TXT@@": ("creció frente a 2024" if (g1 or 0) > 0 else ("cayó frente a 2024" if (g1 or 0) < 0 else "estable frente a 2024")),
                  "@@OGIMG@@": OGD.get(code, "og-municipal.png"),
                  "@@G1@@": ("+" if (g1 or 0) >= 0 else "") + str(g1 or 0) + "%",
                  "@@G5@@": ("+" if (g5 or 0) >= 0 else "") + str(g5 or 0) + "%",

@@ -112,8 +112,8 @@ def generan_ficha(a):
 
     HTML = """<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>@@NOMBRE@@ · Municipal Intelligence</title>
-<meta name="description" content="Ficha de inteligencia municipal de @@NOMBRE@@: población INE 1996-2025 y contratos del Ayuntamiento con detección de posibles troceados.">
+<title>@@NOMBRE@@ (@@PROV@@): @@P25@@ habitantes según el INE 2025 · Municipal IQ</title>
+<meta name="description" content="@@NOMBRE@@ tiene @@P25@@ habitantes (INE Padrón 2025, @@SIGN_VAR@@) y es el @@RANK@@º municipio de España. Población 1996-2025, @@H25PCT@@ hombres, y contratos del Ayuntamiento con detección de troceados.">
 <link rel="canonical" href="https://municipal.viajeinteligencia.com/@@FICHA@@">
 <link rel="icon" type="image/png" href="icon-192.png">
 <script type="application/ld+json">
@@ -187,6 +187,7 @@ a{color:var(--acc)}
         "@@FUENTE@@": a["fuente_contratos"], "@@FICHA@@": ficha_name,
         "@@PROV@@": a["provincia"], "@@P25@@": fmt_e(p25), "@@P96@@": fmt_e(p96),
         "@@SIGN@@": "pos" if var >= 0 else "neg", "@@VAR@@": ("+" if var >= 0 else "") + str(var),
+        "@@SIGN_VAR@@": ("sube" if var > 0 else ("baja" if var < 0 else "se mantiene")),
         "@@RANK@@": str(rank), "@@RANKPROV@@": str(rank_prov),
         "@@H25@@": fmt_e(h25[0] if h25 else 0), "@@M25@@": fmt_e(m25[0] if m25 else 0),
         "@@H25PCT@@": ("%.1f%%" % (h25[0]/(h25[0]+m25[0])*100)) if h25 and m25 else "—",

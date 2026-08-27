@@ -137,8 +137,15 @@ for _ca in ['alquiler-asequible-andalucia.html', 'alquiler-asequible-baleares.ht
 print("paginas editoriales generadas:", n)
 
 # ===== sitemap: insertar las editoriales antes del cierre =====
+# FIX (27/Ago): los 'alquiler-asequible-*.html' viven en la RAÍZ (dashboard/),
+# no en /editorial/. Antes TODAS se insertaban bajo /editorial/ -> 11 soft-404s
+# para Google. Las demas editoriales SI viven en /editorial/.
 sm = open(os.path.join("dashboard", "sitemap.xml")).read()
-insert = "".join("  <url><loc>https://municipal.viajeinteligencia.com/editorial/%s</loc><lastmod>2026-08-21</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>\n" % u for u in sitemap_extra)
+_PREF="https://municipal.viajeinteligencia.com"
+def _url(u):
+    path = u if u.startswith("alquiler-asequible") else "editorial/"+u
+    return "  <url><loc>%s/%s</loc><lastmod>2026-08-21</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>\n" % (_PREF, path)
+insert = "".join(_url(u) for u in sitemap_extra)
 sm = sm.replace("</urlset>", insert + "</urlset>")
 open(os.path.join("dashboard", "sitemap.xml"), "w").write(sm)
 print("sitemap actualizado con", len(sitemap_extra), "URLs editoriales")
