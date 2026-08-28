@@ -305,3 +305,18 @@ municipal-intel 0 commits pendientes de push).
   `social-poster/publish_{bluesky,mastodon}.py` vía `270826_auto_post.py` local. X manual 140.
 - **Vía paralela**: petición SER a datos.gob.es de precios de alquiler €/m² (estado Asignado,
   M. Vivienda) — lenta/manual, en paralelo.
+
+## Hito: Verificación semanal de via_mivau con alerta Telegram (28/Ago)
+- **Motivo**: el backfill semanal (dom 06:40) y la regeneración de la página podían fallar
+  sin que nadie se enterara durante 7 días.
+- **Implementado**: `scripts/via_mivau_health.py` (python3 de sistema, solo stdlib). Detecta:
+  (1) `alquiler.html` sin regenerar hace >8 días (la cadena `via_mivau && gen_alquiler_page`
+  regenera el archivo; si via_mivau falla o el cron no corre, queda stale) y
+  (2) `logs_via_mivau.log` con Traceback/ERROR.
+- **Notificación**: Telegram (reutiliza `TELEGRAM_BOT_TOKEN`/`TELEGRAM_CHAT_ID` del .env de
+  nearme, patrón de pm2_health.py). **Dedup por condición estable** (mtime del log de error o
+  de la página), para no spamear el mismo fallo semanas seguidas. Sin fallo → OK silencioso.
+- **Cron**: `5 7 * * 0` (dom 07:05, 25 min tras el backfill). Log: logs_via_mivau_health.log.
+  Backups crontab: /tmp/cron_backup_before_mivau_health_20260828.txt (server).
+- **Probado**: condicion normal OK; fallo simulado (Traceback en log) → ENVIADO y dedup
+  (2a ejecucion skip); limpio el log de prueba. Commit propio.
