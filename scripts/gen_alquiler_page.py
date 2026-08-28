@@ -11,7 +11,7 @@ OUT = BASE / "dashboard/alquiler.html"
 
 con = sqlite3.connect(f"file:{DB}?mode=ro", uri=True)
 rows = con.execute("""
-    SELECT municipio, provincia, anuncios, eur_m2_mediana, p25, p75, alq_mediana_80m2
+    SELECT municipio, provincia, anuncios, eur_m2_mediana, p25, p75, alq_mediana_80m2, slug
     FROM via_index
     WHERE fecha = (SELECT MAX(fecha) FROM via_index)
     ORDER BY eur_m2_mediana DESC
@@ -32,36 +32,46 @@ if not rows:
     raise SystemExit("sin datos en via_index aun")
 
 fecha = meta[0]
+def _es_oficial(slug):  # filas rellenadas con dato oficial MIVAU (contratos reales), no anuncios
+    return slug is not None and str(slug).startswith("mivau")
+
+n_oficial = sum(1 for r in rows if _es_oficial(r[7]))
+n_pisos = len(rows) - n_oficial
+
 filas = "\n".join(
     f"<tr><td class='rk'>{i+1}</td><td><b>{m}</b><span class='prov'>{prov}</span></td>"
     f"<td class='num'>{eur:.2f} €</td><td class='num'>{alq:,} €</td>".replace(",", ".") +
-    f"<td class='num'>{p25:.1f}–{p75:.1f}</td><td class='num muted'>{an}</td></tr>"
-    for i, (m, prov, an, eur, p25, p75, alq, pob) in enumerate(rows)
+    f"<td class='num'>{p25:.1f}–{p75:.1f}</td>"
+    f"<td class='num muted'>{'oficial' if of else an}</td></tr>"
+    for i, (m, prov, an, eur, p25, p75, alq, slug, pob) in enumerate(rows)
+    for of in [_es_oficial(slug)]
 )
 
-top, bot = rows[0], rows[-1]
-# --- KPI gráfico: barras top 8 caros + bottom 8 baratos ---
+# KPIs y gráfico de "oferta" (anuncios) solos, para no mezclar contratos oficiales con anuncios
+rows_oferta = [r for r in rows if not _es_oficial(r[7])]
+top, bot = rows_oferta[0], rows_oferta[-1]
+# --- KPI gráfico: barras top 8 caros + bottom 8 baratos (solo oferta) ---
 def _bar(m, eur, mx):
     w = max(4, round(eur / mx * 100))
     return (f'<div class="bar-row"><span class="bar-lab">{m}</span>'
             f'<div class="bar-track"><div class="bar-fill" style="width:{w}%"></div></div>'
             f'<span class="bar-val">{eur:.2f}</span></div>')
-_mx = max(r[3] for r in rows)
-_caros = "".join(_bar(r[0], r[3], _mx) for r in rows[:8])
-_baratos = "".join(_bar(r[0], r[3], _mx) for r in rows[-8:])
+_mx = max(r[3] for r in rows_oferta)
+_caros = "".join(_bar(r[0], r[3], _mx) for r in rows_oferta[:8])
+_baratos = "".join(_bar(r[0], r[3], _mx) for r in rows_oferta[-8:])
 chart = (f'<div class="legend">🟠 Los 8 más caros</div>{_caros}'
          f'<div class="legend" style="margin-top:12px">🟢 Los 8 más baratos</div>{_baratos}')
 html = f"""<!DOCTYPE html>
 <html lang="es"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Índice VIA: precio del alquiler hoy por municipio | Municipal Intelligence</title>
-<meta name="description" content="Precio real del alquiler hoy: €/m² mediana de anuncios activos en {meta[1]} municipios españoles. Actualizado semanalmente con previsión de tendencia.">
+<meta name="description" content="Precio del alquiler por municipio en España: €/m² mediana en {n_pisos} municipios (anuncios activos pisos.com) y {n_oficial} municipios con precio oficial 2024 del Ministerio de Vivienda (SERPAVI/MIVAU).">
 <link rel="canonical" href="https://municipal.viajeinteligencia.com/alquiler.html">
 <meta property="og:title" content="Índice VIA — alquiler hoy por municipio">
-<meta property="og:description" content="{len(rows)} municipios · €/m² mediana de anuncios activos · {fecha}">
+<meta property="og:description" content="{len(rows)} municipios · €/m² mediana ({n_pisos} anuncios activos, {n_oficial} dato oficial 2024) · {fecha}">
 <script type="application/ld+json">
 {{"@context":"https://schema.org","@type":"Dataset","name":"Índice VIA: precio del alquiler por municipio de España",
-"description":"Mediana de €/m² y alquiler típico (80 m²) calculada sobre anuncios activos de la semana en {len(rows)} municipios.",
+"description":"Mediana de €/m² y alquiler típico (80 m²). {n_pisos} municipios con mediana de anuncios activos de la semana (pisos.com) y {n_oficial} municipios con precio de referencia oficial 2024 (SERPAVI, Ministerio de Vivienda).",
 "url":"https://municipal.viajeinteligencia.com/alquiler.html",
 "license":"https://creativecommons.org/licenses/by/4.0/",
 "temporalCoverage":"{fecha}/P1W","spatialCoverage":"España",
@@ -110,23 +120,27 @@ function toggleTheme(){{var t=document.documentElement.getAttribute('data-theme'
 </head><body>
 <header style="text-align:center;flex-direction:column;align-items:center"><div>
 <h1>🏘️ Índice VIA — precio del alquiler <u>hoy</u></h1>
-<div class="sub">€/m² mediana de anuncios activos esta semana · {len(rows)} municipios · actualizado {fecha} · <a href="/">← explorador municipal</a> · <a href="/datos.html">dataset población</a></div></div>
+<div class="sub">€/m² mediana · {len(rows)} municipios ({n_pisos} anuncios activos, {n_oficial} dato oficial 2024) · actualizado {fecha} · <a href="/">← explorador municipal</a> · <a href="/datos.html">dataset población</a></div></div>
 <div class="toggle" onclick="toggleTheme()">🌓 Tema</div></header>
 <main>
 <div class="kpis">
 <div class="kpi"><b>{top[3]:.2f} €/m²</b><span>más caro: {top[0]}</span></div>
 <div class="kpi"><b>{bot[3]:.2f} €/m²</b><span>más barato: {bot[0]}</span></div>
-<div class="kpi"><b>{sum(r[3] for r in rows)/len(rows):.2f} €/m²</b><span>media del índice</span></div>
+<div class="kpi"><b>{sum(r[3] for r in rows_oferta)/len(rows_oferta):.2f} €/m²</b><span>media de oferta (anuncios)</span></div>
 </div>
 <h2 style="font-size:15px;margin:24px 0 6px;color:var(--accent)">📊 Más caros y más baratos (€/m²)</h2>
 <div class="chart">{chart}</div>
 <p style="text-align:center;margin:14px 0"><a href="/mapa-alquiler.html" style="display:inline-block;background:var(--accent);color:#0d1117;font-weight:700;padding:13px 26px;border-radius:8px;text-decoration:none;font-size:15px">🗺️ Ver el mapa de calor del alquiler →</a></p>
 <input class="search" id="search" placeholder="🔍 Busca tu municipio (ej: Lorca, Jerez, Hospitalet...)">
-<p style="font-size:12px;color:var(--faint);text-align:center;margin:4px 0 10px" id="count"></p><table id="tabla" class="munis"><thead><tr><th>#</th><th>Municipio</th><th style="text-align:right">€/m² mediana</th><th style="text-align:right">80 m²/mes</th><th style="text-align:right">rango p25–p75</th><th style="text-align:right">anuncios</th></tr></thead>
+<p style="font-size:12px;color:var(--faint);text-align:center;margin:4px 0 10px" id="count"></p><table id="tabla" class="munis"><thead><tr><th>#</th><th>Municipio</th><th style="text-align:right">€/m² mediana</th><th style="text-align:right">80 m²/mes</th><th style="text-align:right">rango p25–p75</th><th style="text-align:right">dato</th></tr></thead>
 <tbody>{filas}</tbody></table>
-<p class="note"><b>Metodología:</b> mediana de €/m² sobre anuncios activos en pisos.com durante la última semana
-(mínimo 5 anuncios para publicar dato; rango intercuartílico p25–p75 como dispersión).
-El índice refleja precios <i>de oferta</i>, no transacciones cerradas. Fuente de población: INE.
+<p class="note"><b>Metodología:</b> dos fuentes diferenciadas, etiquetadas en la tabla.
+<b>Anuncios activos</b> (columna "dato" = nº de anuncios): mediana de €/m² sobre anuncios activos (pisos.com, y unos pocos legados de fotocasa) de la última semana
+(mínimo 5 anuncios para publicar; rango intercuartílico p25–p75 como dispersión).
+<b>Oficial 2024</b> (columna "dato" = "oficial"): precios de referencia del Sistema Estatal de Referencia del Precio del Alquiler (SERPAVI),
+Ministerio de Vivienda, medianas/p25/p75 de contratos reales declarados a Hacienda, último año disponible (2024).
+Los anuncios reflejan precio <i>de oferta</i>; el dato oficial, <i>contratos cerrados</i>.
+Fuente de población: INE.
 Licencia CC BY 4.0 · Municipal Intelligence · previsión a 30 días disponible cuando la serie acumule 4 semanas.</p>
 <div class="comunidades"><b>🌍 Dónde es más asequible alquilar por comunidad:</b>
 <a href="/alquiler-asequible-andalucia.html">Andalucía</a><a href="/alquiler-asequible-baleares.html">Baleares</a><a href="/alquiler-asequible-c-valenciana.html">C. Valenciana</a><a href="/alquiler-asequible-canarias.html">Canarias</a><a href="/alquiler-asequible-castilla-y-leon.html">Castilla y León</a><a href="/alquiler-asequible-castilla-la-mancha.html">Castilla-La Mancha</a><a href="/alquiler-asequible-cataluna.html">Cataluña</a><a href="/alquiler-asequible-galicia.html">Galicia</a><a href="/alquiler-asequible-madrid.html">Madrid</a><a href="/alquiler-asequible-murcia.html">Murcia</a><a href="/alquiler-asequible-pais-vasco.html">País Vasco</a></div>

@@ -282,3 +282,26 @@ municipal-intel 0 commits pendientes de push).
   desacoplado (nohup/setsid o pm2) — una sesion ssh muerta se llevo la primera
   corrida sin escribir sitemap. El CSV se versiona (cambia solo cuando cambia el INE).
 - SIGUIENTE: E2 (alta en datos.gob.es apuntando al CSV real) -> E3 (IndexNow/GSC).
+
+## Hito: 2ª fuente de alquiler MIVAU (reemplaza a Fotocasa) + etiquetado — 28/Ago
+- **Problema**: fuente Fotocasa bloqueada (HTTP 403 anti-bot). Quedaban 3 filas legadas.
+- **Solución**: `scripts/via_mivau.py` — fuente oficial MIVAU (Serpavi) del índice de alquiler.
+  CSV público `https://cdn.mivau.gob.es/portal-web-mivau/Datos_MIVAU/CSV/VDP001_01.csv`
+  (~38MB, separador `;`, **COD_POSTAL = código INE**). `ELEMENTO=PRECIO` (€/mes) /
+  `SUPERFICIE` (m²); `TIPO_MEDIDA=MEDIANA/PERCENT25/PERCENT75`.
+  - €/m² = PRECIO del percentil / **SUPERFICIE MEDIANA** (denominador común → garantiza
+    p25<=mediana<=p75, 0 violaciones). NO usar la superficie del propio percentil (invertía orden).
+  - Cache 24h en `/tmp/vdp001_01.csv`; `INSERT OR REPLACE` solo municipios no cubiertos
+    (check `anuncios>=5 OR slug LIKE 'mivau_%'`); slug `mivau_<ine>`, anuncios=-1,
+    alq=renta mediana real. Lock propio `/tmp/via_mivau.lock`.
+  - Backfill: `via_index` 292→**431 municipios** (289 pisos + 3 fotocasa legados + 139 MIVAU
+    2024), 0 duplicados INE, 0 violaciones, Cangas (36008) vía `INE_MANUAL`.
+- **Etiquetado honesto de fuentes** (`gen_alquiler_page.py`): se usa el campo `slug` como
+  marcador (`mivau_` → "oficial SERPAVI/MIVAU contratos cerrados 2024"; resto → "anuncios
+  activos pisos.com + pocos legados fotocasa"). KPIs/gráficos solo sobre filas de oferta.
+  Página: "431 municipios (292 anuncios activos, 139 dato oficial 2024)".
+- **Cron semanal** (domingo 06:40): via_scraper.py → via_mivau.py + gen_alquiler_page.py.
+- **Publicación en redes** (mecanismo descubierto común al ecosistema, ver WAYAHEAD nearme):
+  `social-poster/publish_{bluesky,mastodon}.py` vía `270826_auto_post.py` local. X manual 140.
+- **Vía paralela**: petición SER a datos.gob.es de precios de alquiler €/m² (estado Asignado,
+  M. Vivienda) — lenta/manual, en paralelo.
