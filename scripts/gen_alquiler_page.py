@@ -69,6 +69,14 @@ html = f"""<!DOCTYPE html>
 <link rel="canonical" href="https://municipal.viajeinteligencia.com/alquiler.html">
 <meta property="og:title" content="Índice VIA — alquiler hoy por municipio">
 <meta property="og:description" content="{len(rows)} municipios · €/m² mediana ({n_pisos} anuncios activos, {n_oficial} dato oficial 2024) · {fecha}">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://municipal.viajeinteligencia.com/alquiler.html">
+<meta property="og:locale" content="es_ES">
+<meta property="og:image" content="https://municipal.viajeinteligencia.com/og-alquiler.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.ico">
 <script type="application/ld+json">
 {{"@context":"https://schema.org","@type":"Dataset","name":"Índice VIA: precio del alquiler por municipio de España",
 "description":"Mediana de €/m² y alquiler típico (80 m²). {n_pisos} municipios con mediana de anuncios activos de la semana (pisos.com) y {n_oficial} municipios con precio de referencia oficial 2024 (SERPAVI, Ministerio de Vivienda).",

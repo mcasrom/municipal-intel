@@ -336,3 +336,14 @@ municipal-intel 0 commits pendientes de push).
 - **Editorial replicable**: JOIN alquiler (Via €/m2) + población (variación 10a) — plantilla en docs/editorial-alquiler-template.md.
 
 **Estrategia ecosistema (VIABILIDAD_ECOSISTEMA.md):** Consolidados sólidos (country 66%, municipal 45%, nearme, www) a priorizar. Alquimetria/tools ya descomisionados: solo 301 al principal (ahora al mapa en el caso de alquimetria). Seguro de vida: todo pusheado a GitHub.
+
+## Sprint pendiente — Revisar accesos y solución Alquimetria (abierto 01/09)
+
+**Objetivo:** verificar que el hito D (Alquimetria -> mapa + hardening + internal linking) funciona en producción y no se degrada.
+
+**Tareas pendientes:**
+- [ ] Revisar accesos municipales la próxima semana (comparar humano/bot tras el fix de internal linking y alquimetria).
+- [ ] Verificar que Alquimetria (301 -> mapa-alquiler.html) recibe tráfico cualificado (referer alquimetria en logs).
+- [ ] Comprobar que el internal linking (289 enlaces a fichas) distribuye tráfico del sitemap (revisar top municipio tras 7 días).
+- [ ] Revisar si el nuevo mapa OG (1200x630) genera CTR en redes (impresiones/clicks de los posts).
+- [ ] Cerrar sprint si humano/día se mantiene >4.000 y municipal >40% humano.

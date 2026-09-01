@@ -44,7 +44,15 @@ html_cabeza = f'''<!DOCTYPE html>
 <meta name="description" content="Mapa interactivo del precio del alquiler por municipio en España: €/m² de anuncios activos, con franjas de precio y leyenda.">
 <link rel="canonical" href="https://municipal.viajeinteligencia.com/mapa-alquiler.html">
 <meta property="og:title" content="Mapa del alquiler en España — €/m² por municipio">
+<meta property="og:description" content="Mapa interactivo del precio del alquiler por municipio en España: €/m² de anuncios activos, con franjas de precio y leyenda.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://municipal.viajeinteligencia.com/mapa-alquiler.html">
+<meta property="og:locale" content="es_ES">
 <meta property="og:image" content="https://municipal.viajeinteligencia.com/og-alquiler.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.ico">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script type="application/ld+json">{{"@context":"https://schema.org","@type":"WebPage","name":"Mapa del alquiler en España"}}</script>
