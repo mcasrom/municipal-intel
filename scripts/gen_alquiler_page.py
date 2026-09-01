@@ -39,7 +39,7 @@ n_oficial = sum(1 for r in rows if _es_oficial(r[7]))
 n_pisos = len(rows) - n_oficial
 
 filas = "\n".join(
-    f"<tr><td class='rk'>{i+1}</td><td><b>{m}</b><span class='prov'>{prov}</span></td>"
+    f"<tr><td class='rk'>{i+1}</td><td><a href='/municipio/{slug}.html' style='color:var(--accent);text-decoration:none'><b>{m}</b></a><span class='prov'>{prov}</span></td>"
     f"<td class='num'>{eur:.2f} €</td><td class='num'>{alq:,} €</td>".replace(",", ".") +
     f"<td class='num'>{p25:.1f}–{p75:.1f}</td>"
     f"<td class='num muted'>{'oficial' if of else an}</td></tr>"
