@@ -320,3 +320,19 @@ municipal-intel 0 commits pendientes de push).
   Backups crontab: /tmp/cron_backup_before_mivau_health_20260828.txt (server).
 - **Probado**: condicion normal OK; fallo simulado (Traceback en log) → ENVIADO y dedup
   (2a ejecucion skip); limpio el log de prueba. Commit propio.
+
+## 2026-09-01 — Hito D: viabilidad + hardening + Alquimetria
+
+**Viabilidad (última semana: 13.099 peticiones municipal, 41,3% humano):**
+- Pico 30/08: 4.561 humanos (83% del tráfico semanal) — editorial alquiler + población.
+- Top paths: / (2.001), sitemap 295, alquiler.html 44, editorial 39, mapa 31 — long-tail uniforme (9-12 por municipio).
+- Status: 200 65%, 444 33% bloqueados, 404 0,8%.
+
+**Acciones D (viable):**
+- **Alquimetria** (descomisionado) redirigido a mapa de alquiler: alquimetria.viajeinteligencia.com (301) -> https://municipal.viajeinteligencia.com/mapa-alquiler.html — nombre con tirón reaprovechado. Certificado LetsEncrypt emitido (2026-11-30), Cloudflare naranja, DNS ok. Backup sites-available/alquimetria.
+- **Hardening**: unificado bot-block.conf (dos mapas duplicados -> uno) + añadidos feroxbuster/l9scan/censysinspect/exposurescanner/curl. Bloqueo verificado (curl 000, navegador 200). Rate-limit /api/ municipal (limit_req zone=emergency_api burst=20).
+- **Internal linking**: alquiler.html cada municipio enlaza a /municipio/{slug}.html (289 enlaces) — distribuye tráfico del sitemap (8.230 URLs). Commit 65c49eb.
+- **Anomalía 26/08**: 1.531 "otro" = SleepBot/1.0 (1.497) — ya bloqueado en el mapa unificado.
+- **Editorial replicable**: JOIN alquiler (Via €/m2) + población (variación 10a) — plantilla en docs/editorial-alquiler-template.md.
+
+**Estrategia ecosistema (VIABILIDAD_ECOSISTEMA.md):** Consolidados sólidos (country 66%, municipal 45%, nearme, www) a priorizar. Alquimetria/tools ya descomisionados: solo 301 al principal (ahora al mapa en el caso de alquimetria). Seguro de vida: todo pusheado a GitHub.
