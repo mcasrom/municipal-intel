@@ -154,6 +154,7 @@ body.light .src{color:#64748b}
   </div>
   <div id="alertMsg" style="font-size:12px;margin-top:6px;color:#94a3b8"></div>
 </div>
+<div style="background:var(--card);border-radius:10px;padding:14px;margin:18px 0"><b style="color:#38bdf8;font-size:14px">Herramientas del ecosistema</b><div style="margin-top:8px;font-size:13px;line-height:1.8"><a href="https://alquimetria.viajeinteligencia.com" style="color:#58a6ff">Alquimetría</a> · precio de alquiler por zona y evolución histórica<br><a href="https://nearme.viajeinteligencia.com" style="color:#58a6ff">NearMe</a> · eventos y servicios cerca de este municipio<br><a href="https://radar.viajeinteligencia.com" style="color:#58a6ff">Radar</a> · detectar desinformación y contrastar fuentes</div></div>
 <div class="src">Municipal Intelligence © 2026 M. Castillo · fuente: INE, Cifras oficiales de población (Revisión del Padrón Municipal), población a 01/01/2025 publicada el 11/12/2025 · coordenadas y códigos: © OpenStreetMap (ref:ine) · ver <a href="../acerca.html">metodología completa</a>.</div>
 <script>
 function suscribir(){
