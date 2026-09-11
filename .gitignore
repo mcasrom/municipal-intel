@@ -13,3 +13,4 @@ logs/*.log
 logs/*.state
 logs_*.log
 *.bak-*
+*.sqlite
