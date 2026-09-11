@@ -11,7 +11,8 @@ OUT = BASE / "dashboard/alquiler.html"
 
 con = sqlite3.connect(f"file:{DB}?mode=ro", uri=True)
 rows = con.execute("""
-    SELECT municipio, provincia, anuncios, eur_m2_mediana, p25, p75, alq_mediana_80m2, slug
+    SELECT municipio, provincia, anuncios, eur_m2_mediana, p25, p75, alq_mediana_80m2, slug,
+           oficial_eur_m2, oficial_p25, oficial_p75, oficial_anio
     FROM via_index
     WHERE fecha = (SELECT MAX(fecha) FROM via_index)
     ORDER BY eur_m2_mediana DESC
@@ -32,23 +33,31 @@ if not rows:
     raise SystemExit("sin datos en via_index aun")
 
 fecha = meta[0]
-def _es_oficial(slug):  # filas rellenadas con dato oficial MIVAU (contratos reales), no anuncios
-    return slug is not None and str(slug).startswith("mivau")
+def _es_oficial(r):  # filas con dato oficial MIVAU (contratos reales), tengan o no anuncios
+    return r[8] is not None
 
-n_oficial = sum(1 for r in rows if _es_oficial(r[7]))
-n_pisos = len(rows) - n_oficial
+n_oficial = sum(1 for r in rows if _es_oficial(r))
+n_pisos = sum(1 for r in rows if r[2] is not None and r[2] > 0)  # municipios con oferta (anuncios)
 
-filas = "\n".join(
-    f"<tr><td class='rk'>{i+1}</td><td><a href='/municipio/{slug}.html' style='color:var(--accent);text-decoration:none'><b>{m}</b></a><span class='prov'>{prov}</span></td>"
-    f"<td class='num'>{eur:.2f} €</td><td class='num'>{alq:,} €</td>".replace(",", ".") +
-    f"<td class='num'>{p25:.1f}–{p75:.1f}</td>"
-    f"<td class='num muted'>{'oficial' if of else an}</td></tr>"
-    for i, (m, prov, an, eur, p25, p75, alq, slug, pob) in enumerate(rows)
-    for of in [_es_oficial(slug)]
-)
+def _fila(i, r):
+    m, prov, an, eur, p25, p75, alq, slug, ofr_e, ofr_p25, ofr_p75, ofr_anio, pob = r
+    to = eur if an else None  # €/m² principal: solo si hay anuncios
+    ofr = f"{ofr_e:.2f} €" if ofr_e is not None else "—"
+    dato = "oficial" if (an is None or an < 1) else f"{an}"
+    celda_eur = f"{to:.2f} €" if to is not None else "—"
+    celda_rango = f"{p25:.1f}–{p75:.1f}" if to is not None else "—"
+    celda_alq = f"{alq:,.0f} €".replace(",", ".") if alq is not None else "—"
+    return (f"<tr><td class='rk'>{i+1}</td>"
+            f"<td><a href='/municipio/{slug}.html' style='color:var(--accent);text-decoration:none'><b>{m}</b></a><span class='prov'>{prov}</span></td>"
+            f"<td class='num'>{celda_eur}</td><td class='num'>{celda_alq}</td>"
+            f"<td class='num'>{celda_rango}</td>"
+            f"<td class='num'>{ofr}</td>"
+            f"<td class='num muted'>{dato}</td></tr>")
+
+filas = "\n".join(_fila(i, r) for i, r in enumerate(rows))
 
 # KPIs y gráfico de "oferta" (anuncios) solos, para no mezclar contratos oficiales con anuncios
-rows_oferta = [r for r in rows if not _es_oficial(r[7])]
+rows_oferta = [r for r in rows if r[2] is not None and r[2] > 0]
 top, bot = rows_oferta[0], rows_oferta[-1]
 # --- KPI gráfico: barras top 8 caros + bottom 8 baratos (solo oferta) ---
 def _bar(m, eur, mx):
@@ -140,12 +149,12 @@ function toggleTheme(){{var t=document.documentElement.getAttribute('data-theme'
 <div class="chart">{chart}</div>
 <p style="text-align:center;margin:14px 0"><a href="/mapa-alquiler.html" style="display:inline-block;background:var(--accent);color:#0d1117;font-weight:700;padding:13px 26px;border-radius:8px;text-decoration:none;font-size:15px">🗺️ Ver el mapa de calor del alquiler →</a></p>
 <input class="search" id="search" placeholder="🔍 Busca tu municipio (ej: Lorca, Jerez, Hospitalet...)">
-<p style="font-size:12px;color:var(--faint);text-align:center;margin:4px 0 10px" id="count"></p><table id="tabla" class="munis"><thead><tr><th>#</th><th>Municipio</th><th style="text-align:right">€/m² mediana</th><th style="text-align:right">80 m²/mes</th><th style="text-align:right">rango p25–p75</th><th style="text-align:right">dato</th></tr></thead>
+<p style="font-size:12px;color:var(--faint);text-align:center;margin:4px 0 10px" id="count"></p><table id="tabla" class="munis"><thead><tr><th>#</th><th>Municipio</th><th style="text-align:right">€/m² mediana</th><th style="text-align:right">80 m²/mes</th><th style="text-align:right">rango p25–p75</th><th style="text-align:right">oficial 2024</th><th style="text-align:right">dato</th></tr></thead>
 <tbody>{filas}</tbody></table>
-<p class="note"><b>Metodología:</b> dos fuentes diferenciadas, etiquetadas en la tabla.
-<b>Anuncios activos</b> (columna "dato" = nº de anuncios): mediana de €/m² sobre anuncios activos (pisos.com, y unos pocos legados de fotocasa) de la última semana
-(mínimo 5 anuncios para publicar; rango intercuartílico p25–p75 como dispersión).
-<b>Oficial 2024</b> (columna "dato" = "oficial"): precios de referencia del Sistema Estatal de Referencia del Precio del Alquiler (SERPAVI),
+<p class="note"><b>Metodología:</b> dos fuentes diferenciadas y etiquetadas.
+<b>Anuncios activos</b> (columna "€/m² mediana", "dato" = nº de anuncios): mediana de €/m² sobre anuncios activos (pisos.com, y unos pocos legados de fotocasa) de la última semana
+(mínimo 5 anuncios para publicar; rango intercuartílico p25–p75 como dispersión; "—" cuando no hay oferta).
+<b>Oficial 2024</b> (columna "oficial 2024"; "dato" = "oficial" cuando no hay anuncios): precios de referencia del Sistema Estatal de Referencia del Precio del Alquiler (SERPAVI),
 Ministerio de Vivienda, medianas/p25/p75 de contratos reales declarados a Hacienda, último año disponible (2024).
 Los anuncios reflejan precio <i>de oferta</i>; el dato oficial, <i>contratos cerrados</i>.
 Fuente de población: INE.
@@ -153,6 +162,7 @@ Licencia CC BY 4.0 · Municipal Intelligence · previsión a 30 días disponible
 <div class="comunidades"><b>🌍 Dónde es más asequible alquilar por comunidad:</b>
 <a href="/alquiler-asequible-andalucia.html">Andalucía</a><a href="/alquiler-asequible-baleares.html">Baleares</a><a href="/alquiler-asequible-c-valenciana.html">C. Valenciana</a><a href="/alquiler-asequible-canarias.html">Canarias</a><a href="/alquiler-asequible-castilla-y-leon.html">Castilla y León</a><a href="/alquiler-asequible-castilla-la-mancha.html">Castilla-La Mancha</a><a href="/alquiler-asequible-cataluna.html">Cataluña</a><a href="/alquiler-asequible-galicia.html">Galicia</a><a href="/alquiler-asequible-madrid.html">Madrid</a><a href="/alquiler-asequible-murcia.html">Murcia</a><a href="/alquiler-asequible-pais-vasco.html">País Vasco</a></div>
 <div style="text-align:center"><a class="kofi" href="https://ko-fi.com/m_castillo" target="_blank" rel="noopener noreferrer">☕ Apóyame en Ko-fi</a></div>
+<div style="text-align:center;font-size:12px;color:var(--faint);margin:10px 0"><a href="https://analisis.pruebapublica.com" target="_blank" rel="noopener noreferrer" style="color:var(--accent)">✍️ Análisis geopolítico (blog)</a></div>
 </main>"""
 
 JS_BUSCADOR = """
