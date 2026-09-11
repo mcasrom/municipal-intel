@@ -7,3 +7,9 @@ dashboard/data/via/via.db
 
 *.bak.*
 
+
+# logs y backups generados (no versionar)
+logs/*.log
+logs/*.state
+logs_*.log
+*.bak-*
