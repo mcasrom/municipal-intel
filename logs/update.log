@@ -81,3 +81,641 @@ paginas editoriales generadas: 103
 sitemap actualizado con 103 URLs editoriales
 regenerado OK (lorca_cambios=0 ine_cambios=0)
 {"ok": true, "enviadas": ["miguelcastillo@gmail.com/30024", "mcasrom@gmail.com/46214"]}alertas notificadas
+
+=== 2026-08-23 05:30:01 ===
+-- Lorca: trimestres nuevos?
+PDFs publicados: 28 | ingeridos: 28 | nuevos: 0
+-- INE: año nuevo?
+INE año máximo: 2025 | BD año máximo: 2025
+-- regeneración del sitio
+export CSV OK: 235376 filas, 8136 municipios, 9.1 MB
+total Espana 2025: 49,114,494
+catalogo: 8109
+rankings.json OK
+series: 8108 | fichero KB: 2679
+index.html: 32 KB
+OK: dashboard/ generado
+lorca_intel.json generado
+OK ficha_lorca.html | 12 KB | menores: 9960 | gasto: 16.793.078
+OK ficha_malaga.html | 8 KB | menores: 1950 | gasto: 15.068.270
+fichas generadas: 2
+Traceback (most recent call last):
+  File "/home/deploy/municipal-intel/gen_og_dinamico.py", line 14, in <module>
+    raw = open("spain_path.txt").read()
+          ^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'spain_path.txt'
+paginas municipio generadas: 8109
+sitemap URLs: 8114
+acerca.html generado: 6 KB
+rss.xml generado: 42 items | 17987 bytes
+paginas editoriales generadas: 103
+sitemap actualizado con 103 URLs editoriales
+regenerado OK (lorca_cambios=0 ine_cambios=0)
+{"ok": true, "enviadas": []}alertas notificadas
+
+=== 2026-08-24 05:30:01 ===
+-- Lorca: trimestres nuevos?
+PDFs publicados: 28 | ingeridos: 28 | nuevos: 0
+-- INE: año nuevo?
+INE año máximo: 2025 | BD año máximo: 2025
+-- regeneración del sitio
+export CSV OK: 235376 filas, 8127 municipios, 9.1 MB
+total Espana 2025: 49,114,494
+catalogo: 8109
+rankings.json OK
+series: 8108 | fichero KB: 2679
+index.html: 32 KB
+OK: dashboard/ generado
+lorca_intel.json generado
+OK ficha_lorca.html | 12 KB | menores: 9960 | gasto: 16.793.078
+OK ficha_malaga.html | 8 KB | menores: 1950 | gasto: 15.068.270
+fichas generadas: 2
+Traceback (most recent call last):
+  File "/home/deploy/municipal-intel/gen_og_dinamico.py", line 14, in <module>
+    raw = open("spain_path.txt").read()
+          ^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'spain_path.txt'
+paginas municipio generadas: 8109
+sitemap URLs: 8114
+acerca.html generado: 6 KB
+rss.xml generado: 42 items | 17987 bytes
+paginas editoriales generadas: 103
+sitemap actualizado con 103 URLs editoriales
+regenerado OK (lorca_cambios=0 ine_cambios=0)
+{"ok": true, "enviadas": []}alertas notificadas
+
+=== 2026-08-25 05:30:02 ===
+-- Lorca: trimestres nuevos?
+PDFs publicados: 28 | ingeridos: 28 | nuevos: 0
+-- INE: año nuevo?
+INE año máximo: 2025 | BD año máximo: 2025
+-- regeneración del sitio
+export CSV OK: 235376 filas, 8127 municipios, 9.1 MB
+total Espana 2025: 49,114,494
+python3: can't open file '/home/deploy/municipal-intel/gen_export_dataset.py': [Errno 2] No such file or directory
+catalogo: 8109
+rankings.json OK
+series: 8108 | fichero KB: 2679
+index.html: 32 KB
+OK: dashboard/ generado
+lorca_intel.json generado
+OK ficha_lorca.html | 12 KB | menores: 9960 | gasto: 16.793.078
+OK ficha_malaga.html | 7 KB | menores: 1950 | gasto: 15.068.270
+fichas generadas: 2
+Traceback (most recent call last):
+  File "/home/deploy/municipal-intel/gen_og_dinamico.py", line 14, in <module>
+    raw = open("spain_path.txt").read()
+          ^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'spain_path.txt'
+paginas municipio generadas: 8109
+sitemap URLs: 8114
+acerca.html generado: 6 KB
+rss.xml generado: 42 items | 17987 bytes
+paginas editoriales generadas: 103
+sitemap actualizado con 114 URLs editoriales
+regenerado OK (lorca_cambios=0 ine_cambios=0)
+{"ok": true, "enviadas": []}alertas notificadas
+
+=== 2026-08-26 05:30:01 ===
+-- Lorca: trimestres nuevos?
+PDFs publicados: 28 | ingeridos: 28 | nuevos: 0
+-- INE: año nuevo?
+INE año máximo: 2025 | BD año máximo: 2025
+-- regeneración del sitio
+export CSV OK: 235376 filas, 8127 municipios, 9.1 MB
+total Espana 2025: 49,114,494
+python3: can't open file '/home/deploy/municipal-intel/gen_export_dataset.py': [Errno 2] No such file or directory
+catalogo: 8109
+rankings.json OK
+series: 8108 | fichero KB: 2679
+index.html: 33 KB
+OK: dashboard/ generado
+lorca_intel.json generado
+OK ficha_lorca.html | 12 KB | menores: 9960 | gasto: 16.793.078
+OK ficha_malaga.html | 7 KB | menores: 1950 | gasto: 15.068.270
+fichas generadas: 2
+Traceback (most recent call last):
+  File "/home/deploy/municipal-intel/gen_og_dinamico.py", line 14, in <module>
+    raw = open("spain_path.txt").read()
+          ^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'spain_path.txt'
+paginas municipio generadas: 8109
+sitemap URLs: 8114
+acerca.html generado: 6 KB
+rss.xml generado: 42 items | 17987 bytes
+paginas editoriales generadas: 103
+sitemap actualizado con 114 URLs editoriales
+regenerado OK (lorca_cambios=0 ine_cambios=0)
+{"ok": true, "enviadas": []}alertas notificadas
+
+=== 2026-08-27 05:30:01 ===
+-- Lorca: trimestres nuevos?
+PDFs publicados: 28 | ingeridos: 28 | nuevos: 0
+-- INE: año nuevo?
+INE año máximo: 2025 | BD año máximo: 2025
+-- regeneración del sitio
+export CSV OK: 235376 filas, 8127 municipios, 9.1 MB
+total Espana 2025: 49,114,494
+python3: can't open file '/home/deploy/municipal-intel/gen_export_dataset.py': [Errno 2] No such file or directory
+catalogo: 8109
+rankings.json OK
+series: 8108 | fichero KB: 2679
+index.html: 33 KB
+OK: dashboard/ generado
+lorca_intel.json generado
+OK ficha_lorca.html | 12 KB | menores: 9960 | gasto: 16.793.078
+OK ficha_malaga.html | 7 KB | menores: 1950 | gasto: 15.068.270
+fichas generadas: 2
+Traceback (most recent call last):
+  File "/home/deploy/municipal-intel/gen_og_dinamico.py", line 14, in <module>
+    raw = open("spain_path.txt").read()
+          ^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'spain_path.txt'
+paginas municipio generadas: 8109
+sitemap URLs: 8114
+acerca.html generado: 6 KB
+rss.xml generado: 42 items | 17987 bytes
+paginas editoriales generadas: 103
+sitemap actualizado con 114 URLs editoriales
+regenerado OK (lorca_cambios=0 ine_cambios=0)
+{"ok": true, "enviadas": []}alertas notificadas
+
+=== 2026-08-28 05:30:02 ===
+-- Lorca: trimestres nuevos?
+PDFs publicados: 28 | ingeridos: 28 | nuevos: 0
+-- INE: año nuevo?
+INE año máximo: 2025 | BD año máximo: 2025
+-- regeneración del sitio
+export CSV OK: 235376 filas, 8127 municipios, 9.1 MB
+total Espana 2025: 49,114,494
+python3: can't open file '/home/deploy/municipal-intel/gen_export_dataset.py': [Errno 2] No such file or directory
+catalogo: 8109
+rankings.json OK
+series: 8108 | fichero KB: 2679
+index.html: 33 KB
+OK: dashboard/ generado
+lorca_intel.json generado
+OK ficha_lorca.html | 12 KB | menores: 9960 | gasto: 16.793.078
+OK ficha_malaga.html | 7 KB | menores: 1950 | gasto: 15.068.270
+fichas generadas: 2
+Traceback (most recent call last):
+  File "/home/deploy/municipal-intel/gen_og_dinamico.py", line 14, in <module>
+    raw = open("spain_path.txt").read()
+          ^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'spain_path.txt'
+paginas municipio generadas: 8109
+sitemap URLs: 8114
+acerca.html generado: 6 KB
+rss.xml generado: 42 items | 17987 bytes
+paginas editoriales generadas: 103
+sitemap actualizado con 114 URLs editoriales
+regenerado OK (lorca_cambios=0 ine_cambios=0)
+{"ok": true, "enviadas": []}alertas notificadas
+
+=== 2026-08-29 05:30:01 ===
+-- Lorca: trimestres nuevos?
+PDFs publicados: 28 | ingeridos: 28 | nuevos: 0
+-- INE: año nuevo?
+INE año máximo: 2025 | BD año máximo: 2025
+-- regeneración del sitio
+export CSV OK: 235376 filas, 8127 municipios, 9.1 MB
+total Espana 2025: 49,114,494
+python3: can't open file '/home/deploy/municipal-intel/gen_export_dataset.py': [Errno 2] No such file or directory
+catalogo: 8109
+rankings.json OK
+series: 8108 | fichero KB: 2679
+index.html: 33 KB
+OK: dashboard/ generado
+lorca_intel.json generado
+OK ficha_lorca.html | 12 KB | menores: 9960 | gasto: 16.793.078
+OK ficha_malaga.html | 7 KB | menores: 1950 | gasto: 15.068.270
+fichas generadas: 2
+Traceback (most recent call last):
+  File "/home/deploy/municipal-intel/gen_og_dinamico.py", line 14, in <module>
+    raw = open("spain_path.txt").read()
+          ^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'spain_path.txt'
+paginas municipio generadas: 8109
+sitemap URLs: 8114
+acerca.html generado: 6 KB
+rss.xml generado: 42 items | 17987 bytes
+paginas editoriales generadas: 103
+sitemap actualizado con 114 URLs editoriales
+regenerado OK (lorca_cambios=0 ine_cambios=0)
+{"ok": true, "enviadas": []}alertas notificadas
+
+=== 2026-08-30 05:30:01 ===
+-- Lorca: trimestres nuevos?
+PDFs publicados: 28 | ingeridos: 28 | nuevos: 0
+-- INE: año nuevo?
+INE año máximo: 2025 | BD año máximo: 2025
+-- regeneración del sitio
+export CSV OK: 235376 filas, 8127 municipios, 9.1 MB
+total Espana 2025: 49,114,494
+python3: can't open file '/home/deploy/municipal-intel/gen_export_dataset.py': [Errno 2] No such file or directory
+catalogo: 8109
+rankings.json OK
+series: 8108 | fichero KB: 2679
+index.html: 33 KB
+OK: dashboard/ generado
+lorca_intel.json generado
+OK ficha_lorca.html | 12 KB | menores: 9960 | gasto: 16.793.078
+OK ficha_malaga.html | 7 KB | menores: 1950 | gasto: 15.068.270
+fichas generadas: 2
+Traceback (most recent call last):
+  File "/home/deploy/municipal-intel/gen_og_dinamico.py", line 14, in <module>
+    raw = open("spain_path.txt").read()
+          ^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'spain_path.txt'
+paginas municipio generadas: 8109
+sitemap URLs: 8114
+acerca.html generado: 6 KB
+rss.xml generado: 42 items | 17987 bytes
+paginas editoriales generadas: 103
+sitemap actualizado con 114 URLs editoriales
+regenerado OK (lorca_cambios=0 ine_cambios=0)
+{"ok": true, "enviadas": []}alertas notificadas
+
+=== 2026-08-31 05:30:01 ===
+-- Lorca: trimestres nuevos?
+PDFs publicados: 28 | ingeridos: 28 | nuevos: 0
+-- INE: año nuevo?
+INE año máximo: 2025 | BD año máximo: 2025
+-- regeneración del sitio
+export CSV OK: 235376 filas, 8127 municipios, 9.1 MB
+total Espana 2025: 49,114,494
+python3: can't open file '/home/deploy/municipal-intel/gen_export_dataset.py': [Errno 2] No such file or directory
+catalogo: 8109
+rankings.json OK
+series: 8108 | fichero KB: 2679
+index.html: 33 KB
+OK: dashboard/ generado
+lorca_intel.json generado
+OK ficha_lorca.html | 12 KB | menores: 9960 | gasto: 16.793.078
+OK ficha_malaga.html | 7 KB | menores: 1950 | gasto: 15.068.270
+fichas generadas: 2
+Traceback (most recent call last):
+  File "/home/deploy/municipal-intel/gen_og_dinamico.py", line 14, in <module>
+    raw = open("spain_path.txt").read()
+          ^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'spain_path.txt'
+paginas municipio generadas: 8109
+sitemap URLs: 8114
+acerca.html generado: 6 KB
+rss.xml generado: 42 items | 17987 bytes
+paginas editoriales generadas: 103
+sitemap actualizado con 114 URLs editoriales
+regenerado OK (lorca_cambios=0 ine_cambios=0)
+{"ok": true, "enviadas": []}alertas notificadas
+
+=== 2026-09-01 05:30:02 ===
+-- Lorca: trimestres nuevos?
+PDFs publicados: 28 | ingeridos: 28 | nuevos: 0
+-- INE: año nuevo?
+INE año máximo: 2025 | BD año máximo: 2025
+-- regeneración del sitio
+export CSV OK: 235376 filas, 8127 municipios, 9.1 MB
+total Espana 2025: 49,114,494
+python3: can't open file '/home/deploy/municipal-intel/gen_export_dataset.py': [Errno 2] No such file or directory
+catalogo: 8109
+rankings.json OK
+series: 8108 | fichero KB: 2679
+index.html: 33 KB
+OK: dashboard/ generado
+lorca_intel.json generado
+OK ficha_lorca.html | 12 KB | menores: 9960 | gasto: 16.793.078
+OK ficha_malaga.html | 7 KB | menores: 1950 | gasto: 15.068.270
+fichas generadas: 2
+Traceback (most recent call last):
+  File "/home/deploy/municipal-intel/gen_og_dinamico.py", line 14, in <module>
+    raw = open("spain_path.txt").read()
+          ^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'spain_path.txt'
+paginas municipio generadas: 8109
+sitemap URLs: 8114
+acerca.html generado: 6 KB
+rss.xml generado: 42 items | 17987 bytes
+paginas editoriales generadas: 103
+sitemap actualizado con 114 URLs editoriales
+regenerado OK (lorca_cambios=0 ine_cambios=0)
+{"ok": true, "enviadas": []}alertas notificadas
+
+=== 2026-09-02 05:30:02 ===
+-- Lorca: trimestres nuevos?
+PDFs publicados: 28 | ingeridos: 28 | nuevos: 0
+-- INE: año nuevo?
+INE año máximo: 2025 | BD año máximo: 2025
+-- regeneración del sitio
+export CSV OK: 235376 filas, 8127 municipios, 9.1 MB
+total Espana 2025: 49,114,494
+python3: can't open file '/home/deploy/municipal-intel/gen_export_dataset.py': [Errno 2] No such file or directory
+catalogo: 8109
+rankings.json OK
+series: 8108 | fichero KB: 2679
+index.html: 33 KB
+OK: dashboard/ generado
+lorca_intel.json generado
+OK ficha_lorca.html | 12 KB | menores: 9960 | gasto: 16.793.078
+OK ficha_malaga.html | 7 KB | menores: 1950 | gasto: 15.068.270
+fichas generadas: 2
+Traceback (most recent call last):
+  File "/home/deploy/municipal-intel/gen_og_dinamico.py", line 14, in <module>
+    raw = open("spain_path.txt").read()
+          ^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'spain_path.txt'
+paginas municipio generadas: 8109
+sitemap URLs: 8114
+acerca.html generado: 6 KB
+rss.xml generado: 42 items | 17987 bytes
+paginas editoriales generadas: 103
+sitemap actualizado con 114 URLs editoriales
+regenerado OK (lorca_cambios=0 ine_cambios=0)
+{"ok": true, "enviadas": []}alertas notificadas
+
+=== 2026-09-03 05:30:02 ===
+-- Lorca: trimestres nuevos?
+PDFs publicados: 28 | ingeridos: 28 | nuevos: 0
+-- INE: año nuevo?
+INE año máximo: 2025 | BD año máximo: 2025
+-- regeneración del sitio
+export CSV OK: 235376 filas, 8127 municipios, 9.1 MB
+total Espana 2025: 49,114,494
+python3: can't open file '/home/deploy/municipal-intel/gen_export_dataset.py': [Errno 2] No such file or directory
+catalogo: 8109
+rankings.json OK
+series: 8108 | fichero KB: 2679
+index.html: 33 KB
+OK: dashboard/ generado
+lorca_intel.json generado
+OK ficha_lorca.html | 12 KB | menores: 9960 | gasto: 16.793.078
+OK ficha_malaga.html | 7 KB | menores: 1950 | gasto: 15.068.270
+fichas generadas: 2
+Traceback (most recent call last):
+  File "/home/deploy/municipal-intel/gen_og_dinamico.py", line 14, in <module>
+    raw = open("spain_path.txt").read()
+          ^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'spain_path.txt'
+paginas municipio generadas: 8109
+sitemap URLs: 8114
+acerca.html generado: 6 KB
+rss.xml generado: 42 items | 17987 bytes
+paginas editoriales generadas: 103
+sitemap actualizado con 114 URLs editoriales
+regenerado OK (lorca_cambios=0 ine_cambios=0)
+{"ok": true, "enviadas": []}alertas notificadas
+
+=== 2026-09-04 05:30:01 ===
+-- Lorca: trimestres nuevos?
+PDFs publicados: 28 | ingeridos: 28 | nuevos: 0
+-- INE: año nuevo?
+INE año máximo: 2025 | BD año máximo: 2025
+-- regeneración del sitio
+export CSV OK: 235376 filas, 8127 municipios, 9.1 MB
+total Espana 2025: 49,114,494
+python3: can't open file '/home/deploy/municipal-intel/gen_export_dataset.py': [Errno 2] No such file or directory
+catalogo: 8109
+rankings.json OK
+series: 8108 | fichero KB: 2679
+index.html: 33 KB
+OK: dashboard/ generado
+lorca_intel.json generado
+OK ficha_lorca.html | 12 KB | menores: 9960 | gasto: 16.793.078
+OK ficha_malaga.html | 7 KB | menores: 1950 | gasto: 15.068.270
+fichas generadas: 2
+Traceback (most recent call last):
+  File "/home/deploy/municipal-intel/gen_og_dinamico.py", line 14, in <module>
+    raw = open("spain_path.txt").read()
+          ^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'spain_path.txt'
+paginas municipio generadas: 8109
+sitemap URLs: 8114
+acerca.html generado: 6 KB
+rss.xml generado: 42 items | 17987 bytes
+paginas editoriales generadas: 103
+sitemap actualizado con 114 URLs editoriales
+regenerado OK (lorca_cambios=0 ine_cambios=0)
+{"ok": true, "enviadas": []}alertas notificadas
+
+=== 2026-09-05 05:30:01 ===
+-- Lorca: trimestres nuevos?
+PDFs publicados: 28 | ingeridos: 28 | nuevos: 0
+-- INE: año nuevo?
+INE año máximo: 2025 | BD año máximo: 2025
+-- regeneración del sitio
+export CSV OK: 235376 filas, 8127 municipios, 9.1 MB
+total Espana 2025: 49,114,494
+python3: can't open file '/home/deploy/municipal-intel/gen_export_dataset.py': [Errno 2] No such file or directory
+catalogo: 8109
+rankings.json OK
+series: 8108 | fichero KB: 2679
+index.html: 33 KB
+OK: dashboard/ generado
+lorca_intel.json generado
+OK ficha_lorca.html | 12 KB | menores: 9960 | gasto: 16.793.078
+OK ficha_malaga.html | 7 KB | menores: 1950 | gasto: 15.068.270
+fichas generadas: 2
+Traceback (most recent call last):
+  File "/home/deploy/municipal-intel/gen_og_dinamico.py", line 14, in <module>
+    raw = open("spain_path.txt").read()
+          ^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'spain_path.txt'
+paginas municipio generadas: 8109
+sitemap URLs: 8114
+acerca.html generado: 6 KB
+rss.xml generado: 42 items | 17987 bytes
+paginas editoriales generadas: 103
+sitemap actualizado con 114 URLs editoriales
+regenerado OK (lorca_cambios=0 ine_cambios=0)
+{"ok": true, "enviadas": []}alertas notificadas
+
+=== 2026-09-06 05:30:01 ===
+-- Lorca: trimestres nuevos?
+PDFs publicados: 28 | ingeridos: 28 | nuevos: 0
+-- INE: año nuevo?
+INE año máximo: 2025 | BD año máximo: 2025
+-- regeneración del sitio
+export CSV OK: 235376 filas, 8127 municipios, 9.1 MB
+total Espana 2025: 49,114,494
+python3: can't open file '/home/deploy/municipal-intel/gen_export_dataset.py': [Errno 2] No such file or directory
+catalogo: 8109
+rankings.json OK
+series: 8108 | fichero KB: 2679
+index.html: 33 KB
+OK: dashboard/ generado
+lorca_intel.json generado
+OK ficha_lorca.html | 12 KB | menores: 9960 | gasto: 16.793.078
+OK ficha_malaga.html | 7 KB | menores: 1950 | gasto: 15.068.270
+fichas generadas: 2
+Traceback (most recent call last):
+  File "/home/deploy/municipal-intel/gen_og_dinamico.py", line 14, in <module>
+    raw = open("spain_path.txt").read()
+          ^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'spain_path.txt'
+paginas municipio generadas: 8109
+sitemap URLs: 8114
+acerca.html generado: 6 KB
+rss.xml generado: 42 items | 17987 bytes
+paginas editoriales generadas: 103
+sitemap actualizado con 114 URLs editoriales
+regenerado OK (lorca_cambios=0 ine_cambios=0)
+{"ok": true, "enviadas": []}alertas notificadas
+
+=== 2026-09-07 05:30:01 ===
+-- Lorca: trimestres nuevos?
+PDFs publicados: 28 | ingeridos: 28 | nuevos: 0
+-- INE: año nuevo?
+INE año máximo: 2025 | BD año máximo: 2025
+-- regeneración del sitio
+export CSV OK: 235376 filas, 8127 municipios, 9.1 MB
+total Espana 2025: 49,114,494
+python3: can't open file '/home/deploy/municipal-intel/gen_export_dataset.py': [Errno 2] No such file or directory
+catalogo: 8109
+rankings.json OK
+series: 8108 | fichero KB: 2679
+index.html: 33 KB
+OK: dashboard/ generado
+lorca_intel.json generado
+OK ficha_lorca.html | 12 KB | menores: 9960 | gasto: 16.793.078
+OK ficha_malaga.html | 7 KB | menores: 1950 | gasto: 15.068.270
+fichas generadas: 2
+Traceback (most recent call last):
+  File "/home/deploy/municipal-intel/gen_og_dinamico.py", line 14, in <module>
+    raw = open("spain_path.txt").read()
+          ^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'spain_path.txt'
+paginas municipio generadas: 8109
+sitemap URLs: 8114
+acerca.html generado: 6 KB
+rss.xml generado: 42 items | 17987 bytes
+paginas editoriales generadas: 103
+sitemap actualizado con 114 URLs editoriales
+regenerado OK (lorca_cambios=0 ine_cambios=0)
+{"ok": true, "enviadas": []}alertas notificadas
+
+=== 2026-09-08 05:30:01 ===
+-- Lorca: trimestres nuevos?
+PDFs publicados: 28 | ingeridos: 28 | nuevos: 0
+-- INE: año nuevo?
+INE año máximo: 2025 | BD año máximo: 2025
+-- regeneración del sitio
+export CSV OK: 235376 filas, 8127 municipios, 9.1 MB
+total Espana 2025: 49,114,494
+python3: can't open file '/home/deploy/municipal-intel/gen_export_dataset.py': [Errno 2] No such file or directory
+catalogo: 8109
+rankings.json OK
+series: 8108 | fichero KB: 2679
+index.html: 33 KB
+OK: dashboard/ generado
+lorca_intel.json generado
+OK ficha_lorca.html | 12 KB | menores: 9960 | gasto: 16.793.078
+OK ficha_malaga.html | 7 KB | menores: 1950 | gasto: 15.068.270
+fichas generadas: 2
+Traceback (most recent call last):
+  File "/home/deploy/municipal-intel/gen_og_dinamico.py", line 14, in <module>
+    raw = open("spain_path.txt").read()
+          ^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'spain_path.txt'
+paginas municipio generadas: 8109
+sitemap URLs: 8114
+acerca.html generado: 6 KB
+rss.xml generado: 42 items | 17987 bytes
+paginas editoriales generadas: 103
+sitemap actualizado con 114 URLs editoriales
+regenerado OK (lorca_cambios=0 ine_cambios=0)
+{"ok": true, "enviadas": []}alertas notificadas
+
+=== 2026-09-09 05:30:01 ===
+-- Lorca: trimestres nuevos?
+PDFs publicados: 28 | ingeridos: 28 | nuevos: 0
+-- INE: año nuevo?
+INE año máximo: 2025 | BD año máximo: 2025
+-- regeneración del sitio
+export CSV OK: 235376 filas, 8127 municipios, 9.1 MB
+total Espana 2025: 49,114,494
+python3: can't open file '/home/deploy/municipal-intel/gen_export_dataset.py': [Errno 2] No such file or directory
+catalogo: 8109
+rankings.json OK
+series: 8108 | fichero KB: 2679
+index.html: 33 KB
+OK: dashboard/ generado
+lorca_intel.json generado
+OK ficha_lorca.html | 12 KB | menores: 9960 | gasto: 16.793.078
+OK ficha_malaga.html | 7 KB | menores: 1950 | gasto: 15.068.270
+fichas generadas: 2
+Traceback (most recent call last):
+  File "/home/deploy/municipal-intel/gen_og_dinamico.py", line 14, in <module>
+    raw = open("spain_path.txt").read()
+          ^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'spain_path.txt'
+paginas municipio generadas: 8109
+sitemap URLs: 8114
+acerca.html generado: 6 KB
+rss.xml generado: 42 items | 17987 bytes
+paginas editoriales generadas: 103
+sitemap actualizado con 114 URLs editoriales
+regenerado OK (lorca_cambios=0 ine_cambios=0)
+{"ok": true, "enviadas": []}alertas notificadas
+
+=== 2026-09-10 05:30:01 ===
+-- Lorca: trimestres nuevos?
+PDFs publicados: 28 | ingeridos: 28 | nuevos: 0
+-- INE: año nuevo?
+INE año máximo: 2025 | BD año máximo: 2025
+-- regeneración del sitio
+export CSV OK: 235376 filas, 8127 municipios, 9.1 MB
+total Espana 2025: 49,114,494
+python3: can't open file '/home/deploy/municipal-intel/gen_export_dataset.py': [Errno 2] No such file or directory
+catalogo: 8109
+rankings.json OK
+series: 8108 | fichero KB: 2679
+index.html: 33 KB
+OK: dashboard/ generado
+lorca_intel.json generado
+OK ficha_lorca.html | 12 KB | menores: 9960 | gasto: 16.793.078
+OK ficha_malaga.html | 7 KB | menores: 1950 | gasto: 15.068.270
+fichas generadas: 2
+Traceback (most recent call last):
+  File "/home/deploy/municipal-intel/gen_og_dinamico.py", line 14, in <module>
+    raw = open("spain_path.txt").read()
+          ^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'spain_path.txt'
+paginas municipio generadas: 8109
+sitemap URLs: 8114
+acerca.html generado: 6 KB
+rss.xml generado: 42 items | 17987 bytes
+paginas editoriales generadas: 103
+sitemap actualizado con 114 URLs editoriales
+regenerado OK (lorca_cambios=0 ine_cambios=0)
+{"ok": true, "enviadas": []}alertas notificadas
+
+=== 2026-09-11 05:30:02 ===
+-- Lorca: trimestres nuevos?
+PDFs publicados: 28 | ingeridos: 28 | nuevos: 0
+-- INE: año nuevo?
+INE año máximo: 2025 | BD año máximo: 2025
+-- regeneración del sitio
+export CSV OK: 235376 filas, 8127 municipios, 9.1 MB
+total Espana 2025: 49,114,494
+python3: can't open file '/home/deploy/municipal-intel/gen_export_dataset.py': [Errno 2] No such file or directory
+catalogo: 8109
+rankings.json OK
+series: 8108 | fichero KB: 2679
+index.html: 33 KB
+OK: dashboard/ generado
+lorca_intel.json generado
+OK ficha_lorca.html | 12 KB | menores: 9960 | gasto: 16.793.078
+OK ficha_malaga.html | 7 KB | menores: 1950 | gasto: 15.068.270
+fichas generadas: 2
+Traceback (most recent call last):
+  File "/home/deploy/municipal-intel/gen_og_dinamico.py", line 14, in <module>
+    raw = open("spain_path.txt").read()
+          ^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'spain_path.txt'
+paginas municipio generadas: 8109
+sitemap URLs: 8114
+acerca.html generado: 6 KB
+rss.xml generado: 42 items | 17987 bytes
+paginas editoriales generadas: 103
+sitemap actualizado con 114 URLs editoriales
+regenerado OK (lorca_cambios=0 ine_cambios=0)
+{"ok": true, "enviadas": []}alertas notificadas

@@ -94,48 +94,117 @@ def eur_m2_por_municipio(mivau, ine):
     return None
 
 
+def _asegurar_esquema(con):
+    """Idempotente: garantiza las columnas de dato oficial (tabla preexistente)."""
+    cols = {r[1] for r in con.execute("PRAGMA table_info(via_index)")}
+    for nombre, tipo in (("oficial_eur_m2", "REAL"), ("oficial_p25", "REAL"),
+                         ("oficial_p75", "REAL"), ("oficial_anio", "INTEGER")):
+        if nombre not in cols:
+            con.execute(f"ALTER TABLE via_index ADD COLUMN {nombre} {tipo}")
+
+
 def main():
     limit = None
     if "--limit" in sys.argv:
         limit = int(sys.argv[sys.argv.index("--limit") + 1])
+    # --db <ruta> permite probar sobre una copia sin tocar la BD de producción
+    db_path = VIADB
+    if "--db" in sys.argv:
+        db_path = Path(sys.argv[sys.argv.index("--db") + 1])
 
-    con = sqlite3.connect(VIADB)
+    con = sqlite3.connect(db_path)
+    _asegurar_esquema(con)
     fecha_act = con.execute("SELECT MAX(fecha) FROM via_index").fetchone()[0]
     if not fecha_act:
         print("[FIN] via.db vacia: primero corre via_scraper.py (pisos.com)")
         return
-    # ya cubiertos por pisos.com (>=5) o por mivau en la fecha maxima
-    cubiertos = set(r[0] for r in con.execute(
-        "SELECT codigo_ine FROM via_index WHERE fecha=? AND ((anuncios>=5) OR (slug LIKE 'mivau_%'))",
-        (fecha_act,)))
+
+    # Limpieza: si una fila oficial (slug mivau_, anuncios=0) duplica a una fila del
+    # scraper (anuncios>0) del mismo municipio/fecha (bug previo), fusionar el oficial
+    # en la del scraper y eliminar la duplicada.
+    dups = con.execute(
+        "SELECT d.municipio, d.codigo_ine FROM via_index d "
+        "JOIN via_index o ON o.fecha=d.fecha AND o.municipio=d.municipio "
+        "AND o.anuncios>0 "
+        "WHERE d.fecha=? AND d.anuncios IS NOT NULL AND d.anuncios<1 "
+        "AND d.slug LIKE 'mivau_%'", (fecha_act,)).fetchall()
+    for nombre, ine in dups:
+        con.execute(
+            "UPDATE via_index SET oficial_eur_m2 = (SELECT d.oficial_eur_m2 FROM "
+            " via_index d WHERE d.fecha=? AND d.codigo_ine=?) "
+            "WHERE fecha=? AND municipio=? AND anuncios>0",
+            (fecha_act, ine, fecha_act, nombre))
+        con.execute("DELETE FROM via_index WHERE fecha=? AND codigo_ine=? AND anuncios<1 AND municipio=?",
+                    (fecha_act, ine, nombre))
+        print(f"  [cleanup] fusionado oficial de {nombre} (duplicado previo)")
 
     print("descargando/sirviendo CSV MIVAU (cache 24h)...")
     path = descargar()
     mivau = parse_mivau(path)
     print(f"  CSV {path.name}: {sum(len(v) for v in mivau.values())} filas COLECTIVA en {len(mivau)} municipios")
 
-    objetivos = [x for x in municipios_objetivo() if x[0] and x[0] not in cubiertos]
-    objetivos.sort(key=lambda x: -x[2])
-    if limit:
-        objetivos = objetivos[:limit]
-    print(f"municipios >=20k a rellenar con MIVAU: {len(objetivos)}  (fecha {fecha_act})")
+    # --- Enfoque COMPLEMENTARIO: el dato oficial 2024 se muestra como referencia
+    # adicional en CADA municipio, además del precio de oferta (anuncios) de pisos.com.
+    # 1) Municipios ya en via_index (anuncios): rellenar sus columnas oficial_*.
+    # 2) Municipios >=20k SIN fila (scraper no publicó por <5 anuncios): insertarlos
+    #    con anuncios=0 y el dato oficial como única cifra.
+    obj = [(ine, m, p) for ine, m, p in municipios_objetivo() if ine]
+    # filas actuales: por codigo_ine (puede estar vacio en el scraper) y por nombre
+    filas_act = con.execute(
+        "SELECT codigo_ine, municipio FROM via_index WHERE fecha=?", (fecha_act,)).fetchall()
+    por_ine = {ine for ine, _ in filas_act if ine}
+    por_nombre = {nom for _, nom in filas_act}
 
-    ok = sin_dato = 0
-    for ine, nombre, p in objetivos:
+    ok_upd = sin_dato = 0
+    nuevos = []
+
+    def aplicar(ine, nombre):
+        nonlocal ok_upd, sin_dato
         r = eur_m2_por_municipio(mivau, ine)
         if not r:
             sin_dato += 1
             print(f"  -- {nombre:28} sin dato MIVAU")
+            return None
+        return r
+
+    # 1) rellenar oficial en quienes ya tienen fila (pisos.com). El scraper guarda
+    #    codigo_ine vacio en muchos casos, asi que tambien se empareja por nombre.
+    for ine, nombre, p in [x for x in obj if x[0] in por_ine or x[1] in por_nombre]:
+        r = aplicar(ine, nombre)
+        if not r:
             continue
         con.execute(
-            "INSERT OR REPLACE INTO via_index VALUES (?,?,?,?,?,?,?,?,?,?)",
-            (fecha_act, ine, nombre, "", f"mivau_{ine}", -1,
-             r["eur_m2_mediana"], r["p25"], r["p75"], r["alq_mediana_80m2"]))
-        ok += 1
-        print(f"  OK {nombre:28} {r['eur_m2_mediana']:6.2f} €/m² oficial {r['anio']}")
-    con.commit()
+            "UPDATE via_index SET oficial_eur_m2=?, oficial_p25=?, oficial_p75=?,"
+            " oficial_anio=? WHERE fecha=? AND (codigo_ine=? OR municipio=?)",
+            (r["eur_m2_mediana"], r["p25"], r["p75"], r["anio"], fecha_act, ine, nombre))
+        ok_upd += 1
+        print(f"  UP {nombre:28} {r['eur_m2_mediana']:6.2f} €/m² oficial {r['anio']}")
+
+    # 2) municipios SIN fila (ni por ine ni por nombre) pero con dato oficial
+    #    -> insertarlos (anuncios=0, único valor oficial)
+    for ine, nombre, p in [x for x in obj
+                           if x[0] not in por_ine and x[1] not in por_nombre]:
+        r = aplicar(ine, nombre)
+        if not r:
+            continue
+        nuevos.append((ine, nombre, r))
+
+    # insertar los nuevos (fuera del bucle para no tocar indices mientras iteramos)
+    for ine, nombre, r in nuevos:
+        con.execute(
+            "INSERT OR IGNORE INTO via_index VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+            (fecha_act, ine, nombre, "", f"mivau_{ine}", 0,
+             r["eur_m2_mediana"], r["p25"], r["p75"], r["alq_mediana_80m2"],
+             r["eur_m2_mediana"], r["p25"], r["p75"], r["anio"]))
+        print(f"  NEW {nombre:28} {r['eur_m2_mediana']:6.2f} €/m² oficial {r['anio']} (solo oficial)")
+
+    if limit:  # modo test: limitar actualizaciones para depurar sin tocar todo
+        print(f"  [limit={limit}] no se hizo commit completo")
+        con.rollback()
+    else:
+        con.commit()
     con.close()
-    print(f"[FIN] ok={ok} sin_dato={sin_dato}")
+    print(f"[FIN] actualizados={len(nuevos) + ok_upd} sin_dato={sin_dato} (fecha {fecha_act})")
 
 
 if __name__ == "__main__":
