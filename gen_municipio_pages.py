@@ -213,6 +213,9 @@ for pg in pages:
     v = VIA.get(muni)
     if v:
         alquiler_html = (
+            '<h2 style="font-size:18px;margin:20px 0 2px">Alquiler en ' + muni + ': precio por m²</h2>'
+            '<p style="font-size:13px;color:#94a3b8;margin:0 0 8px">Precio del alquiler de vivienda en '
+            + muni + ' (mediana de anuncios activos) y comparativa con su provincia.</p>'
             '<div class="kpi" style="margin:14px 0;font-size:14px">💰 <b>Alquiler hoy:</b> '
             + str(round(v["eur"], 2)).replace(".", ",") + ' €/m² mediana · piso de 80 m² ≈ '
             + fmt(v["alq"]) + ' €/mes '
@@ -227,6 +230,7 @@ for pg in pages:
             _min_v, _min_m = _vals[0]
             _max_v, _max_m = _vals[-1]
             alquiler_html = (
+                '<h2 style="font-size:18px;margin:20px 0 2px">Alquiler en la provincia de ' + prov + '</h2>'
                 '<div class="kpi" style="margin:14px 0;font-size:14px">'
                 '💰 <b>Alquiler en tu provincia (' + prov + '):</b> media '
                 + str(round(_media, 2)).replace(".", ",") + ' €/m² '
