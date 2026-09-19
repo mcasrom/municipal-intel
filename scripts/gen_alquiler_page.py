@@ -73,10 +73,10 @@ chart = (f'<div class="legend">🟠 Los 8 más caros</div>{_caros}'
 html = f"""<!DOCTYPE html>
 <html lang="es"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Índice VIA: precio del alquiler hoy por municipio | Municipal Intelligence</title>
+<title>Alquiler en España: Precio medio €/m² por Municipio (INE 2025) · Municipal Intelligence</title>
 <meta name="description" content="Precio del alquiler por municipio en España: €/m² mediana en {n_pisos} municipios (anuncios activos pisos.com) y {n_oficial} municipios con precio oficial 2024 del Ministerio de Vivienda (SERPAVI/MIVAU).">
 <link rel="canonical" href="https://municipal.viajeinteligencia.com/alquiler.html">
-<meta property="og:title" content="Índice VIA — alquiler hoy por municipio">
+<meta property="og:title" content="Alquiler en España: Precio medio €/m² por Municipio (INE 2025)">
 <meta property="og:description" content="{len(rows)} municipios · €/m² mediana ({n_pisos} anuncios activos, {n_oficial} dato oficial 2024) · {fecha}">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://municipal.viajeinteligencia.com/alquiler.html">
