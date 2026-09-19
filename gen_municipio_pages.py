@@ -1,4 +1,4 @@
-import json, sqlite3, os, re, unicodedata
+import json, sqlite3, os, re, unicodedata, hashlib
 import datetime
 
 DBP = "data/poblacion_municipal.sqlite"
@@ -34,6 +34,22 @@ except Exception:
     PROV_CTX = {}
 
 TODAY = datetime.date.today().isoformat()
+
+# --- TEST SEO (PREPARADO, SIN DESPLEGAR) -------------------------------------
+# Test del <title> de las fichas de municipio (TODA la coleccion, 8.109).
+# Split determinista por slug (md5): TITLE_TEST_PCT % recibe la VARIANTE; el resto
+# mantiene el CONTROL (titulo de poblacion actual). Reparto estable entre regens.
+# Baseline GSC (20-ago..13-sep): 51.194 impresiones, 45 clics, CTR 0,09%;
+# 959/1000 consultas = "habitantes" y 0 de alquiler -> se testea POBLACION.
+# Reversible: TITLE_TEST = False. Medir impresiones/CTR/posicion en GSC (2-4 sem).
+TITLE_TEST = True
+TITLE_TEST_PCT = 50
+# -----------------------------------------------------------------------------
+
+def en_test_titulo(slug):
+    """True si la ficha entra en el grupo de test (split determinista por slug)."""
+    h = int(hashlib.md5(slug.encode("utf-8")).hexdigest(), 16)
+    return (h % 100) < TITLE_TEST_PCT
 
 def pop_of(prov, muni, anyo):
     r = con.execute("SELECT poblacion FROM poblacion WHERE provincia=? AND municipio=? AND anyo=? AND sexo='Total'", (prov, muni, anyo)).fetchone()
@@ -74,7 +90,7 @@ def pct(a, b):
 
 TEMPLATE = """<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>@@MUNI@@ (@@PROV@@): @@POP@@ habitantes según el INE 2025</title>
+<title>@@TITLE@@</title>
 <meta name="description" content="@@MUNI@@ (@@PROV@@) tiene @@POP@@ habitantes en 2025 (@@SIGN_G1_TXT@@) y es el @@RANK@@ municipio de España. Evolución INE 1996-2025, alquiler y datos demográficos oficiales, sin inventar.">
 <link rel="canonical" href="https://municipal.viajeinteligencia.com/municipio/@@SLUG@@.html">
 <link rel="icon" type="image/png" href="../icon-192.png">
@@ -187,7 +203,7 @@ def build_svg(serie):
 def build_rows(serie):
     return "".join(f"<tr><td>{a}</td><td style='text-align:right'>{fmt(p)}</td></tr>" for a, p in serie)
 
-sitemap = ["https://municipal.viajeinteligencia.com/", "https://municipal.viajeinteligencia.com/ficha_lorca.html", "https://municipal.viajeinteligencia.com/ficha_malaga.html", "https://municipal.viajeinteligencia.com/acerca.html", "https://municipal.viajeinteligencia.com/datos.html"]
+sitemap = ["https://municipal.viajeinteligencia.com/ficha_lorca.html", "https://municipal.viajeinteligencia.com/ficha_malaga.html", "https://municipal.viajeinteligencia.com/acerca.html", "https://municipal.viajeinteligencia.com/datos.html"]
 n = 0
 OGD = {}
 try:
@@ -211,6 +227,10 @@ for pg in pages:
         lorca_link = f'<div style="background:#1e293b;border:1px solid #334155;border-radius:10px;padding:12px;margin:12px 0"><a href="../ficha_malaga.html" style="color:#38bdf8;font-weight:600">Ver la ficha de transparencia de Málaga →</a> (contratos menores del Ayuntamiento, datos.gob.es)</div>'
     html = TEMPLATE
     v = VIA.get(muni)
+    if TITLE_TEST and en_test_titulo(slugv):
+        title = f"¿Cuántos habitantes tiene {muni}? {fmt(p25)} (INE 2025)"
+    else:
+        title = f"{muni} ({prov}): {fmt(p25)} habitantes según el INE 2025"
     if v:
         alquiler_html = (
             '<h2 style="font-size:18px;margin:20px 0 2px">Alquiler en ' + muni + ': precio por m²</h2>'
@@ -241,7 +261,8 @@ for pg in pages:
                 + '</span><br>'
                 + '<span style="font-size:12px;color:#94a3b8">Este municipio no tiene suficientes anuncios activos para un dato propio.'
                 + ' <a href="../alquiler.html" style="color:#58a6ff">Índice completo</a></span></div>')
-    for k, v in {"@@MUNI@@": muni, "@@PROV@@": prov, "@@CODE@@": code, "@@SLUG@@": slugv,
+    for k, v in {"@@TITLE@@": title,
+                 "@@MUNI@@": muni, "@@PROV@@": prov, "@@CODE@@": code, "@@SLUG@@": slugv,
                  "@@POP@@": fmt(p25), "@@P96@@": fmt(p96),
                  "@@SIGN@@": "pos" if (var or 0) >= 0 else "neg",
                  "@@VAR@@": ("+" if (var or 0) >= 0 else "") + str(var or 0),
