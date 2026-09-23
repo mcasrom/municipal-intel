@@ -82,6 +82,15 @@ for muni, prov, code, lat, lon, pop in rows:
     pages.append({"muni": muni, "prov": prov, "code": code, "lat": lat, "lon": lon,
                   "pop": pop, "slug": s})
 
+# enlaces internos: municipios de la misma provincia con dato de alquiler
+PROV_LINKS = {}
+for _pg in pages:
+    _v = VIA.get(_pg["muni"])
+    if _v:
+        PROV_LINKS.setdefault(_pg["prov"], []).append((_v["eur"], _pg["muni"], _pg["slug"]))
+for _p in PROV_LINKS:
+    PROV_LINKS[_p].sort()
+
 def fmt(n):
     return format(int(round(n)), ",").replace(",", ".")
 
@@ -140,7 +149,7 @@ body.light .src{color:#64748b}
 <button class="toggle" onclick="tema()" id="temaBtn" title="Modo claro/oscuro">&#127769;</button>
 <script>function tema(){var b=document.body;b.classList.toggle("light");var l=b.classList.contains("light");document.getElementById("temaBtn").textContent=l?"🌙":"☀️";try{localStorage.setItem("municip-tema",l?"light":"dark");}catch(e){}}</script>
 <script>try{if(localStorage.getItem("municip-tema")==="light"){document.body.classList.add("light");document.getElementById("temaBtn").textContent="🌙";}}catch(e){}</script>
-<div class="nav"><a href="../">← Mapa de municipios de España</a> · <a href="../acerca.html">Metodología y fuentes</a> · <a href="https://www.viajeinteligencia.com">Ecosistema de datos abiertos</a></div>
+<div class="nav"><a href="../">← Mapa de municipios de España</a> · <a href="../mapa-alquiler.html">Mapa del alquiler</a> · <a href="../acerca.html">Metodología y fuentes</a> · <a href="https://www.viajeinteligencia.com">Ecosistema de datos abiertos</a></div>
 <h1>@@MUNI@@ <span class="mut">· @@PROV@@</span></h1>
 <div class="mut">Código INE @@CODE@@ · datos oficiales de la Revisión del Padrón Municipal (INE) · sin datos inventados</div>
 <div class="grid">
@@ -161,6 +170,7 @@ body.light .src{color:#64748b}
 <table>@@ROWS@@</table>
 </details>
 @@ALQUILER@@
+@@VECINOS@@
 <div class="alerta-box" style="background:var(--card);border-radius:10px;padding:14px;margin:14px 0">
   <b style="color:#38bdf8">¿Avísame si cambian los datos de @@MUNI@@?</b>
   <div style="font-size:12px;color:#94a3b8;margin:4px 0">Recibirás un email cuando se actualicen los datos de este municipio (población, ranking o contratos). Sin spam; baja fácil.</div>
@@ -261,6 +271,23 @@ for pg in pages:
                 + '</span><br>'
                 + '<span style="font-size:12px;color:#94a3b8">Este municipio no tiene suficientes anuncios activos para un dato propio.'
                 + ' <a href="../alquiler.html" style="color:#58a6ff">Índice completo</a></span></div>')
+    vecinos_html = ""
+    _vn = PROV_LINKS.get(prov)
+    if _vn and len(_vn) >= 4:
+        _otros = [x for x in _vn if x[1] != muni]
+        _sel = _otros[:4] + _otros[-4:]
+        _seen = set(); _sel2 = []
+        for _e, _mm, _ss in _sel:
+            if _mm in _seen:
+                continue
+            _seen.add(_mm); _sel2.append((_e, _mm, _ss))
+        _links = " · ".join(
+            '<a href="' + _ss + '.html">' + _mm + '</a> (' + str(round(_e, 1)).replace(".", ",") + ' €/m²)'
+            for _e, _mm, _ss in _sel2)
+        vecinos_html = ('<h2 style="font-size:18px;margin:20px 0 2px">Más municipios de ' + prov
+                        + ' con dato de alquiler</h2>'
+                        + '<p style="font-size:13px;color:#94a3b8;margin:0 0 8px">' + _links
+                        + ' · <a href="../mapa-alquiler.html">ver el mapa completo</a></p>')
     for k, v in {"@@TITLE@@": title,
                  "@@MUNI@@": muni, "@@PROV@@": prov, "@@CODE@@": code, "@@SLUG@@": slugv,
                  "@@POP@@": fmt(p25), "@@P96@@": fmt(p96),
@@ -273,7 +300,7 @@ for pg in pages:
                  "@@G5@@": ("+" if (g5 or 0) >= 0 else "") + str(g5 or 0) + "%",
                  "@@G16@@": ("+" if (g16 or 0) >= 0 else "") + str(g16 or 0) + "%",
                  "@@SVG@@": build_svg(serie), "@@ROWS@@": build_rows(serie),
-                 "@@ALQUILER@@": alquiler_html}.items():
+                 "@@ALQUILER@@": alquiler_html, "@@VECINOS@@": vecinos_html}.items():
         html = html.replace(k, str(v))
     with open(os.path.join(OUT, f"{slugv}.html"), "w", encoding="utf-8") as f:
         f.write(html)
