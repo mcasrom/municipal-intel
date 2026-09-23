@@ -4,8 +4,13 @@ import datetime
 DBP = "data/poblacion_municipal.sqlite"
 if not os.path.exists(DBP):
     DBP = "poblacion_municipal.sqlite"
-OUT = os.path.join("dashboard", "municipio")
+OUT = os.environ.get("MUN_OUT", os.path.join("dashboard", "municipio"))
+HUB_DIR = os.environ.get("MUN_HUB", os.path.join("dashboard", "provincia"))
+SM_PATH = os.environ.get("MUN_SITEMAP", os.path.join("dashboard", "sitemap.xml"))
+SLUGMAP_PATH = os.environ.get("MUN_SLUGMAP", os.path.join("dashboard", "data", "municipio_slugs.json"))
+MUN_LIMIT = int(os.environ.get("MUN_LIMIT", "0"))
 os.makedirs(OUT, exist_ok=True)
+os.makedirs(HUB_DIR, exist_ok=True)
 con = sqlite3.connect(DBP)
 
 # H1.5: bloque "Alquiler hoy" desde el Indice VIA (si aun no hay datos, fichas salen sin bloque)
@@ -34,6 +39,15 @@ except Exception:
     PROV_CTX = {}
 
 TODAY = datetime.date.today().isoformat()
+
+# --- Presupuesto de rastreo (GSC, 23/Sep/2026) --------------------------------
+# El "tail" de municipios sin demanda (baja población Y sin dato de alquiler)
+# pasa a <meta robots="noindex,follow"> y se excluye del sitemap, para concentrar
+# el crawl budget en las fichas útiles. Reversible: NOINDEX_POP = 0.
+NOINDEX_POP = int(os.environ.get("MUN_NOINDEX_POP", "250"))
+def es_tail(muni, pop):
+    return (pop or 0) < NOINDEX_POP and muni not in VIA
+# -----------------------------------------------------------------------------
 
 # --- TEST SEO (PREPARADO, SIN DESPLEGAR) -------------------------------------
 # Test del <title> de las fichas de municipio (TODA la coleccion, 8.109).
@@ -97,6 +111,9 @@ for muni, prov, code, lat, lon, pop in rows:
     pages.append({"muni": muni, "prov": prov, "code": code, "lat": lat, "lon": lon,
                   "pop": pop, "slug": s})
 
+if MUN_LIMIT:
+    pages = pages[:MUN_LIMIT]
+
 # enlaces internos: municipios de la misma provincia con dato de alquiler
 PROV_LINKS = {}
 for _pg in pages:
@@ -106,17 +123,35 @@ for _pg in pages:
 for _p in PROV_LINKS:
     PROV_LINKS[_p].sort()
 
+# Hubs de provincia: agrupan las fichas INDEXABLES (no-tail) para dar enlaces
+# internos rastreables (mejora el "descubierta sin indexar" de GSC).
+HUBS = {}
+for _pg in pages:
+    if not es_tail(_pg["muni"], _pg["pop"]):
+        HUBS.setdefault(_pg["prov"], []).append((_pg["pop"], _pg["muni"], _pg["slug"]))
+for _p in HUBS:
+    HUBS[_p].sort(reverse=True)
+HUB_SLUG = {_p: slug(_p, "") for _p in HUBS}
+
 def fmt(n):
     return format(int(round(n)), ",").replace(",", ".")
 
 def pct(a, b):
     return round((a - b) / b * 100, 1) if b else None
 
+HUBCSS = ("body{font-family:system-ui,Segoe UI,Roboto,sans-serif;background:#0f172a;color:#e2e8f0;line-height:1.6}"
+          "*{box-sizing:border-box;margin:0;padding:0}.wrap{max-width:820px;margin:0 auto;padding:22px}"
+          "a{color:#38bdf8}.mut{color:#94a3b8;font-size:13px}h1{font-size:24px;margin-bottom:6px}"
+          ".lista{columns:2;column-gap:26px;list-style:none;margin-top:14px}"
+          ".lista li{margin:3px 0;font-size:13.5px;break-inside:avoid}.nav{font-size:13px;margin-bottom:12px}"
+          "@media(max-width:560px){.lista{columns:1}}")
+
 TEMPLATE = """<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>@@TITLE@@</title>
 <meta name="description" content="@@MUNI@@ (@@PROV@@) tiene @@POP@@ habitantes en 2025 (@@SIGN_G1_TXT@@) y es el @@RANK@@ municipio de España. Evolución INE 1996-2025, alquiler y datos demográficos oficiales, sin inventar.">
 <link rel="canonical" href="https://municipal.viajeinteligencia.com/municipio/@@SLUG@@.html">
+@@ROBOTS@@
 <link rel="icon" type="image/png" href="../icon-192.png">
 <meta property="og:type" content="article">
 <meta property="og:title" content="@@MUNI@@ (@@PROV@@): @@POP@@ habitantes en 2025">
@@ -165,6 +200,7 @@ body.light .src{color:#64748b}
 <script>function tema(){var b=document.body;b.classList.toggle("light");var l=b.classList.contains("light");document.getElementById("temaBtn").textContent=l?"🌙":"☀️";try{localStorage.setItem("municip-tema",l?"light":"dark");}catch(e){}}</script>
 <script>try{if(localStorage.getItem("municip-tema")==="light"){document.body.classList.add("light");document.getElementById("temaBtn").textContent="🌙";}}catch(e){}</script>
 <div class="nav"><a href="../">← Mapa de municipios de España</a> · <a href="../mapa-alquiler.html">Mapa del alquiler</a> · <a href="../acerca.html">Metodología y fuentes</a> · <a href="https://www.viajeinteligencia.com">Ecosistema de datos abiertos</a></div>
+@@BREADCRUMB@@
 <h1>@@MUNI@@ <span class="mut">· @@PROV@@</span></h1>
 <div class="mut">Código INE @@CODE@@ · datos oficiales de la Revisión del Padrón Municipal (INE) · sin datos inventados</div>
 <div class="grid">
@@ -306,6 +342,12 @@ for pg in pages:
                         + ' con dato de alquiler</h2>'
                         + '<p style="font-size:13px;color:#94a3b8;margin:0 0 8px">' + _links
                         + ' · <a href="../mapa-alquiler.html">ver el mapa completo</a></p>')
+    tail = es_tail(muni, p25)
+    robots_html = '<meta name="robots" content="noindex,follow">' if tail else ''
+    _hub = HUB_SLUG.get(prov)
+    _hub_link = (f'<a href="../provincia/{_hub}.html">{prov}</a>' if _hub else prov)
+    breadcrumb_html = ('<div class="bc" style="font-size:12.5px;color:#94a3b8;margin-bottom:8px">'
+                       f'<a href="../">España</a> › {_hub_link} › <span>{muni}</span></div>')
     for k, v in {"@@TITLE@@": title,
                  "@@MUNI@@": muni, "@@PROV@@": prov, "@@CODE@@": code, "@@SLUG@@": slugv,
                  "@@POP@@": fmt(p25), "@@P96@@": fmt(p96),
@@ -318,16 +360,43 @@ for pg in pages:
                  "@@G5@@": ("+" if (g5 or 0) >= 0 else "") + str(g5 or 0) + "%",
                  "@@G16@@": ("+" if (g16 or 0) >= 0 else "") + str(g16 or 0) + "%",
                  "@@SVG@@": build_svg(serie), "@@ROWS@@": build_rows(serie),
-                 "@@ALQUILER@@": alquiler_html, "@@VECINOS@@": vecinos_html}.items():
+                 "@@ALQUILER@@": alquiler_html, "@@VECINOS@@": vecinos_html,
+                 "@@ROBOTS@@": robots_html, "@@BREADCRUMB@@": breadcrumb_html}.items():
         html = html.replace(k, str(v))
     with open(os.path.join(OUT, f"{slugv}.html"), "w", encoding="utf-8") as f:
         f.write(html)
-    sitemap.append(f"https://municipal.viajeinteligencia.com/municipio/{slugv}.html")
+    if not tail:
+        sitemap.append(f"https://municipal.viajeinteligencia.com/municipio/{slugv}.html")
     n += 1
+
+# --- Hubs de provincia (enlaces internos rastreables para las fichas indexables) ---
+hub_n = 0
+for _p, _items in HUBS.items():
+    _hs = HUB_SLUG[_p]
+    _links = "".join(
+        f'<li><a href="../municipio/{_s}.html">{_m}</a> <span class="mut">· {fmt(_pp)} hab.</span></li>'
+        for _pp, _m, _s in _items)
+    _hub_html = (
+        '<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">'
+        '<meta name="viewport" content="width=device-width, initial-scale=1.0">'
+        f'<title>Municipios de {_p} — población (INE) y alquiler</title>'
+        f'<meta name="description" content="Listado de {len(_items)} municipios de {_p} con población (INE 2025) y datos de alquiler.">'
+        f'<link rel="canonical" href="https://municipal.viajeinteligencia.com/provincia/{_hs}.html">'
+        f'<style>{HUBCSS}</style></head><body><div class="wrap">'
+        '<div class="nav"><a href="../">← Mapa de municipios de España</a> · <a href="../alquiler.html">Índice de alquiler</a></div>'
+        f'<h1>Municipios de {_p}</h1><p class="mut">{len(_items)} municipios con ficha · población INE 2025.</p>'
+        f'<ul class="lista">{_links}</ul>'
+        '<p class="mut" style="margin-top:20px">Fuente: INE (Padrón Municipal) y anuncios de alquiler agregados. '
+        '<a href="../acerca.html">Metodología</a>.</p></div></body></html>')
+    with open(os.path.join(HUB_DIR, f"{_hs}.html"), "w", encoding="utf-8") as f:
+        f.write(_hub_html)
+    sitemap.append(f"https://municipal.viajeinteligencia.com/provincia/{_hs}.html")
+    hub_n += 1
+print("hubs de provincia:", hub_n)
 
 # exportar mapa code -> slug (para el enlace del mapa con colisiones)
 slugmap = {pg["code"]: pg["slug"] for pg in pages}
-with open(os.path.join("dashboard", "data", "municipio_slugs.json"), "w") as f:
+with open(SLUGMAP_PATH, "w") as f:
     json.dump(slugmap, f, separators=(",", ":"))
 
 # sitemap
@@ -338,7 +407,7 @@ sm = ['<?xml version="1.0" encoding="UTF-8"?>',
 for u in sitemap:
     sm.append(f"  <url><loc>{u}</loc><lastmod>{TODAY}</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>")
 sm.append("</urlset>")
-with open(os.path.join("dashboard", "sitemap.xml"), "w") as f:
+with open(SM_PATH, "w") as f:
     f.write("\n".join(sm))
 print(f"paginas municipio generadas: {n}")
 print("sitemap URLs:", len(sitemap))
