@@ -45,11 +45,26 @@ TODAY = datetime.date.today().isoformat()
 TITLE_TEST = True
 TITLE_TEST_PCT = 50
 # -----------------------------------------------------------------------------
+# --- TEST SEO 2: titulo orientado a ALQUILER (solo municipios CON dato) -------
+# Para municipios con dato de alquiler (VIA) se testea un <title> de intencion de
+# alquiler (50%) frente al de poblacion (control). Los municipios SIN dato siguen
+# con el test de poblacion de arriba. Split determinista e independiente (salt "alq:").
+# Razon: el angulo "habitantes" tiene CTR ~0,09% (Google responde la pregunta y no
+# hay clic); el de alquiler exige clic. Medir en GSC (2-4 sem).
+# Reversible: TITLE_RENTAL_TEST = False.
+TITLE_RENTAL_TEST = True
+TITLE_RENTAL_PCT = 50
+# -----------------------------------------------------------------------------
 
 def en_test_titulo(slug):
     """True si la ficha entra en el grupo de test (split determinista por slug)."""
     h = int(hashlib.md5(slug.encode("utf-8")).hexdigest(), 16)
     return (h % 100) < TITLE_TEST_PCT
+
+def en_test_alquiler(slug):
+    """True si la ficha CON dato entra en el grupo de titulo de alquiler."""
+    h = int(hashlib.md5(("alq:" + slug).encode("utf-8")).hexdigest(), 16)
+    return (h % 100) < TITLE_RENTAL_PCT
 
 def pop_of(prov, muni, anyo):
     r = con.execute("SELECT poblacion FROM poblacion WHERE provincia=? AND municipio=? AND anyo=? AND sexo='Total'", (prov, muni, anyo)).fetchone()
@@ -237,7 +252,10 @@ for pg in pages:
         lorca_link = f'<div style="background:#1e293b;border:1px solid #334155;border-radius:10px;padding:12px;margin:12px 0"><a href="../ficha_malaga.html" style="color:#38bdf8;font-weight:600">Ver la ficha de transparencia de Málaga →</a> (contratos menores del Ayuntamiento, datos.gob.es)</div>'
     html = TEMPLATE
     v = VIA.get(muni)
-    if TITLE_TEST and en_test_titulo(slugv):
+    _eur_txt = str(round(v["eur"], 2)).replace(".", ",") if v else ""
+    if v and TITLE_RENTAL_TEST and en_test_alquiler(slugv):
+        title = f"Alquiler en {muni} ({prov}): {_eur_txt} €/m² (2026)"
+    elif TITLE_TEST and en_test_titulo(slugv):
         title = f"¿Cuántos habitantes tiene {muni}? {fmt(p25)} (INE 2025)"
     else:
         title = f"{muni} ({prov}): {fmt(p25)} habitantes según el INE 2025"
