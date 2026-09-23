@@ -26,6 +26,7 @@ python3 gen_map.py >> "$LOG" 2>&1
 python3 gen_ficha_municipio.py >> "$LOG" 2>&1
 python3 gen_og_dinamico.py >> "$LOG" 2>&1
 python3 gen_municipio_pages.py >> "$LOG" 2>&1
+python3 scripts/gen_mapa_alquiler.py >> "$LOG" 2>&1
 python3 gen_acerca.py >> "$LOG" 2>&1
 python3 gen_rss.py
 python3 gen_editorial_pages.py >> "$LOG" 2>&1
