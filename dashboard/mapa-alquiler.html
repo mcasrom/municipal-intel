@@ -35,7 +35,11 @@ h1{margin:0 0 4px;font-size:21px} .sub{color:var(--mut);font-size:13px}
 <a href="alquiler.html" style="color:#58a6ff;text-decoration:none;margin:0 8px">← Volver al índice de alquiler</a>
 <a href="/" style="color:#58a6ff;text-decoration:none;margin:0 8px">🏘️ Municipal</a>
 <a href="https://www.viajeinteligencia.com/ecosistema.html" style="color:#58a6ff;text-decoration:none;margin:0 8px">🌐 Ecosistema</a>
-</div></header>
+<a href="https://analisis.pruebapublica.com/posts/vivienda-como-poder-1978-2004/" style="color:#58a6ff;text-decoration:none;margin:0 8px">📖 Geopolítica de la vivienda (serie)</a>
+<a href="https://vivienda.pruebapublica.com/" style="color:#58a6ff;text-decoration:none;margin:0 8px">🏘️ Datos de vivienda</a>
+</div>
+<div style="margin-top:8px;font-size:12px;color:var(--mut)">Compartir: <a href="https://x.com/intent/tweet?text=Mapa%20del%20alquiler%20en%20Espa%C3%B1a%20por%20municipio&url=https%3A%2F%2Fmunicipal.viajeinteligencia.com%2Fmapa-alquiler.html%3Futm_source%3Dx%26utm_medium%3Dsocial" style="color:#58a6ff;margin:0 6px">X</a><a href="https://mastodon.social/share?text=Mapa%20del%20alquiler%20en%20Espa%C3%B1a%20por%20municipio%20https%3A%2F%2Fmunicipal.viajeinteligencia.com%2Fmapa-alquiler.html%3Futm_source%3Dmastodon%26utm_medium%3Dsocial" style="color:#58a6ff;margin:0 6px">Mastodon</a><a href="https://bsky.app/intent/compose?text=Mapa%20del%20alquiler%20en%20Espa%C3%B1a%20por%20municipio%20https%3A%2F%2Fmunicipal.viajeinteligencia.com%2Fmapa-alquiler.html%3Futm_source%3Dbluesky%26utm_medium%3Dsocial" style="color:#58a6ff;margin:0 6px">Bluesky</a></div>
+</header>
 <div class="legend" style="position:absolute;z-index:1000;left:10px;bottom:10px">
 <b>Precio del alquiler (€/m²)</b>
 <div style="margin-top:6px"><span style="display:inline-block;width:14px;height:14px;border-radius:3px;background:#16a34a;margin-right:6px"></span>menos de 8</div>
@@ -66,7 +70,7 @@ PUNTOS.forEach(function(p){
   if (p.p25 != null && p.p75 != null) s += '<br><span style="color:#94a3b8">rango ' + p.p25.toFixed(1) + '–' + p.p75.toFixed(1) + ' €/m²</span>';
   if (p.of != null) s += '<br><span style="color:#94a3b8">oficial ' + p.of.toFixed(2) + ' €/m²</span>';
   if (p.v != null) s += '<br><span style="color:' + (p.v >= 0 ? '#4ade80' : '#f87171') + '">población ' + (p.v >= 0 ? '▲ +' : '▼ ') + p.v + '% (10 años)</span>';
-  if (p.s) s += '<br><a href="/municipio/' + p.s + '.html" style="color:#58a6ff;font-weight:600">Ver ficha completa →</a>';
+  if (p.s) s += '<br><a href="/municipio/' + p.s + '.html" style="color:#58a6ff;font-weight:600">🔔 Ficha y alertas del municipio →</a>';
   if (p.s) s += '<br><a href="?m=' + p.s + '" style="color:#94a3b8;font-size:12px">🔗 enlace directo a este municipio</a>';
   var mk = L.circleMarker([p.lat, p.lon], {radius:8, fillColor:colorDe(p.e), fillOpacity:0.9, color:'#fff', weight:1})
     .bindPopup(s).addTo(map);
