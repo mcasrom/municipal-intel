@@ -9,10 +9,20 @@ BASE = Path.home() / "municipal-intel"
 DB = BASE / "dashboard/data/via/via.db"
 OUT = BASE / "dashboard/alquiler.html"
 
+# slug canónico por codigo_ine (resuelve colisiones). La columna via_index.slug
+# puede venir como "mivau_<ine>" (placeholder legacy) -> se corrige aquí.
+SLUGS = {}
+_sl = BASE / "dashboard/data/municipio_slugs.json"
+if _sl.exists():
+    try:
+        SLUGS = json.loads(_sl.read_text(encoding="utf-8"))
+    except Exception:
+        SLUGS = {}
+
 con = sqlite3.connect(f"file:{DB}?mode=ro", uri=True)
 rows = con.execute("""
     SELECT municipio, provincia, anuncios, eur_m2_mediana, p25, p75, alq_mediana_80m2, slug,
-           oficial_eur_m2, oficial_p25, oficial_p75, oficial_anio
+           oficial_eur_m2, oficial_p25, oficial_p75, oficial_anio, codigo_ine
     FROM via_index
     WHERE fecha = (SELECT MAX(fecha) FROM via_index)
     ORDER BY eur_m2_mediana DESC
@@ -40,7 +50,12 @@ n_oficial = sum(1 for r in rows if _es_oficial(r))
 n_pisos = sum(1 for r in rows if r[2] is not None and r[2] > 0)  # municipios con oferta (anuncios)
 
 def _fila(i, r):
-    m, prov, an, eur, p25, p75, alq, slug, ofr_e, ofr_p25, ofr_p75, ofr_anio, pob = r
+    m, prov, an, eur, p25, p75, alq, slug, ofr_e, ofr_p25, ofr_p75, ofr_anio, code, pob = r
+    if not slug or str(slug).startswith("mivau_"):
+        slug = SLUGS.get(code, slug)
+    # Los ficheros servidos usan guiones (mapa canonico); la BD guarda slugs viejos con "_".
+    slug = SLUGS.get(str(code)) or SLUGS.get(str(code).zfill(5)) or slug
+    slug = str(slug or "").replace("_", "-")
     to = eur if an else None  # €/m² principal: solo si hay anuncios
     ofr = f"{ofr_e:.2f} €" if ofr_e is not None else "—"
     dato = "oficial" if (an is None or an < 1) else f"{an}"
