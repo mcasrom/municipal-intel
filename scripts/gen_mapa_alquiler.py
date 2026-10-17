@@ -42,7 +42,10 @@ for m, (e, a, s, p25, p75, of) in via.items():
         v = None
         if pob25.get(m) and pob16.get(m) and pob16[m] > 0:
             v = round((pob25[m] - pob16[m]) / pob16[m] * 100, 1)
-        puntos.append({"m": m, "e": e, "a": a, "s": s or "", "p25": p25, "p75": p75,
+        _s = s or ""
+        if _s and not (BASE / "dashboard" / "municipio" / f"{_s}.html").exists():
+            _s = ""
+        puntos.append({"m": m, "e": e, "a": a, "s": _s, "p25": p25, "p75": p75,
                        "of": of, "v": v, "lat": coords[m][0], "lon": coords[m][1]})
 
 

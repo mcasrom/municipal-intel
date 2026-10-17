@@ -56,6 +56,11 @@ def _fila(i, r):
     # Los ficheros servidos usan guiones (mapa canonico); la BD guarda slugs viejos con "_".
     slug = SLUGS.get(str(code)) or SLUGS.get(str(code).zfill(5)) or slug
     slug = str(slug or "").replace("_", "-")
+    _ficha = BASE / "dashboard" / "municipio" / f"{slug}.html"
+    if slug and _ficha.exists():
+        _nombre = f"<a href='/municipio/{slug}.html' style='color:var(--accent);text-decoration:none'><b>{m}</b></a>"
+    else:
+        _nombre = f"<b>{m}</b>"
     to = eur if an else None  # €/m² principal: solo si hay anuncios
     ofr = f"{ofr_e:.2f} €" if ofr_e is not None else "—"
     dato = "oficial" if (an is None or an < 1) else f"{an}"
@@ -63,7 +68,7 @@ def _fila(i, r):
     celda_rango = f"{p25:.1f}–{p75:.1f}" if to is not None else "—"
     celda_alq = f"{alq:,.0f} €".replace(",", ".") if alq is not None else "—"
     return (f"<tr><td class='rk'>{i+1}</td>"
-            f"<td><a href='/municipio/{slug}.html' style='color:var(--accent);text-decoration:none'><b>{m}</b></a><span class='prov'>{prov}</span></td>"
+            f"<td>{_nombre}<span class='prov'>{prov}</span></td>"
             f"<td class='num'>{celda_eur}</td><td class='num'>{celda_alq}</td>"
             f"<td class='num'>{celda_rango}</td>"
             f"<td class='num'>{ofr}</td>"
