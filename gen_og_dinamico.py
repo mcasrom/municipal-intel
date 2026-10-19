@@ -7,8 +7,20 @@ OUT = os.path.join("dashboard", "ogm")
 os.makedirs(OUT, exist_ok=True)
 con = sqlite3.connect(DBP)
 
-FONT_B = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
-FONT_R = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
+def _pick_font(*cands):
+    for c in cands:
+        if os.path.exists(c):
+            return c
+    raise SystemExit("no se encontro ninguna fuente TTF (dejavu/liberation)")
+
+FONT_B = _pick_font(
+    "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
+    "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf",
+)
+FONT_R = _pick_font(
+    "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+    "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf",
+)
 
 # trazado de espana
 raw = open("spain_path.txt").read()
